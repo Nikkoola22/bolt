@@ -4,10 +4,10 @@ import { Clock, GraduationCap, Users, Phone, Mail, MapPin, ArrowRight, Sparkles,
 import RssFeed from "./components/RssFeed"
 
 // --- IMPORTATIONS DES DONNÉES ---
-import { sommaire } from "../lib/sommaire.ts"
-import { chapitres } from "../lib/temps.ts"
-import { formation } from "../lib/formation.ts"
-import { infoItems } from "../lib/info-data.ts"
+import { sommaire } from "./lib/sommaire.ts"
+import { chapitres } from "./lib/temps.ts"
+import { formation } from "./lib/formation.ts"
+import { infoItems } from "./lib/info-data.ts"
 
 // --- TYPES ---
 interface ChatMessage {
