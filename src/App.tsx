@@ -35,7 +35,7 @@ const API_URL = "https://api.perplexity.ai/chat/completions"
 const FEEDS = [{ label: "France Info — Politique", url: "https://www.franceinfo.fr/politique.rss" }]
 
 // --- PARSING DES DONNÉES ---
-const sommaireData = JSON.parse(sommaire)
+const sommaireData = sommaire
 
 // --- FONCTION DE NETTOYAGE ---
 const nettoyerChaine = (chaine: string): string => {

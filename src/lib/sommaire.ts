@@ -1,5 +1,4 @@
-export const sommaire= `
-{
+export const sommaire = {
     "chapitres": [
         {
             "titre": "Chapitre 1 : Le temps de travail",
@@ -499,5 +498,4 @@ export const sommaire= `
             ]
         }
     ]
-}
-`.trim(); 
+};
