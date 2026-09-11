@@ -1,0 +1,298 @@
+import React, { useState } from "react";
+import type { ProfilAgent, StatutAgent } from "../types/career";
+import { CADRES_EMPLOIS } from "../data/gradesData";
+import { isGradeAvancement } from "../services/simulationEngine";
+import { DateFieldWithYear } from "./DateFieldWithYear";
+import { X, Save, SlidersHorizontal } from "lucide-react";
+
+interface ProfileEditModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  profil: ProfilAgent;
+  onSave: (nouveauProfil: ProfilAgent) => void;
+}
+
+export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
+  isOpen,
+  onClose,
+  profil,
+  onSave,
+}) => {
+  const [form, setForm] = useState<ProfilAgent>({ ...profil });
+
+  if (!isOpen) return null;
+
+  const currentCadre = CADRES_EMPLOIS.find((c) => c.id === form.cadreEmploiId) || CADRES_EMPLOIS[0];
+  const currentGrade = currentCadre.grades.find((g) => g.id === form.gradeId) || currentCadre.grades[0];
+
+  const handleStatutChange = (newStatut: StatutAgent) => {
+    const isNewContractuel = newStatut.startsWith("contractuel");
+    let targetGradeId = form.gradeId;
+    let targetEchelon = form.echelonActuel;
+
+    if (isNewContractuel && isGradeAvancement(currentCadre, form.gradeId)) {
+      targetGradeId = currentCadre.grades[0].id;
+      targetEchelon = 1;
+    }
+
+    const cleanedEvents = isNewContractuel
+      ? form.evenementsSimules.filter(e => e.type !== "examen_professionnel" && e.type !== "disponibilite")
+      : form.evenementsSimules;
+
+    setForm({
+      ...form,
+      statut: newStatut,
+      gradeId: targetGradeId,
+      echelonActuel: targetEchelon,
+      evenementsSimules: cleanedEvents,
+    });
+  };
+
+  const handleCadreChange = (cadreId: string) => {
+    const selectedCadre = CADRES_EMPLOIS.find((c) => c.id === cadreId) || CADRES_EMPLOIS[0];
+    const defaultGrade = selectedCadre.grades[0];
+    setForm({
+      ...form,
+      cadreEmploiId: selectedCadre.id,
+      gradeId: defaultGrade.id,
+      echelonActuel: Math.min(form.echelonActuel, defaultGrade.echelons.length),
+    });
+  };
+
+  const handleGradeChange = (gradeId: string) => {
+    const selectedGrade = currentCadre.grades.find((g) => g.id === gradeId) || currentCadre.grades[0];
+    setForm({
+      ...form,
+      gradeId: selectedGrade.id,
+      echelonActuel: Math.min(form.echelonActuel, selectedGrade.echelons.length),
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave({
+      ...form,
+      collectivite: "Collectivité de Gennevilliers",
+      versant: "FPT",
+    });
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
+      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+        
+        {/* Header */}
+        <div className="bg-slate-900 p-4 sm:p-5 text-white flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-indigo-600 rounded-lg text-white">
+              <SlidersHorizontal className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-white">
+                Paramétrer ma situation statutaire
+              </h3>
+              <p className="text-xs text-slate-400">
+                Ajustez votre cadre d emplois, grade, échelon et dates d effet
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Formulaire */}
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs text-slate-800">
+          
+          {/* Identité */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Votre Prénom</label>
+              <input
+                type="text"
+                value={form.prenom}
+                onChange={(e) => setForm({ ...form, prenom: e.target.value })}
+                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-medium"
+                required
+              />
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-2.5 text-xs text-blue-900">
+              <span className="font-bold block">Collectivité de Gennevilliers</span>
+              <span className="text-blue-700 text-[11px]">Fonction Publique Territoriale (FPT)</span>
+            </div>
+          </div>
+
+          {/* Cadre & Grade */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Cadre d emplois</label>
+              <select
+                value={form.cadreEmploiId}
+                onChange={(e) => handleCadreChange(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              >
+                {CADRES_EMPLOIS.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nom} (Catégorie {c.categorie})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Grade actuel</label>
+              <select
+                value={form.gradeId}
+                onChange={(e) => handleGradeChange(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              >
+                {currentCadre.grades.map((g) => {
+                  const isAvancement = isGradeAvancement(currentCadre, g.id);
+                  const isContractuel = form.statut.startsWith("contractuel");
+                  const isDisabled = isContractuel && isAvancement;
+                  return (
+                    <option key={g.id} value={g.id} disabled={isDisabled}>
+                      {g.nom} {isDisabled ? "— (Réservé aux titulaires)" : ""}
+                    </option>
+                  );
+                })}
+              </select>
+              {form.statut.startsWith("contractuel") && (
+                <p className="text-[11px] text-amber-800 mt-1 font-medium leading-tight">
+                  Les grades d avancement sont statutairement fermés aux contractuels.
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Échelon & Quotité */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Échelon actuel</label>
+              <select
+                value={form.echelonActuel}
+                onChange={(e) => setForm({ ...form, echelonActuel: Number(e.target.value) })}
+                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              >
+                {currentGrade.echelons.map((ech) => (
+                  <option key={ech.numero} value={ech.numero}>
+                    {ech.numero}e échelon (IM {ech.indiceMajore})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Ancienneté conservée (mois)</label>
+              <input
+                type="number"
+                min="0"
+                max="36"
+                value={form.ancienneteConserveeMois}
+                onChange={(e) => setForm({ ...form, ancienneteConserveeMois: Number(e.target.value) })}
+                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Quotité de travail</label>
+              <select
+                value={form.quotiteActuelle}
+                onChange={(e) => setForm({ ...form, quotiteActuelle: Number(e.target.value) })}
+                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-semibold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value={100}>100% (Temps complet)</option>
+                <option value={90}>90% (Payé 91,4%)</option>
+                <option value={80}>80% (Payé 85,7%)</option>
+                <option value={70}>70%</option>
+                <option value={60}>60%</option>
+                <option value={50}>50%</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Dates clés */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-200">
+            <DateFieldWithYear
+              label="Date d effet échelon"
+              value={form.dateEffetEchelonActuel}
+              onChange={(val) => setForm({ ...form, dateEffetEchelonActuel: val })}
+              minYear={1990}
+              maxYear={2026}
+              required
+            />
+
+            <DateFieldWithYear
+              label="Date nomination grade"
+              value={form.dateNominationGradeActuel}
+              onChange={(val) => setForm({ ...form, dateNominationGradeActuel: val })}
+              minYear={1965}
+              maxYear={2026}
+              required
+            />
+
+            <DateFieldWithYear
+              label="Entrée Fonction Publique"
+              value={form.dateEntreeFonctionPublique}
+              onChange={(val) => setForm({ ...form, dateEntreeFonctionPublique: val })}
+              minYear={1965}
+              maxYear={2026}
+              highlightYear={1998}
+              hint="Année en 1 clic (ex: 1998)"
+              required
+            />
+          </div>
+
+          {/* Statut agent */}
+          <div className="pt-2 border-t border-slate-200">
+            <label className="block font-semibold text-slate-700 mb-1">Statut juridique</label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { val: "titulaire", label: "Titulaire" },
+                { val: "stagiaire", label: "Stagiaire" },
+                { val: "contractuel_cdi", label: "Contractuel CDI" },
+                { val: "contractuel_cdd", label: "Contractuel CDD" },
+              ].map((st) => (
+                <button
+                  key={st.val}
+                  type="button"
+                  onClick={() => handleStatutChange(st.val as StatutAgent)}
+                  className={`py-1.5 px-2 rounded-lg font-medium border text-center transition-colors cursor-pointer text-xs ${
+                    form.statut === st.val
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+                      : "bg-slate-50 text-slate-700 border-slate-300 hover:bg-slate-100"
+                  }`}
+                >
+                  {st.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-200 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium cursor-pointer text-center"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              className="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+            >
+              <Save className="w-4 h-4" />
+              Appliquer et actualiser
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  );
+};
