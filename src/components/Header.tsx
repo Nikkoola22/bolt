@@ -1,6 +1,6 @@
 import React from "react";
 import type { ProfilAgent } from "../types/career";
-import { BookOpen, Printer, ShieldCheck, RotateCcw } from "lucide-react";
+import { BookOpen, Printer, ShieldCheck, RotateCcw, Sun, Moon } from "lucide-react";
 
 interface HeaderProps {
   currentProfile?: ProfilAgent;
@@ -9,6 +9,8 @@ interface HeaderProps {
   onOpenGlossary?: () => void;
   onOpenPrintSummary?: () => void;
   onResetEvents?: () => void;
+  isDark?: boolean;
+  onToggleTheme?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +18,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenGlossary,
   onOpenPrintSummary,
   onResetEvents,
+  isDark = false,
+  onToggleTheme,
 }) => {
   const hasEvents = currentProfile && currentProfile.evenementsSimules && currentProfile.evenementsSimules.length > 0;
 
@@ -89,6 +93,27 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Printer className="w-3.5 h-3.5 text-white" />
               <span className="hidden sm:inline">Fiche Entretien</span>
+            </button>
+          )}
+
+          {onToggleTheme && (
+            <button
+              onClick={onToggleTheme}
+              className="text-xs px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs text-slate-200 hover:text-white"
+              title={isDark ? "Passer en mode clair" : "Passer en mode sombre"}
+              aria-label={isDark ? "Passer en mode clair" : "Passer en mode sombre"}
+            >
+              {isDark ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  <span className="hidden md:inline font-semibold">Mode Clair</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-sky-300" />
+                  <span className="hidden md:inline font-semibold">Mode Sombre</span>
+                </>
+              )}
             </button>
           )}
         </div>

@@ -136,7 +136,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/60 backdrop-blur-xs flex justify-end animate-fadeIn">
-      <div className="bg-white w-full max-w-full sm:max-w-xl h-full shadow-2xl flex flex-col border-l border-slate-200">
+      <div className="bg-white dark:bg-slate-900 w-full max-w-full sm:max-w-xl h-full shadow-2xl flex flex-col border-l border-slate-200 dark:border-slate-800">
         
         {/* Header Drawer */}
         <div className="bg-slate-900 p-4 sm:p-5 text-white flex items-center justify-between border-b border-slate-800">
@@ -162,33 +162,33 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
         </div>
 
         {/* Corps du Drawer */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800 dark:text-slate-100">
 
           {/* Formulaire d ajout personnalisé */}
-          <form onSubmit={handleCreateEvent} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4">
-            <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-              <Plus className="w-4 h-4 text-orange-600" />
+          <form onSubmit={handleCreateEvent} className="bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-4">
+            <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+              <Plus className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               Ajouter un événement personnalisé :
             </div>
 
             {/* Type d événement */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 Type d événement
               </label>
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value as TypeEvenementCarriere)}
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
+                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
               >
                 <option value="">Choisir...</option>
-                <option value="reussite_concours" className="font-bold text-emerald-800">
+                <option value="reussite_concours" className="font-bold text-emerald-800 dark:text-emerald-400">
                   {isContractuel 
                     ? "🏆 Réussite au Concours (Mise en stage & Titularisation FPT)" 
                     : "🏆 Réussite au Concours (Changement de catégorie C ➔ B ou B ➔ A)"}
                 </option>
                 {!isContractuel && (
-                  <option value="promotion_interne" className="font-bold text-amber-800">
+                  <option value="promotion_interne" className="font-bold text-amber-800 dark:text-amber-400">
                     ⭐ Promotion Interne (Changement de catégorie sans concours - liste CDG)
                   </option>
                 )}
@@ -211,8 +211,8 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                 )}
               </select>
               {isContractuel && (
-                <div className="mt-2 bg-amber-50 border border-amber-200/90 rounded-xl p-2.5 text-[11px] text-amber-900 flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="mt-2 bg-amber-50 dark:bg-amber-950/50 border border-amber-200/90 dark:border-amber-800/60 rounded-xl p-2.5 text-[11px] text-amber-900 dark:text-amber-200 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                   <p>
                     <strong>Règle statutaire :</strong> L examen pro d avancement de grade, la promotion interne, la disponibilité et le détachement sont réservés aux fonctionnaires titulaires. Pour évoluer vers le statut de titulaire, choisissez l option <strong>« Réussite au Concours »</strong> ci-dessus !
                   </p>
@@ -222,11 +222,11 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
             {/* Invite par défaut si aucun événement sélectionné */}
             {!selectedType && (
-              <div className="p-4 bg-orange-50/40 border border-orange-200/70 rounded-xl text-center text-xs text-slate-600 space-y-1">
-                <p className="font-bold text-orange-950">
+              <div className="p-4 bg-orange-50/40 dark:bg-orange-950/40 border border-orange-200/70 dark:border-orange-800/60 rounded-xl text-center text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                <p className="font-bold text-orange-950 dark:text-orange-200">
                   Sélectionnez un événement ci-dessus
                 </p>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                   Choisissez la nature de l événement (concours, promotion, temps partiel, disponibilité...) pour afficher ses modalités et simuler son impact statutaire sur votre carrière.
                 </p>
               </div>
@@ -234,8 +234,8 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
             {/* Paramètres selon le type */}
             {selectedType === "reussite_concours" && (
-              <div className="bg-gradient-to-br from-emerald-50 via-teal-50/60 to-blue-50/50 border border-emerald-200/90 rounded-2xl p-4 text-xs text-emerald-950 space-y-2.5 shadow-2xs">
-                <div className="font-extrabold text-emerald-950 text-sm flex items-center gap-2">
+              <div className="bg-gradient-to-br from-emerald-50 via-teal-50/60 to-blue-50/50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/30 border border-emerald-200/90 dark:border-emerald-800 rounded-2xl p-4 text-xs text-emerald-950 dark:text-emerald-200 space-y-2.5 shadow-2xs">
+                <div className="font-extrabold text-emerald-950 dark:text-emerald-200 text-sm flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-emerald-600 text-white shadow-2xs">
                     <Sparkles className="w-4 h-4" />
                   </span>
@@ -245,15 +245,15 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                       : "Admission au Concours : Accès à la Catégorie Supérieure"}
                   </span>
                 </div>
-                <p className="leading-relaxed text-emerald-900">
+                <p className="leading-relaxed text-emerald-900 dark:text-emerald-300">
                   {isContractuel ? (
                     <>La réussite au concours entraîne votre nomination en qualité de <strong>fonctionnaire stagiaire</strong> pour une durée probatoire d un an (art. L327-1 du CGFP).</>
                   ) : (
                     <>La réussite au concours vous permet de <strong>changer de catégorie hiérarchique</strong> (ex: Cat. C vers B, ou B vers A). Vous êtes nommé stagiaire en position de <strong>détachement pour stage</strong> (art. L513-7 CGFP), garantissant la conservation de votre rémunération et votre droit au retour en cas de besoin.</>
                   )}
                 </p>
-                <div className="bg-white/85 p-3 rounded-xl border border-emerald-200/80 space-y-1.5 text-[11px] text-slate-700">
-                  <div className="font-bold text-emerald-900 flex items-center gap-1.5">
+                <div className="bg-white/85 dark:bg-slate-900/90 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                  <div className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     Impacts majeurs calculés sur votre carrière :
                   </div>
@@ -265,17 +265,17 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             )}
 
             {selectedType === "promotion_interne" && (
-              <div className="bg-gradient-to-br from-amber-50 via-orange-50/60 to-amber-50/40 border border-amber-300/80 rounded-2xl p-4 text-xs text-amber-950 space-y-2.5 shadow-2xs">
-                <div className="font-extrabold text-amber-950 text-sm flex items-center gap-2">
+              <div className="bg-gradient-to-br from-amber-50 via-orange-50/60 to-amber-50/40 dark:from-amber-950/40 dark:via-slate-900 dark:to-amber-950/30 border border-amber-300/80 dark:border-amber-800 rounded-2xl p-4 text-xs text-amber-950 dark:text-amber-200 space-y-2.5 shadow-2xs">
+                <div className="font-extrabold text-amber-950 dark:text-amber-200 text-sm flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-amber-600 text-white shadow-2xs">
                     <Award className="w-4 h-4" />
                   </span>
                   <span>Promotion Interne au Choix (sans concours)</span>
                 </div>
-                <p className="leading-relaxed text-amber-900">
+                <p className="leading-relaxed text-amber-900 dark:text-amber-300">
                   La promotion interne permet à un fonctionnaire titulaire d accéder à la <strong>catégorie supérieure (ex: C vers B ou B vers A)</strong> sans passer de concours, au vu de sa valeur professionnelle et après inscription sur la liste d aptitude arrêtée par le Centre de Gestion (CDG).
                 </p>
-                <div className="bg-white/85 p-3 rounded-xl border border-amber-200/80 space-y-1.5 text-[11px] text-slate-700">
+                <div className="bg-white/85 dark:bg-slate-900/90 p-3 rounded-xl border border-amber-200/80 dark:border-amber-800/80 space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
                   <div>• <strong>Nomination :</strong> Nomination en tant que stagiaire probatoire ou directe selon le cadre d emplois.</div>
                   <div>• <strong>Garantie indiciaire :</strong> Reclassement à un indice égal ou immédiatement supérieur (aucun agent ne perd en rémunération).</div>
                 </div>
@@ -283,28 +283,28 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             )}
 
             {selectedType === "examen_professionnel" && (
-              <div className="bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white border border-blue-200/80 rounded-2xl p-4 text-xs text-blue-950 space-y-2 shadow-2xs">
-                <div className="font-extrabold text-blue-950 text-sm flex items-center gap-2">
+              <div className="bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white dark:from-blue-950/40 dark:via-slate-900 dark:to-indigo-950/30 border border-blue-200/80 dark:border-blue-800 rounded-2xl p-4 text-xs text-blue-950 dark:text-blue-200 space-y-2 shadow-2xs">
+                <div className="font-extrabold text-blue-950 dark:text-blue-200 text-sm flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-blue-600 text-white shadow-2xs">
                     <Award className="w-4 h-4" />
                   </span>
                   <span>Réussite à l Examen Professionnel</span>
                 </div>
-                <p className="leading-relaxed text-blue-900">
+                <p className="leading-relaxed text-blue-900 dark:text-blue-300">
                   L attestation de réussite obtenue auprès du Centre de Gestion (CDG) est <strong>valable sans limitation de durée</strong>. Elle ouvre la voie accélérée pour être proposé au tableau d avancement au grade supérieur.
                 </p>
               </div>
             )}
 
             {selectedType === "mobilite_detachement" && (
-              <div className="bg-gradient-to-br from-slate-50 via-stone-50 to-white border border-slate-300 rounded-2xl p-4 text-xs text-slate-800 space-y-2 shadow-2xs">
-                <div className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+              <div className="bg-gradient-to-br from-slate-50 via-stone-50 to-white dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-850 border border-slate-300 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-800 dark:text-slate-200 space-y-2 shadow-2xs">
+                <div className="font-extrabold text-slate-900 dark:text-white text-sm flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-slate-700 text-white shadow-2xs">
                     <Layers className="w-4 h-4" />
                   </span>
                   <span>Mobilité par Détachement</span>
                 </div>
-                <p className="leading-relaxed text-slate-700">
+                <p className="leading-relaxed text-slate-700 dark:text-slate-300">
                   Vous occupez un emploi permanent dans une autre collectivité territoriale ou administration d État. Vous bénéficiez du <strong>principe de la double carrière</strong> : votre avancement continue d être pris en compte dans votre cadre d emplois d origine et dans votre structure d accueil.
                 </p>
               </div>
@@ -312,7 +312,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
             {selectedType === "temps_partiel" && (
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Quotité choisie
                 </label>
                 <div className="grid grid-cols-5 gap-2">
@@ -324,14 +324,14 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                       className={`text-xs py-1.5 rounded-lg font-bold border transition-colors cursor-pointer ${
                         quotite === q
                           ? "bg-orange-600 text-white border-orange-600 shadow-xs"
-                          : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
+                          : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
                       }`}
                     >
                       {q}%
                     </button>
                   ))}
                 </div>
-                <p className="text-[11px] text-orange-950 mt-1.5 font-medium">
+                <p className="text-[11px] text-orange-950 dark:text-orange-300 mt-1.5 font-medium">
                   {quotite === 80 && "Règle de rémunération : 80% donne droit à 6/7ème du traitement brut (soit 85,71%)."}
                   {quotite === 90 && "Règle de rémunération : 90% donne droit à 32/35ème du traitement brut (soit 91,43%)."}
                   {quotite < 80 && `Rémunération strictement proportionnelle à la quotité (${quotite}%).`}
@@ -342,13 +342,13 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             {selectedType === "disponibilite" && (
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Motif de disponibilité
                   </label>
                   <select
                     value={motifDispo}
                     onChange={(e) => setMotifDispo(e.target.value as MotifDisponibilite["code"])}
-                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                   >
                     {MOTIFS_DISPONIBILITE.map((m) => (
                       <option key={m.code} value={m.code}>
@@ -359,7 +359,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                 </div>
 
                 {motifDispo === "convenance_personnelle_avec_activite" && (
-                  <div className="flex items-start gap-2 bg-orange-50 border border-orange-200 p-2.5 rounded-lg">
+                  <div className="flex items-start gap-2 bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800/80 p-2.5 rounded-lg">
                     <input
                       type="checkbox"
                       id="chk-justifs"
@@ -367,7 +367,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                       onChange={(e) => setJustificatifsFournis(e.target.checked)}
                       className="mt-0.5 rounded text-orange-600 focus:ring-orange-500"
                     />
-                    <label htmlFor="chk-justifs" className="text-xs text-orange-950 font-medium cursor-pointer">
+                    <label htmlFor="chk-justifs" className="text-xs text-orange-950 dark:text-orange-200 font-medium cursor-pointer">
                       Je certifie transmettre annuellement à ma DRH les bulletins de paie (&gt; 600h/an) pour maintenir mes droits à l avancement d échelon.
                     </label>
                   </div>
@@ -379,7 +379,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             {selectedType && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {selectedType === "reussite_concours"
                       ? "Date de nomination stagiaire"
                       : selectedType === "promotion_interne"
@@ -392,14 +392,14 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                     type="date"
                     value={dateDebut}
                     onChange={(e) => setDateDebut(e.target.value)}
-                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                     required
                   />
                 </div>
 
                 {(selectedType === "temps_partiel" || selectedType === "conge_parental" || selectedType === "disponibilite" || selectedType === "mobilite_detachement") && (
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Durée (en mois)
                     </label>
                     <input
@@ -408,7 +408,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                       max="60"
                       value={dureeMois}
                       onChange={(e) => setDureeMois(Number(e.target.value))}
-                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                       required
                     />
                   </div>
@@ -421,7 +421,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
               disabled={!selectedType}
               className={`w-full text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-md ${
                 !selectedType
-                  ? "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none border border-slate-300/60"
+                  ? "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed shadow-none border border-slate-300/60 dark:border-slate-700"
                   : "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white shadow-orange-500/20 ring-1 ring-orange-400/30 cursor-pointer"
               }`}
             >
@@ -431,12 +431,12 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
           {/* Liste des événements actuellement appliqués */}
           <div>
-            <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center justify-between">
+            <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center justify-between">
               <span>Événements actuellement appliqués ({evenements.length}) :</span>
             </div>
 
             {evenements.length === 0 ? (
-              <p className="text-xs text-slate-500 italic bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+              <p className="text-xs text-slate-500 dark:text-slate-400 italic bg-slate-50 dark:bg-slate-850 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
                 Aucun événement simulé. Votre frise reflète un parcours linéaire standard sans interruption.
               </p>
             ) : (
@@ -444,32 +444,32 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                 {evenements.map((evt) => (
                   <div
                     key={evt.id}
-                    className="bg-white border border-slate-200 rounded-xl p-3 flex items-start justify-between gap-3 shadow-2xs hover:border-slate-300 transition-colors"
+                    className="bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-start justify-between gap-3 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-900">{evt.titre}</span>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">{evt.titre}</span>
                         {evt.impacteAvancementEchelon ? (
-                          <span className="text-[10px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-800 px-1.5 py-0.5 rounded">
                             Décale l avancement
                           </span>
                         ) : (
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.5 rounded">
                             Avancement préservé
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                         Début : {formatDateFrench(evt.dateDebut)} {evt.dureeMois > 0 ? `• Durée : ${evt.dureeMois} mois` : ""}
                       </div>
-                      <p className="text-xs text-slate-600 mt-1 line-clamp-2">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2">
                         {evt.descriptionDetaillee}
                       </p>
                     </div>
 
                     <button
                       onClick={() => onRemoveEvent(evt.id)}
-                      className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer shrink-0"
+                      className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer shrink-0"
                       title="Supprimer cet événement"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -483,13 +483,13 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
         </div>
 
         {/* Footer Drawer */}
-        <div className="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-          <span className="text-[11px] text-slate-500">
+        <div className="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400">
             Recalcul dynamique en temps réel
           </span>
           <button
             onClick={onClose}
-            className="text-xs font-semibold bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer"
+            className="text-xs font-semibold bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer"
           >
             Fermer le simulateur
           </button>

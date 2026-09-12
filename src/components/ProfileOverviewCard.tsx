@@ -53,16 +53,16 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
   const getCategoryTagClass = (cat: string) => {
     switch (cat) {
       case "A":
-        return "bg-purple-100 text-purple-800 border border-purple-200";
+        return "bg-purple-100 dark:bg-purple-950/70 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-700";
       case "B":
-        return "bg-indigo-100 text-indigo-800 border border-indigo-200";
+        return "bg-indigo-100 dark:bg-indigo-950/70 text-indigo-800 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-700";
       default:
-        return "bg-orange-100 text-orange-950 border border-orange-300";
+        return "bg-orange-100 dark:bg-orange-950/70 text-orange-950 dark:text-orange-200 border border-orange-300 dark:border-orange-700";
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xs border border-slate-200/90 overflow-hidden ring-1 ring-slate-900/5 transition-all">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800 overflow-hidden ring-1 ring-slate-900/5 dark:ring-white/5 transition-all">
       {/* Header card avec look exécutif et badge autorité */}
       <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/70 p-4 sm:p-6 text-white relative overflow-hidden">
         {/* Lueur d'ambiance en arrière-plan */}
@@ -115,22 +115,22 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
 
       {/* Alerte contractuel explicative */}
       {isContractuel && (
-        <div className="p-4 sm:p-5 bg-amber-50/90 border-b border-amber-200/90 flex items-start gap-3 text-slate-800">
+        <div className="p-4 sm:p-5 bg-amber-50/90 dark:bg-amber-950/40 border-b border-amber-200/90 dark:border-amber-800/60 flex items-start gap-3 text-slate-800 dark:text-slate-200">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-950 leading-relaxed">
+          <div className="text-xs text-amber-950 dark:text-amber-200 leading-relaxed">
             <strong>Statut Contractuel de droit public (Décret n° 88-145) :</strong> Vous ne bénéficiez pas d'avancement d'échelon de plein droit ni d'avancement de grade automatique. Votre rémunération fait l'objet d'une <strong>réévaluation triennale indicative</strong> par avenant de la collectivité. Pour devenir fonctionnaire titulaire, préparez le <strong>Concours Interne</strong> (consultez le jalon dédié sur votre frise).
           </div>
         </div>
       )}
 
       {/* Grille des 4 blocs indicateurs statutaires (KPIs) */}
-      <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 bg-slate-50/40 border-b border-slate-200/80">
+      <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 bg-slate-50/40 dark:bg-slate-900/40 border-b border-slate-200/80 dark:border-slate-800">
         
         {/* 1. Grade actuel & Cadre d'emplois (Thème Orange CFDT) */}
-        <div className="bg-gradient-to-br from-orange-50/80 via-white to-amber-50/40 p-5 rounded-2xl border-2 border-orange-200/90 shadow-xs hover:shadow-md hover:border-orange-400 transition-all flex flex-col justify-between group">
+        <div className="bg-gradient-to-br from-orange-50/80 via-white to-amber-50/40 dark:from-orange-950/40 dark:via-slate-900 dark:to-amber-950/20 p-5 rounded-2xl border-2 border-orange-200/90 dark:border-orange-800/60 shadow-xs hover:shadow-md hover:border-orange-400 dark:hover:border-orange-500 transition-all flex flex-col justify-between group">
           <div>
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-bold flex items-center gap-1.5 text-orange-950 uppercase tracking-wider text-[11px]">
+            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2">
+              <span className="font-bold flex items-center gap-1.5 text-orange-950 dark:text-orange-200 uppercase tracking-wider text-[11px]">
                 <span className="p-1.5 rounded-lg bg-orange-600 text-white shadow-2xs">
                   <Briefcase className="w-3.5 h-3.5" />
                 </span>
@@ -140,30 +140,30 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 Cat. {grade.categorie}
               </span>
             </div>
-            <div className="font-black text-slate-950 text-base sm:text-lg leading-snug group-hover:text-orange-700 transition-colors mt-1">
+            <div className="font-black text-slate-950 dark:text-white text-base sm:text-lg leading-snug group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors mt-1">
               {grade.nom}
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-              <div className="inline-flex items-center gap-1.5 bg-orange-100/80 border border-orange-200/90 text-orange-950 text-xs font-semibold px-2.5 py-1 rounded-lg">
-                <span className="text-orange-700 font-medium">Cadre d emplois :</span>
+              <div className="inline-flex items-center gap-1.5 bg-orange-100/80 dark:bg-orange-950/70 border border-orange-200/90 dark:border-orange-800/60 text-orange-950 dark:text-orange-200 text-xs font-semibold px-2.5 py-1 rounded-lg">
+                <span className="text-orange-700 dark:text-orange-400 font-medium">Cadre d emplois :</span>
                 <span className="font-black">{cadre.nom}</span>
               </div>
-              <span className="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+              <span className="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                 Filière {cadre.filiere}
               </span>
             </div>
           </div>
-          <div className="text-xs text-slate-500 mt-3 pt-2.5 border-t border-orange-100 flex items-center gap-1">
+          <div className="text-xs text-slate-500 dark:text-slate-400 mt-3 pt-2.5 border-t border-orange-100 dark:border-orange-950/80 flex items-center gap-1">
             <Clock className="w-3.5 h-3.5 text-orange-500" />
             <span>Nommé(e) le {formatDateFrench(profil.dateNominationGradeActuel)}</span>
           </div>
         </div>
 
         {/* 2. Échelon actuel & Position indiciaire (Thème Émeraude / Menthe) */}
-        <div className="bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/40 p-5 rounded-2xl border-2 border-emerald-200/90 shadow-xs hover:shadow-md hover:border-emerald-400 transition-all flex flex-col justify-between group">
+        <div className="bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/20 p-5 rounded-2xl border-2 border-emerald-200/90 dark:border-emerald-800/60 shadow-xs hover:shadow-md hover:border-emerald-400 dark:hover:border-emerald-500 transition-all flex flex-col justify-between group">
           <div>
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-bold flex items-center gap-1.5 text-emerald-950 uppercase tracking-wider text-[11px]">
+            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2">
+              <span className="font-bold flex items-center gap-1.5 text-emerald-950 dark:text-emerald-200 uppercase tracking-wider text-[11px]">
                 <span className="p-1.5 rounded-lg bg-emerald-600 text-white shadow-2xs">
                   <Award className="w-3.5 h-3.5" />
                 </span>
@@ -174,25 +174,25 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
               </span>
             </div>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl sm:text-3xl font-black text-emerald-950 tracking-tight">
+              <span className="text-2xl sm:text-3xl font-black text-emerald-950 dark:text-emerald-200 tracking-tight">
                 IM {currentEchelon.indiceMajore}
               </span>
-              <span className="text-xs font-black text-emerald-900 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-md">
+              <span className="text-xs font-black text-emerald-900 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-700 px-2 py-0.5 rounded-md">
                 IB {currentEchelon.indiceBrut}
               </span>
             </div>
-            <div className="text-xs text-emerald-950 mt-1.5 flex items-center gap-1 font-medium">
-              <span>Date d effet : <strong className="text-slate-900 font-bold">{formatDateFrench(profil.dateEffetEchelonActuel)}</strong></span>
+            <div className="text-xs text-emerald-950 dark:text-emerald-300 mt-1.5 flex items-center gap-1 font-medium">
+              <span>Date d effet : <strong className="text-slate-900 dark:text-white font-bold">{formatDateFrench(profil.dateEffetEchelonActuel)}</strong></span>
             </div>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-emerald-100">
+          <div className="mt-3 pt-2.5 border-t border-emerald-100 dark:border-emerald-950/80">
             {profil.ancienneteConserveeMois > 0 ? (
-              <div className="text-xs text-emerald-800 font-bold flex items-center gap-1">
+              <div className="text-xs text-emerald-800 dark:text-emerald-300 font-bold flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>+{profil.ancienneteConserveeMois} mois d ancienneté conservée</span>
               </div>
             ) : (
-              <div className="text-xs text-slate-600 font-medium">
+              <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">
                 {isContractuel ? "Périodicité réévaluation : 3 ans (triennale)" : `Durée normale : ${currentEchelon.dureeAnnees} an(s)`}
               </div>
             )}
@@ -200,66 +200,66 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
         </div>
 
         {/* 3. Traitement brut mensuel de base */}
-        <div className="bg-white p-4.5 rounded-xl border border-slate-200/80 shadow-2xs hover:shadow-sm hover:border-indigo-200 transition-all flex flex-col justify-between group">
+        <div className="bg-white dark:bg-slate-850 p-4.5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:shadow-sm hover:border-indigo-200 dark:hover:border-indigo-700 transition-all flex flex-col justify-between group">
           <div>
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-semibold flex items-center gap-1.5 text-slate-700">
-                <span className="p-1 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">
+            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2">
+              <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                <span className="p-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
                   <DollarSign className="w-3.5 h-3.5" />
                 </span>
                 Traitement indiciaire
               </span>
-              <span className="text-[10px] font-bold text-indigo-900 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-indigo-900 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-2 py-0.5 rounded-md">
                 {profil.quotiteActuelle === 100 ? "Temps plein (100%)" : `${profil.quotiteActuelle}% quotité`}
               </span>
             </div>
-            <div className="text-2xl font-black text-indigo-950 tracking-tight">
+            <div className="text-2xl font-black text-indigo-950 dark:text-indigo-200 tracking-tight">
               {Math.round(currentEchelon.indiceMajore * 4.92278 * (profil.quotiteActuelle === 80 ? (6/7) : profil.quotiteActuelle === 90 ? (32/35) : (profil.quotiteActuelle / 100)))} €
-              <span className="text-xs font-semibold text-slate-500 ml-1">/ mois</span>
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 ml-1">/ mois</span>
             </div>
-            <div className="text-[11px] text-slate-500 mt-1.5">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
               Hors primes, RIFSEEP et SFT
             </div>
           </div>
-          <div className="text-[11px] text-indigo-700 mt-3 pt-2.5 border-t border-slate-100 font-medium">
+          <div className="text-[11px] text-indigo-700 dark:text-indigo-300 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 font-medium">
             Valeur du point : 4,92278 € / mois
           </div>
         </div>
 
         {/* 4. Ancienneté globale */}
-        <div className="bg-white p-4.5 rounded-xl border border-slate-200/80 shadow-2xs hover:shadow-sm hover:border-amber-200 transition-all flex flex-col justify-between group">
+        <div className="bg-white dark:bg-slate-850 p-4.5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:shadow-sm hover:border-amber-200 dark:hover:border-amber-700 transition-all flex flex-col justify-between group">
           <div>
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-semibold flex items-center gap-1.5 text-slate-700">
-                <span className="p-1 rounded-lg bg-amber-50 text-amber-600 border border-amber-100">
+            <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2">
+              <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                <span className="p-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-300 border border-amber-100 dark:border-amber-800">
                   <Clock className="w-3.5 h-3.5" />
                 </span>
                 Ancienneté cumulée
               </span>
-              <span className="text-[10px] font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-md">
                 Total FP
               </span>
             </div>
-            <div className="text-base font-extrabold text-slate-900">
+            <div className="text-base font-extrabold text-slate-900 dark:text-white">
               {formatDurationInYearsAndMonths(moisAnciennetePublic)}
             </div>
-            <div className="text-xs text-slate-600 mt-1 space-y-0.5">
-              <div>Dans le cadre ({grade.categorie}) : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteCadre)}</span></div>
-              <div>Dans le grade : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteGrade)}</span></div>
+            <div className="text-xs text-slate-600 dark:text-slate-400 mt-1 space-y-0.5">
+              <div>Dans le cadre ({grade.categorie}) : <span className="font-semibold text-slate-800 dark:text-slate-200">{formatDurationInYearsAndMonths(moisAncienneteCadre)}</span></div>
+              <div>Dans le grade : <span className="font-semibold text-slate-800 dark:text-slate-200">{formatDurationInYearsAndMonths(moisAncienneteGrade)}</span></div>
             </div>
           </div>
-          <div className="text-[11px] text-slate-600 mt-2.5 pt-2 border-t border-slate-100">
-            Dans l échelon : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteEchelon)}</span>
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+            Dans l échelon : <span className="font-semibold text-slate-800 dark:text-slate-200">{formatDurationInYearsAndMonths(moisAncienneteEchelon)}</span>
           </div>
         </div>
 
       </div>
 
       {/* Barre de progression vers le prochain échelon avec callout exécutif */}
-      <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50/90 via-white to-slate-50/90 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5">
+      <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50/90 via-white to-slate-50/90 dark:from-slate-900/90 dark:via-slate-850 dark:to-slate-900/90 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between text-xs mb-2">
-            <span className="font-bold text-slate-800 flex items-center gap-2">
+            <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -271,11 +271,11 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 }
               </span>
             </span>
-            <span className="font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/80 shrink-0 ml-2">
+            <span className="font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200/80 dark:border-slate-700 shrink-0 ml-2">
               {moisAncienneteEchelon} / {moisDureeEchelon} mois ({progressionPourcent}%)
             </span>
           </div>
-          <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200/80 p-0.5">
+          <div className="w-full bg-slate-100 dark:bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-200/80 dark:border-slate-700 p-0.5">
             <div
               className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-xs"
               style={{ width: `${progressionPourcent}%` }}
@@ -284,21 +284,23 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
         </div>
 
         {prochainEchelonJalon && (
-          <div className={`lg:border-l lg:border-slate-200 lg:pl-5 flex items-center justify-between sm:justify-start gap-3.5 w-full lg:w-auto ${
-            isContractuel ? "bg-amber-50/80 border-amber-300/80" : "bg-emerald-50/70 border-emerald-200/70"
+          <div className={`lg:border-l lg:border-slate-200 dark:lg:border-slate-800 lg:pl-5 flex items-center justify-between sm:justify-start gap-3.5 w-full lg:w-auto ${
+            isContractuel 
+              ? "bg-amber-50/80 dark:bg-amber-950/40 border-amber-300/80 dark:border-amber-800/60" 
+              : "bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200/70 dark:border-emerald-800/60"
           } border rounded-xl p-3 shadow-2xs`}>
             <div className="flex items-center gap-3 min-w-0">
               <div className={`p-2 rounded-lg ${isContractuel ? "bg-amber-600" : "bg-emerald-600"} text-white shrink-0`}>
                 <Award className="w-5 h-5" />
               </div>
               <div className="min-w-0">
-                <div className={`text-[10px] ${isContractuel ? "text-amber-900" : "text-emerald-900"} uppercase font-black tracking-wider truncate`}>
+                <div className={`text-[10px] ${isContractuel ? "text-amber-900 dark:text-amber-300" : "text-emerald-900 dark:text-emerald-300"} uppercase font-black tracking-wider truncate`}>
                   {isContractuel ? "Réévaluation indicative (Avenant)" : "Prochain échelon garanti"}
                 </div>
-                <div className={`text-xs font-black ${isContractuel ? "text-amber-950" : "text-emerald-950"}`}>
+                <div className={`text-xs font-black ${isContractuel ? "text-amber-950 dark:text-amber-100" : "text-emerald-950 dark:text-emerald-100"}`}>
                   {formatDateFrench(prochainEchelonJalon.date)}
                 </div>
-                <div className={`text-[11px] ${isContractuel ? "text-amber-800" : "text-emerald-800"} font-bold truncate`}>
+                <div className={`text-[11px] ${isContractuel ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"} font-bold truncate`}>
                   +{prochainEchelonJalon.gainIndiciaire} pts (~+{Math.round(prochainEchelonJalon.gainFinancierBrutMensuel || 0)} € brut/mois)
                 </div>
               </div>
@@ -308,8 +310,8 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 onClick={onScrollToNextMilestone}
                 className={`text-xs ${
                   isContractuel 
-                    ? "text-amber-800 hover:text-amber-950 bg-white hover:bg-amber-100 border-amber-300/80" 
-                    : "text-emerald-800 hover:text-emerald-950 bg-white hover:bg-emerald-100 border-emerald-300/80"
+                    ? "text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-white bg-white dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-slate-700 border-amber-300/80 dark:border-amber-700/80" 
+                    : "text-emerald-800 dark:text-emerald-300 hover:text-emerald-950 dark:hover:text-white bg-white dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-slate-700 border-emerald-300/80 dark:border-emerald-700/80"
                 } border p-2 rounded-lg transition-all cursor-pointer shadow-2xs shrink-0`}
                 title="Consulter ce jalon sur la frise"
               >
