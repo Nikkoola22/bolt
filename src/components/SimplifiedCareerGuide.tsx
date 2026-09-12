@@ -14,8 +14,7 @@ import {
   Sparkles, 
   ShieldCheck, 
   Layers,
-  FileEdit,
-  Milestone
+  FileEdit
 } from "lucide-react";
 
 interface SimplifiedCareerGuideProps {
@@ -148,9 +147,6 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
             Que souhaitez-vous savoir en priorité ?
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Cliquez sur l une des deux questions pour obtenir une réponse directe, chiffrée et conforme aux statuts.
-          </p>
         </div>
 
         {/* Les 2 grands boutons de sélection */}
@@ -260,72 +256,6 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               {premierEchelon ? (
                 <div className="space-y-6">
                   
-                  {/* FRISSE ÉTAPE PAR ÉTAPE : SITUATION ACTUELLE -> 1ER ÉCHELON -> 2E ÉCHELON */}
-                  <div className="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-800">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                        <Milestone className="w-4 h-4" />
-                        Trajectoire sur vos 2 prochains échelons
-                      </span>
-                      <span className="text-[11px] text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-slate-700">
-                        {isContractuel ? "Réévaluations triennales" : "Cadence PPCR garantie"}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 relative">
-                      
-                      {/* Palier 0 : Aujourd'hui */}
-                      <div className="bg-slate-800/90 border border-slate-700 rounded-xl p-3.5 space-y-1">
-                        <span className="text-[10px] font-bold uppercase text-slate-400">Situation Actuelle</span>
-                        <div className="text-base font-black text-white">Échelon {profil.echelonActuel}</div>
-                        <div className="text-xs text-slate-300 font-semibold">IM {resultatSimulation.jalonActuel.indiceMajore} (IB {resultatSimulation.jalonActuel.indiceBrut})</div>
-                        <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-700/60">
-                          ~{Math.round(resultatSimulation.jalonActuel.traitementBrutMensuel)} € brut / mois
-                        </div>
-                      </div>
-
-                      {/* Palier 1 : 1er Prochain Échelon */}
-                      <div className="bg-emerald-950/70 border-2 border-emerald-500/80 rounded-xl p-3.5 space-y-1 relative shadow-inner">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black uppercase text-emerald-300">1er Prochain Échelon</span>
-                          <span className="text-[10px] font-bold text-emerald-400 bg-emerald-900/80 px-2 py-0.2 rounded-full">Dans {delaiPremierTexte}</span>
-                        </div>
-                        <div className="text-base font-black text-emerald-200">Échelon {premierEchelon.echelonNumero}</div>
-                        <div className="text-xs text-emerald-100 font-semibold flex items-center gap-1">
-                          <span>IM {premierEchelon.indiceMajore}</span>
-                          <span className="text-emerald-400 text-[11px] font-bold">(+{premierEchelon.gainIndiciaire} pts)</span>
-                        </div>
-                        <div className="text-[11px] text-emerald-300 pt-1 border-t border-emerald-800/60 font-bold">
-                          +~{Math.round(premierEchelon.gainFinancierBrutMensuel || 0)} € brut / mois
-                        </div>
-                      </div>
-
-                      {/* Palier 2 : 2ème Prochain Échelon */}
-                      {deuxiemeEchelon ? (
-                        <div className="bg-indigo-950/60 border border-indigo-500/60 rounded-xl p-3.5 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black uppercase text-indigo-300">2e Prochain Échelon</span>
-                            <span className="text-[10px] font-bold text-indigo-400 bg-indigo-900/80 px-2 py-0.2 rounded-full">Dans {delaiDeuxiemeTexte}</span>
-                          </div>
-                          <div className="text-base font-black text-indigo-200">Échelon {deuxiemeEchelon.echelonNumero}</div>
-                          <div className="text-xs text-indigo-100 font-semibold flex items-center gap-1">
-                            <span>IM {deuxiemeEchelon.indiceMajore}</span>
-                            <span className="text-indigo-400 text-[11px] font-bold">(+{gainIndiciaireDeuxiemeCumule} pts cumulés)</span>
-                          </div>
-                          <div className="text-[11px] text-indigo-300 pt-1 border-t border-indigo-800/60 font-bold">
-                            +~{Math.round(gainFinancierDeuxiemeCumule)} € brut / mois cumulés
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3.5 flex flex-col justify-center items-center text-center">
-                          <span className="text-xs font-bold text-slate-300">Échelon sommital atteint</span>
-                          <span className="text-[11px] text-slate-400 mt-1">L échelon {premierEchelon.echelonNumero} est le sommet de votre grade.</span>
-                        </div>
-                      )}
-
-                    </div>
-                  </div>
-
                   {/* LES DEUX CARTES DÉTAILLÉES CÔTE À CÔTE */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     
@@ -633,29 +563,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
         </div>
       </div>
 
-      {/* BANNIÈRE DE REDIRECTION VERS LA VERSION COMPLÈTE */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 sm:p-7 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-amber-300 font-bold text-xs uppercase tracking-wider">
-            <Sparkles className="w-4 h-4" />
-            Approfondir votre simulation
-          </div>
-          <h3 className="text-base sm:text-lg font-black text-white mt-1">
-            Envie de visualiser l intégralité de votre frise sur 15 ans ?
-          </h3>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl">
-            La Version Complète vous offre la frise prospective détaillée, la checklist de toutes les conditions, le comparateur d impacts et la simulation d événements de vie (temps partiel, congé parental, disponibilité, concours).
-          </p>
-        </div>
 
-        <button
-          onClick={onSwitchToComplete}
-          className="w-full sm:w-auto px-5 py-3 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-md shadow-emerald-900/30 active:scale-[0.98] transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2 border border-emerald-300/30"
-        >
-          <span>Accéder à la Version Complète</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 };
