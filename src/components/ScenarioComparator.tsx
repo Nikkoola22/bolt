@@ -60,7 +60,7 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Colonne 1 : Scénario Référence */}
-        <div className="bg-slate-50/80 dark:bg-slate-850 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 space-y-3.5 shadow-2xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 space-y-3.5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
@@ -111,7 +111,7 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
         <div className={`border rounded-2xl p-5 space-y-3.5 shadow-2xs transition-all ${
           hasSimulatedEvents
             ? "bg-orange-50/50 dark:bg-orange-950/30 border-orange-200/90 dark:border-orange-800 ring-2 ring-orange-500/10"
-            : "bg-slate-50/80 dark:bg-slate-850 border-slate-200/90 dark:border-slate-800"
+            : "bg-slate-50/80 dark:bg-slate-800 border-slate-200/90 dark:border-slate-800"
         }`}>
           <div className="flex items-center justify-between">
             <span className="text-xs font-extrabold uppercase tracking-wider text-orange-950 dark:text-orange-200 flex items-center gap-2">

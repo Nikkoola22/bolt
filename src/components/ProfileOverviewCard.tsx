@@ -200,7 +200,7 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
         </div>
 
         {/* 3. Traitement brut mensuel de base */}
-        <div className="bg-white dark:bg-slate-850 p-4.5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:shadow-sm hover:border-indigo-200 dark:hover:border-indigo-700 transition-all flex flex-col justify-between group">
+        <div className="bg-white dark:bg-slate-800 p-4.5 rounded-xl border border-slate-200/80 dark:border-slate-700 shadow-2xs hover:shadow-sm hover:border-indigo-200 dark:hover:border-indigo-600 transition-all flex flex-col justify-between group">
           <div>
             <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2">
               <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
@@ -221,13 +221,13 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
               Hors primes, RIFSEEP et SFT
             </div>
           </div>
-          <div className="text-[11px] text-indigo-700 dark:text-indigo-300 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 font-medium">
+          <div className="text-[11px] text-indigo-700 dark:text-indigo-300 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-700 font-medium">
             Valeur du point : 4,92278 € / mois
           </div>
         </div>
 
         {/* 4. Ancienneté globale */}
-        <div className="bg-white dark:bg-slate-850 p-4.5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-2xs hover:shadow-sm hover:border-amber-200 dark:hover:border-amber-700 transition-all flex flex-col justify-between group">
+        <div className="bg-white dark:bg-slate-800 p-4.5 rounded-xl border border-slate-200/80 dark:border-slate-700 shadow-2xs hover:shadow-sm hover:border-amber-200 dark:hover:border-amber-600 transition-all flex flex-col justify-between group">
           <div>
             <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2">
               <span className="font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
@@ -248,7 +248,7 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
               <div>Dans le grade : <span className="font-semibold text-slate-800 dark:text-slate-200">{formatDurationInYearsAndMonths(moisAncienneteGrade)}</span></div>
             </div>
           </div>
-          <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-700">
             Dans l échelon : <span className="font-semibold text-slate-800 dark:text-slate-200">{formatDurationInYearsAndMonths(moisAncienneteEchelon)}</span>
           </div>
         </div>
@@ -256,7 +256,7 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
       </div>
 
       {/* Barre de progression vers le prochain échelon avec callout exécutif */}
-      <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50/90 via-white to-slate-50/90 dark:from-slate-900/90 dark:via-slate-850 dark:to-slate-900/90 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5">
+      <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50/90 via-white to-slate-50/90 dark:from-slate-900/90 dark:via-slate-800 dark:to-slate-900/90 flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-5">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between text-xs mb-2">
             <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">

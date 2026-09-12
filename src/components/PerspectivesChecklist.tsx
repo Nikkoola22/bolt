@@ -69,13 +69,13 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
       )}
 
       {perspectivesJalons.length === 0 ? (
-        <div className="p-8 text-center text-xs text-slate-600 dark:text-slate-400 bg-slate-50/80 dark:bg-slate-850 rounded-2xl border border-slate-200/80 dark:border-slate-800">
+        <div className="p-8 text-center text-xs text-slate-600 dark:text-slate-400 bg-slate-50/80 dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-800">
           Vous êtes actuellement sur le grade sommital de votre cadre d emplois sans perspective d avancement direct par tableau. Explorez les passerelles de détachement ou de concours interne.
         </div>
       ) : (
         <div className="space-y-4">
           {/* Légende visuelle des différentes natures de perspectives */}
-          <div className="flex items-center gap-2 flex-wrap text-xs bg-slate-50/90 dark:bg-slate-850 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-2xs">
+          <div className="flex items-center gap-2 flex-wrap text-xs bg-slate-50/90 dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-2xs">
             <span className="font-extrabold text-slate-700 dark:text-slate-300 mr-1 text-[11px] uppercase tracking-wider">Fonds par perspective :</span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800 font-bold text-[11px]">
               <span className="w-2 h-2 rounded-full bg-purple-500"></span> Au choix / Ancienneté

@@ -217,7 +217,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 value={formData.prenom}
                 onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
                 placeholder="Ex: Atlas, Sophie, Karim..."
-                className="w-full bg-slate-50/70 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm sm:text-base focus:bg-white dark:focus:bg-slate-850 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all shadow-2xs"
+                className="w-full bg-slate-50/70 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm sm:text-base focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all shadow-2xs"
                 required
               />
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
@@ -230,7 +230,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               <select
                 value={formData.statut}
                 onChange={(e) => handleStatutChange(e.target.value as StatutAgent)}
-                className="w-full bg-slate-50/70 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm sm:text-base focus:bg-white dark:focus:bg-slate-850 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs cursor-pointer"
+                className="w-full bg-slate-50/70 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm sm:text-base focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs cursor-pointer"
               >
                 <option value="titulaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fonctionnaire Titulaire</option>
                 <option value="stagiaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fonctionnaire Stagiaire (en cours de stage probatoire)</option>

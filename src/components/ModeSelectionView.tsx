@@ -59,7 +59,7 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
         {/* CARTE 1 : VERSION SIMPLIFIÉE */}
         <div 
           onClick={onSelectSimplified}
-          className="bg-white dark:bg-slate-900 hover:bg-gradient-to-br hover:from-amber-50/40 hover:via-white hover:to-orange-50/30 dark:hover:from-amber-950/30 dark:hover:via-slate-900 dark:hover:to-orange-950/20 border-2 border-slate-200/90 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
+          className="bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/90 border-2 border-slate-200/90 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
         >
           {/* Liseré subtil supérieur */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 opacity-80"></div>
@@ -112,7 +112,7 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
         {/* CARTE 2 : VERSION COMPLÈTE */}
         <div 
           onClick={onSelectComplete}
-          className="bg-white dark:bg-slate-900 hover:bg-gradient-to-br hover:from-orange-50/40 hover:via-white hover:to-amber-50/30 dark:hover:from-orange-950/30 dark:hover:via-slate-900 dark:hover:to-amber-950/20 border-2 border-slate-200/90 dark:border-slate-800 hover:border-orange-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
+          className="bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/90 border-2 border-slate-200/90 dark:border-slate-800 hover:border-orange-500 dark:hover:border-orange-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
         >
           {/* Liseré subtil supérieur */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 opacity-80"></div>

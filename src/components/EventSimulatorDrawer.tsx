@@ -165,7 +165,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
         <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800 dark:text-slate-100">
 
           {/* Formulaire d ajout personnalisé */}
-          <form onSubmit={handleCreateEvent} className="bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-4">
+          <form onSubmit={handleCreateEvent} className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-4">
             <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
               <Plus className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               Ajouter un événement personnalisé :
@@ -297,7 +297,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             )}
 
             {selectedType === "mobilite_detachement" && (
-              <div className="bg-gradient-to-br from-slate-50 via-stone-50 to-white dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-850 border border-slate-300 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-800 dark:text-slate-200 space-y-2 shadow-2xs">
+              <div className="bg-gradient-to-br from-slate-50 via-stone-50 to-white dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-800 border border-slate-300 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-800 dark:text-slate-200 space-y-2 shadow-2xs">
                 <div className="font-extrabold text-slate-900 dark:text-white text-sm flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-slate-700 text-white shadow-2xs">
                     <Layers className="w-4 h-4" />
@@ -436,7 +436,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             </div>
 
             {evenements.length === 0 ? (
-              <p className="text-xs text-slate-500 dark:text-slate-400 italic bg-slate-50 dark:bg-slate-850 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+              <p className="text-xs text-slate-500 dark:text-slate-400 italic bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
                 Aucun événement simulé. Votre frise reflète un parcours linéaire standard sans interruption.
               </p>
             ) : (
@@ -444,7 +444,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                 {evenements.map((evt) => (
                   <div
                     key={evt.id}
-                    className="bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-start justify-between gap-3 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
+                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-start justify-between gap-3 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -483,7 +483,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
         </div>
 
         {/* Footer Drawer */}
-        <div className="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div className="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <span className="text-[11px] text-slate-500 dark:text-slate-400">
             Recalcul dynamique en temps réel
           </span>

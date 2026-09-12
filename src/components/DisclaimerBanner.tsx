@@ -53,7 +53,7 @@ export const DisclaimerBanner: React.FC = () => {
 
       {expanded && (
         <div className="mt-4 pt-4 border-t border-amber-200/80 dark:border-amber-800/60 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-700 dark:text-slate-300 animate-fadeIn">
-          <div className="bg-white/90 dark:bg-slate-850 p-4 rounded-xl border border-amber-200/80 dark:border-amber-800/60 shadow-2xs space-y-1">
+          <div className="bg-white/90 dark:bg-slate-800 p-4 rounded-xl border border-amber-200/80 dark:border-amber-700/60 shadow-2xs space-y-1">
             <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               Avancement d Échelon
@@ -63,7 +63,7 @@ export const DisclaimerBanner: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-white/90 dark:bg-slate-850 p-4 rounded-xl border border-amber-200/80 dark:border-amber-800/60 shadow-2xs space-y-1">
+          <div className="bg-white/90 dark:bg-slate-800 p-4 rounded-xl border border-amber-200/80 dark:border-amber-700/60 shadow-2xs space-y-1">
             <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
               <span className="w-2 h-2 rounded-full bg-purple-500"></span>
               Avancement de Grade
@@ -73,7 +73,7 @@ export const DisclaimerBanner: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-white/90 dark:bg-slate-850 p-4 rounded-xl border border-amber-200/80 dark:border-amber-800/60 shadow-2xs space-y-1">
+          <div className="bg-white/90 dark:bg-slate-800 p-4 rounded-xl border border-amber-200/80 dark:border-amber-700/60 shadow-2xs space-y-1">
             <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
               <span className="w-2 h-2 rounded-full bg-amber-500"></span>
               Promotion Interne (C &rarr; B &rarr; A)

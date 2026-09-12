@@ -155,7 +155,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
             );
             let badgeBg = "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700";
             let typeLabel = "Jalon";
-            let cardBg = "bg-gradient-to-br from-slate-50/80 via-white to-slate-100/50 dark:from-slate-850 dark:via-slate-900 dark:to-slate-850 border-slate-200/90 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-md";
+            let cardBg = "bg-gradient-to-br from-slate-50/80 via-white to-slate-100/50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 border-slate-200/90 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-md";
             let selectedBorder = "border-orange-600 ring-4 ring-orange-500/25 shadow-md";
             let titleHover = "group-hover:text-orange-700 dark:group-hover:text-orange-400";
 
@@ -245,7 +245,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
               );
               badgeBg = "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700";
               typeLabel = "Reprise / Fin de période";
-              cardBg = "bg-gradient-to-br from-slate-100/80 via-white to-slate-50 dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-850 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-slate-500/10";
+              cardBg = "bg-gradient-to-br from-slate-100/80 via-white to-slate-50 dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-800 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-slate-500/10";
               selectedBorder = "border-slate-500 ring-4 ring-slate-400/25 shadow-md";
               titleHover = "group-hover:text-slate-800 dark:group-hover:text-slate-200";
             }
@@ -322,7 +322,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                   </div>
 
                   {/* Résumé de l explication */}
-                  <p className="text-xs text-slate-700 dark:text-slate-300 mt-3 line-clamp-2 bg-slate-50/80 dark:bg-slate-850/80 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800 leading-relaxed">
+                  <p className="text-xs text-slate-700 dark:text-slate-300 mt-3 line-clamp-2 bg-slate-50/80 dark:bg-slate-800/80 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800 leading-relaxed">
                     {jalon.pourquoi}
                   </p>
 

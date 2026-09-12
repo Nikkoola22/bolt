@@ -192,7 +192,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
               {/* Pièces fournies par l agent */}
-              <div className="bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl">
+              <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl">
                 <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2 text-xs">
                   <FileText className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                   À fournir par l agent :
@@ -212,7 +212,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
               </div>
 
               {/* Décisions et actes DRH / Collectivité */}
-              <div className="bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl">
+              <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl">
                 <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-2 text-xs">
                   <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   Décisions & actes DRH :
@@ -235,7 +235,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
 
           {/* Section 4 : HYPOTHÈSES & LIGNES DIRECTRICES DE GESTION */}
           {jalon.hypothesesEtAlertes.length > 0 && (
-            <div className="bg-slate-100/70 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl text-xs text-slate-700 dark:text-slate-300">
+            <div className="bg-slate-100/70 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl text-xs text-slate-700 dark:text-slate-300">
               <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 mb-1.5">
                 <BookOpen className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
                 Cadre réglementaire & Lignes Directrices de Gestion (LDG) :
@@ -268,7 +268,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                   onClose();
                   onOpenAddEvent("temps_partiel");
                 }}
-                className="text-xs bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
               >
                 <span>Et si je passais à 80% (Temps partiel) ?</span>
                 <ArrowRight className="w-3 h-3 text-slate-500" />
@@ -290,7 +290,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                       onClose();
                       onOpenAddEvent("conge_parental");
                     }}
-                    className="text-xs bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                    className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <span>Et si je prenais un congé parental ?</span>
                     <ArrowRight className="w-3 h-3 text-slate-500" />
@@ -303,7 +303,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                       onClose();
                       onOpenAddEvent("disponibilite");
                     }}
-                    className="text-xs bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                    className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <span>Et si je prenais 1 an de dispo ?</span>
                     <ArrowRight className="w-3 h-3 text-slate-500" />
@@ -313,7 +313,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                       onClose();
                       onOpenAddEvent("examen_professionnel");
                     }}
-                    className="text-xs bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                    className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <span>Et si je réussissais l examen pro ?</span>
                     <ArrowRight className="w-3 h-3 text-slate-500" />
@@ -326,7 +326,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
         </div>
 
         {/* Footer modal */}
-        <div className="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-[11px] text-slate-500 dark:text-slate-400 text-center sm:text-left">
             Simulation indicative • Contrôle final impératif par la DRH
           </span>

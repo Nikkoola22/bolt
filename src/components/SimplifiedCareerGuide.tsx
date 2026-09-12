@@ -170,7 +170,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             className={`p-5 sm:p-6 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
               activeQuestion === "echelon"
                 ? "bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/30 border-emerald-600 dark:border-emerald-500 shadow-md ring-4 ring-emerald-500/15 scale-[1.01]"
-                : "bg-white dark:bg-slate-850 hover:bg-slate-50/70 dark:hover:bg-slate-800 border-slate-200/90 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700"
+                : "bg-white dark:bg-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-700 border-slate-200/90 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-600"
             }`}
           >
             <div className="flex items-start justify-between gap-3">
@@ -218,7 +218,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             className={`p-5 sm:p-6 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
               activeQuestion === "promotion"
                 ? "bg-gradient-to-br from-purple-50/90 via-white to-violet-50/40 dark:from-purple-950/40 dark:via-slate-900 dark:to-violet-950/30 border-purple-600 dark:border-purple-500 shadow-md ring-4 ring-purple-500/15 scale-[1.01]"
-                : "bg-white dark:bg-slate-850 hover:bg-slate-50/70 dark:hover:bg-slate-800 border-slate-200/90 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-700"
+                : "bg-white dark:bg-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-700 border-slate-200/90 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-600"
             }`}
           >
             <div className="flex items-start justify-between gap-3">
@@ -302,7 +302,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                       {/* 3 métriques chiffrées */}
                       <div className="grid grid-cols-3 gap-2.5">
-                        <div className="bg-white dark:bg-slate-850 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
+                        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
                           <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                             <Clock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                             Délai
@@ -315,7 +315,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                           </div>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-850 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
+                        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
                           <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                             <Award className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
                             Indice
@@ -328,7 +328,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                           </div>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-850 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
+                        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
                           <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                             <DollarSign className="w-3 h-3 text-teal-600 dark:text-teal-400" />
                             Gain Brut
@@ -342,7 +342,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                         </div>
                       </div>
 
-                      <div className="bg-white/80 dark:bg-slate-850 p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <div className="bg-white/80 dark:bg-slate-800 p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                         <strong>Règle statutaire :</strong> {isContractuel
                           ? "Réévaluation triennale obligatoire (art. 1-2 décret 88-145) fixée à 36 mois après la dernière revalorisation."
                           : "Avancement d échelon continu à cadence unique PPCR, validé automatiquement par arrêté DRH."}
@@ -375,7 +375,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                         {/* 3 métriques chiffrées cumulées */}
                         <div className="grid grid-cols-3 gap-2.5">
-                          <div className="bg-white dark:bg-slate-850 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
                             <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                               <Clock className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
                               Échéance
@@ -388,7 +388,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                             </div>
                           </div>
 
-                          <div className="bg-white dark:bg-slate-850 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
                             <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                               <Award className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
                               Indice Cible
@@ -401,7 +401,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                             </div>
                           </div>
 
-                          <div className="bg-white dark:bg-slate-850 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
                             <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                               <DollarSign className="w-3 h-3 text-teal-600 dark:text-teal-400" />
                               Gain Cumulé
@@ -415,12 +415,12 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                           </div>
                         </div>
 
-                        <div className="bg-white/80 dark:bg-slate-850 p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-800/60 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                        <div className="bg-white/80 dark:bg-slate-800 p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-800/60 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                           <strong>Rythme de progression :</strong> Ce 2e échelon sera franchi après {delaiEntreEchelonsTexte} passés dans l échelon {premierEchelon.echelonNumero}, garantissant un gain global cumulé de +{gainIndiciaireDeuxiemeCumule} points d Indice Majoré.
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center space-y-2">
+                      <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center space-y-2">
                         <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold">
                           ✓
                         </div>
@@ -446,7 +446,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                 </div>
               ) : (
-                <div id="block-premier-palier" className="bg-slate-50 dark:bg-slate-850 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400 scroll-mt-24">
+                <div id="block-premier-palier" className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400 scroll-mt-24">
                   Vous avez atteint l échelon sommital de votre grade. Votre évolution indiciaire ultérieure passe par un avancement de grade.
                 </div>
               )}
@@ -466,13 +466,13 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-black uppercase tracking-wider text-purple-900 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 border border-purple-300 dark:border-purple-750 px-3 py-1 rounded-full">
+                        <span className="text-xs font-black uppercase tracking-wider text-purple-900 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 border border-purple-300 dark:border-purple-700 px-3 py-1 rounded-full">
                           {isContractuel 
                             ? "Voie d accès au statut de Titulaire"
                             : "Avancement au choix (sans examen professionnel)"}
                         </span>
                         {!isContractuel && (
-                          <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-750 px-2.5 py-0.5 rounded-full">
+                          <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 px-2.5 py-0.5 rounded-full">
                             Inscription directe au Tableau LDG
                           </span>
                         )}
@@ -571,7 +571,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   )}
                 </div>
               ) : (
-                <div id="block-avancement-choix" className="bg-slate-50 dark:bg-slate-850 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400 scroll-mt-24">
+                <div id="block-avancement-choix" className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400 scroll-mt-24">
                   Aucune perspective d avancement direct identifiée pour ce grade. Vous êtes au sommet de votre cadre d emplois.
                 </div>
               )}

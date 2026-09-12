@@ -117,7 +117,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                 type="text"
                 value={form.prenom}
                 onChange={(e) => setForm({ ...form, prenom: e.target.value })}
-                className="w-full bg-slate-50 dark:bg-slate-850 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500 font-medium text-slate-900 dark:text-white"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500 font-medium text-slate-900 dark:text-white"
                 required
               />
             </div>
@@ -231,7 +231,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   max="36"
                   value={form.ancienneteConserveeMois}
                   onChange={(e) => setForm({ ...form, ancienneteConserveeMois: Number(e.target.value) })}
-                  className="w-20 sm:w-24 bg-slate-50 dark:bg-slate-850 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-2.5 py-1.5 font-bold text-sm text-center focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500"
+                  className="w-20 sm:w-24 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-2.5 py-1.5 font-bold text-sm text-center focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500"
                 />
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">mois</span>
               </div>
@@ -245,7 +245,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
               <select
                 value={form.quotiteActuelle}
                 onChange={(e) => setForm({ ...form, quotiteActuelle: Number(e.target.value) })}
-                className="w-full bg-slate-50 dark:bg-slate-850 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 font-semibold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 font-semibold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500"
               >
                 <option value={100}>100% (Temps complet)</option>
                 <option value={90}>90% (Payé 91,4%)</option>
@@ -326,7 +326,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   className={`py-1.5 px-2 rounded-lg font-medium border text-center transition-colors cursor-pointer text-xs ${
                     form.statut === st.val
                       ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
-                      : "bg-slate-50 dark:bg-slate-850 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
                   }`}
                 >
                   {st.label}

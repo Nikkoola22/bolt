@@ -89,7 +89,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     focusRing: "focus:ring-amber-500/20 focus:border-amber-500",
   },
   slate: {
-    cardBg: "bg-gradient-to-b from-slate-50/90 via-white to-slate-50/40 dark:from-slate-900 dark:via-slate-850 dark:to-slate-900/60",
+    cardBg: "bg-gradient-to-b from-slate-50/90 via-white to-slate-50/40 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900/60",
     border: "border-slate-300 dark:border-slate-700",
     hoverBorder: "hover:border-slate-500 dark:hover:border-slate-400",
     iconBg: "bg-slate-700 dark:bg-slate-600",
@@ -174,7 +174,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
               <select
                 value={currentYear}
                 onChange={(e) => handleYearChange(e.target.value)}
-                className={`w-full bg-white dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 font-bold rounded-lg px-1 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-850 focus:ring-2 ${styles.focusRing} transition-all cursor-pointer shadow-2xs text-center`}
+                className={`w-full bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 font-bold rounded-lg px-1 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 ${styles.focusRing} transition-all cursor-pointer shadow-2xs text-center`}
                 title={`Choisir l'année pour : ${label}`}
               >
                 {yearsList.map((y) => (
@@ -193,7 +193,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
                 max={`${maxYear}-12-31`}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className={`w-full bg-white dark:bg-slate-850 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-slate-100 font-bold text-xs focus:bg-white dark:focus:bg-slate-850 focus:ring-2 ${styles.focusRing} transition-all shadow-2xs`}
+                className={`w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-slate-100 font-bold text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 ${styles.focusRing} transition-all shadow-2xs`}
                 required={required}
               />
             </div>
@@ -240,7 +240,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
           <select
             value={currentYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="w-full bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 font-bold rounded-lg px-1 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs text-center"
+            className="w-full bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 font-bold rounded-lg px-1 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs text-center"
             title={`Choisir l'année pour : ${label}`}
           >
             {yearsList.map((y) => (

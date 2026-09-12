@@ -355,7 +355,7 @@ export function App() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-700 dark:text-slate-300">
               {/* Colonne 1 : Conseils pour l entretien annuel */}
-              <div className="bg-slate-50/80 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3.5 shadow-2xs">
+              <div className="bg-slate-50/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 space-y-3.5 shadow-2xs">
                 <div className="flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-orange-100 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300">
                     <FileText className="w-4 h-4" />
@@ -379,7 +379,7 @@ export function App() {
               </div>
 
               {/* Colonne 2 : Justificatifs à surveiller */}
-              <div className="bg-slate-50/80 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3.5 shadow-2xs">
+              <div className="bg-slate-50/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 space-y-3.5 shadow-2xs">
                 <div className="flex items-center gap-2">
                   <span className="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
                     <ShieldCheck className="w-4 h-4" />
