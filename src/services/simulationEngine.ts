@@ -227,13 +227,34 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       pieces.push("Attestation de réussite délivrée par le Centre de Gestion (CDG)");
       actes.push("Inscription de plein droit dans le vivier promouvable par examen");
     } else if (evt.type === "reussite_concours") {
-      descType = "Lauréat de Concours & Nomination Stagiaire";
+      const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
+      descType = isContractuel 
+        ? "Lauréat de Concours & Nomination Stagiaire"
+        : `Lauréat de Concours & Nomination Stagiaire (Accès Catégorie ${cibleCat})`;
       alertes.push("Réussite au concours de la Fonction Publique Territoriale.");
-      alertes.push("Nomination en qualité de fonctionnaire stagiaire sur emploi permanent.");
-      alertes.push("Période probatoire de 12 mois avec formation d intégration obligatoire CNFPT avant titularisation.");
+      alertes.push(isContractuel
+        ? "Nomination en qualité de fonctionnaire stagiaire sur emploi permanent."
+        : `Détachement pour stage probatoire dans la Catégorie ${cibleCat} (maintien du traitement antérieur garanti, art. L513-7 CGFP).`);
+      alertes.push("Période probatoire de 12 mois avec formation obligatoire CNFPT avant titularisation.");
       pieces.push("Attestation de réussite au concours délivrée par le Centre de Gestion (CIG/CDG)", "Dossier de nomination stagiaire");
       actes.push("Arrêté individuel de nomination en qualité de fonctionnaire stagiaire");
+    } else if (evt.type === "promotion_interne") {
+      const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
+      descType = `Promotion Interne (Accès Catégorie ${cibleCat})`;
+      alertes.push(`Changement de catégorie hiérarchique au choix sans concours (accès Catégorie ${cibleCat}).`);
+      alertes.push("Inscription sur la liste d aptitude établie par le Centre de Gestion (CDG) ou l autorité territoriale.");
+      alertes.push("Nomination avec garantie de l indice antérieur ou reclassement immédiatement supérieur.");
+      pieces.push("Dossier de candidature à la promotion interne validé par la collectivité", "Attestations de formation CNFPT");
+      actes.push("Inscription sur liste d aptitude CDG", "Arrêté individuel de nomination au grade supérieur");
+    } else if (evt.type === "mobilite_detachement") {
+      descType = "Détachement / Mobilité administrative";
+      alertes.push("Accueil en détachement sur un emploi permanent d une autre collectivité ou administration.");
+      alertes.push("Maintien de la double carrière (avancement garanti dans le corps d origine et d accueil selon la règle la plus favorable).");
+      pieces.push("Demande écrite de détachement", "Accord de l autorité d accueil et avis de la collectivité d origine");
+      actes.push("Arrêté conjoint de détachement pris par les deux administrations");
     }
+
+    const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
 
     const evtJalon: JalonTimeline = {
       id: evt.id,
@@ -241,8 +262,16 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       annee: parseDate(evt.dateDebut).getFullYear(),
       mois: parseDate(evt.dateDebut).getMonth() + 1,
       typeJalon: "evenement_vie",
-      titre: evt.type === "reussite_concours" ? `Lauréat du Concours : Nomination Stagiaire (${grade.nom})` : evt.titre,
-      sousTitre: evt.type === "reussite_concours" ? "Début du stage probatoire de 12 mois (CGFP art. L327-1)" : descType,
+      titre: evt.type === "reussite_concours" 
+        ? (isContractuel
+            ? `Lauréat du Concours : Nomination Stagiaire (${grade.nom})`
+            : `Lauréat du Concours : Nomination Stagiaire (Accès Cat. ${cibleCat})`)
+        : evt.titre,
+      sousTitre: evt.type === "reussite_concours" 
+        ? (isContractuel
+            ? "Début du stage probatoire de 12 mois (CGFP art. L327-1)"
+            : `Détachement pour stage probatoire (12 mois) vers la Catégorie ${cibleCat}`)
+        : descType,
       gradeNom: grade.nom,
       echelonNumero: currentEchelonData.numero,
       indiceBrut: currentEchelonData.indiceBrut,
@@ -250,7 +279,9 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       traitementBrutMensuel: evt.type === "temps_partiel" ? calculateTraitementBrut(currentEchelonData.indiceMajore, evt.quotite || 80) : evt.type === "conge_parental" || evt.type === "disponibilite" ? 0 : currentTraitement,
       statutValidation: "simule",
       pourquoi: evt.type === "reussite_concours"
-        ? "Félicitations : Vous êtes déclaré lauréat du concours et inscrit sur la liste d aptitude. Le Maire de Gennevilliers prononce votre nomination en qualité de fonctionnaire stagiaire sur un emploi permanent. Vous commencez votre année probatoire de stage et suivez la formation d intégration obligatoire CNFPT."
+        ? (isContractuel
+            ? "Félicitations : Vous êtes déclaré lauréat du concours et inscrit sur la liste d aptitude. Le Maire de Gennevilliers prononce votre nomination en qualité de fonctionnaire stagiaire sur un emploi permanent. Vous commencez votre année probatoire de stage et suivez la formation d intégration obligatoire CNFPT."
+            : `Félicitations : Votre admission au concours de la Fonction Publique Territoriale vous permet d accéder à la catégorie supérieure (Catégorie ${cibleCat}). En qualité de titulaire, vous êtes placé en position de détachement pour stage (art. L513-7 CGFP), ce qui garantit votre maintien de rémunération et votre droit au retour statutaire. Vous accomplissez votre période probatoire et suivez la formation obligatoire CNFPT.`)
         : evt.descriptionDetaillee,
       conditionsRemplies: evt.type === "reussite_concours" ? [
         {
@@ -259,7 +290,9 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
           valeurActuelle: "Lauréat inscrit sur liste d aptitude",
           valeurRequise: "Attestation de réussite CDG/CIG",
           progressionPourcent: 100,
-          detailsExplicatifs: "Ouvre le droit à être nommé fonctionnaire stagiaire par la collectivité.",
+          detailsExplicatifs: isContractuel
+            ? "Ouvre le droit à être nommé fonctionnaire stagiaire par la collectivité."
+            : `Ouvre le droit à être nommé fonctionnaire stagiaire dans le nouveau cadre d emplois de Catégorie ${cibleCat}.`,
           piecesAFournir: ["Attestation de réussite au concours"],
           actesAdministratifs: ["Arrêté de nomination stagiaire"]
         }
@@ -283,15 +316,21 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         annee: parseDate(dateTitu).getFullYear(),
         mois: parseDate(dateTitu).getMonth() + 1,
         typeJalon: "promouvabilite_interne",
-        titre: `Titularisation : Fonctionnaire Titulaire (${grade.nom})`,
-        sousTitre: "Fin de stage probatoire - Entrée pleine et entière dans le statut FPT",
+        titre: isContractuel
+          ? `Titularisation : Fonctionnaire Titulaire (${grade.nom})`
+          : `Titularisation : Nouveau Cadre d Emplois (Catégorie ${cibleCat})`,
+        sousTitre: isContractuel
+          ? "Fin de stage probatoire - Entrée pleine et entière dans le statut FPT"
+          : `Titularisation dans le nouveau corps de Catégorie ${cibleCat} avec reclassement indiciaire favorable`,
         gradeNom: grade.nom,
         echelonNumero: currentEchelonData.numero,
         indiceBrut: currentEchelonData.indiceBrut,
         indiceMajore: currentEchelonData.indiceMajore,
         traitementBrutMensuel: currentTraitement,
         statutValidation: "simule",
-        pourquoi: "À l issue des 12 mois de stage probatoire et après avis favorable de votre hiérarchie et validation de la formation d intégration CNFPT, l autorité territoriale prend votre arrêté de titularisation. Vous accédez au statut de fonctionnaire titulaire de la FPT, ce qui débloque les avancements d échelon garantis et l avancement de grade !",
+        pourquoi: isContractuel
+          ? "À l issue des 12 mois de stage probatoire et après avis favorable de votre hiérarchie et validation de la formation d intégration CNFPT, l autorité territoriale prend votre arrêté de titularisation. Vous accédez au statut de fonctionnaire titulaire de la FPT, ce qui débloque les avancements d échelon garantis et l avancement de grade !"
+          : `À l issue des 12 mois de stage probatoire et après avis de votre hiérarchie, vous êtes titularisé dans votre nouveau cadre d emplois de Catégorie ${cibleCat}. Vous bénéficiez d un reclassement indiciaire statutaire à indice égal ou immédiatement supérieur avec reprise d ancienneté, ouvrant une nouvelle dynamique d avancement !`,
         conditionsRemplies: [
           {
             libelle: "Accomplissement de 12 mois de stage probatoire",
@@ -304,10 +343,10 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
             actesAdministratifs: []
           },
           {
-            libelle: "Validation de la formation d intégration CNFPT",
+            libelle: "Validation de la formation CNFPT",
             statut: "remplie",
             valeurActuelle: "Attestation délivrée",
-            valeurRequise: "Formation d intégration suivie",
+            valeurRequise: "Formation CNFPT suivie",
             progressionPourcent: 100,
             detailsExplicatifs: "Formation statutaire obligatoire préalable à la titularisation.",
             piecesAFournir: ["Attestation CNFPT"],
@@ -316,18 +355,22 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         ],
         conditionsManquantes: [],
         justificatifsRequis: [
-          "Attestation de suivi de la formation d intégration CNFPT",
+          "Attestation de suivi de la formation CNFPT",
           "Rapport de fin de stage établi par le supérieur hiérarchique"
         ],
         decisionsAdministrativesRequises: [
-          "Arrêté individuel de titularisation signé par le Maire de Gennevilliers",
+          `Arrêté individuel de titularisation dans le nouveau cadre d emplois (Catégorie ${cibleCat}) signé par le Maire de Gennevilliers`,
           "Transmission en Préfecture (contrôle de légalité)",
           "Notification à l agent et mise à jour de la carrière au CIG"
         ],
-        hypothesesEtAlertes: [
+        hypothesesEtAlertes: isContractuel ? [
           "Consacre l intégration définitive dans la Fonction Publique Territoriale.",
           "Les passages d échelon futurs deviennent de plein droit et automatiques à cadence unique PPCR.",
           "Débloque l éligibilité aux tableaux d avancement de grade et aux examens professionnels."
+        ] : [
+          `Consacre votre accès définitif à la Catégorie ${cibleCat}.`,
+          "Reclassement indiciaire à indice égal ou immédiatement supérieur garantissant l absence de perte de traitement.",
+          "Nouvelle grille indiciaire et nouvelles perspectives d avancement de grade dans le nouveau cadre d emplois."
         ],
         referenceReglementaire: "Article L327-10 du Code Général de la Fonction Publique"
       };

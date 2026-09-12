@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { EvenementCarriere, TypeEvenementCarriere, MotifDisponibilite } from "../types/career";
 import { MOTIFS_DISPONIBILITE } from "../data/gradesData";
 import { formatDateFrench, addMonthsToDate } from "../services/simulationEngine";
@@ -8,7 +8,8 @@ import {
   Trash2, 
   Sparkles, 
   Layers,
-  AlertTriangle
+  AlertTriangle,
+  Award
 } from "lucide-react";
 
 interface EventSimulatorDrawerProps {
@@ -30,11 +31,9 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
   initialEventType,
   isContractuel = false,
 }) => {
-  const defaultType = (isContractuel && (initialEventType === "examen_professionnel" || initialEventType === "disponibilite"))
-    ? "temps_partiel"
-    : (initialEventType as TypeEvenementCarriere) || "temps_partiel";
-
-  const [selectedType, setSelectedType] = useState<TypeEvenementCarriere>(defaultType);
+  const [selectedType, setSelectedType] = useState<TypeEvenementCarriere | "">(
+    (initialEventType as TypeEvenementCarriere) || ""
+  );
   const [dateDebut, setDateDebut] = useState("2025-01-01");
   const [dureeMois, setDureeMois] = useState(12);
   const [quotite, setQuotite] = useState(80);
@@ -43,17 +42,26 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
   );
   const [justificatifsFournis, setJustificatifsFournis] = useState(true);
 
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedType((initialEventType as TypeEvenementCarriere) || "");
+    }
+  }, [isOpen, initialEventType]);
+
   if (!isOpen) return null;
 
   const handleCreateEvent = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedType) return;
 
     let titre = "";
     let desc = "";
     let impacteAvancement = false;
     let impacteRemu = false;
 
-    const dateFin = dureeMois > 0 ? addMonthsToDate(dateDebut, dureeMois) : undefined;
+    const hasDuration = selectedType === "temps_partiel" || selectedType === "conge_parental" || selectedType === "disponibilite" || selectedType === "mobilite_detachement";
+    const dureeEffective = selectedType === "reussite_concours" ? 12 : hasDuration ? dureeMois : 0;
+    const dateFin = (hasDuration && dureeMois > 0) ? addMonthsToDate(dateDebut, dureeMois) : undefined;
 
     if (selectedType === "temps_partiel") {
       titre = `Temps partiel à ${quotite}% (${dureeMois} mois)`;
@@ -87,8 +95,23 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
       impacteAvancement = false;
       impacteRemu = false;
     } else if (selectedType === "reussite_concours") {
-      titre = "Réussite au Concours : Nomination Stagiaire & Titularisation";
-      desc = "Admission aux épreuves du concours FPT. Nomination en tant que fonctionnaire stagiaire (stage probatoire d un an), puis arrêté de titularisation ouvrant la carrière de titulaire avec échelons garantis et avancement de grade.";
+      if (isContractuel) {
+        titre = "Réussite au Concours : Nomination Stagiaire & Titularisation";
+        desc = "Admission aux épreuves du concours FPT. Nomination en tant que fonctionnaire stagiaire (stage probatoire d un an), puis arrêté de titularisation ouvrant la carrière de titulaire avec échelons garantis et avancement de grade.";
+      } else {
+        titre = "Réussite au Concours : Changement de Catégorie & Nomination Stagiaire";
+        desc = "Admission au concours pour l accès à la catégorie supérieure. Détachement pour stage probatoire (12 mois) avec maintien de la rémunération indiciaire garanti (art. L513-7 CGFP), suivi de la titularisation dans le nouveau cadre d emplois.";
+      }
+      impacteAvancement = false;
+      impacteRemu = false;
+    } else if (selectedType === "promotion_interne") {
+      titre = "Promotion Interne (Liste d aptitude CDG)";
+      desc = "Inscription sur la liste d aptitude de promotion interne pour nomination dans le cadre d emplois supérieur sans concours. Nomination en stage probatoire avec maintien d indice puis titularisation (CGFP art. L523-1).";
+      impacteAvancement = false;
+      impacteRemu = false;
+    } else if (selectedType === "mobilite_detachement") {
+      titre = `Mobilité / Détachement (${dureeMois} mois)`;
+      desc = "Accueil en détachement dans une autre collectivité territoriale ou administration publique. Droit au bénéfice de la double carrière (avancement garanti dans le corps d origine et d accueil selon la règle la plus favorable).";
       impacteAvancement = false;
       impacteRemu = false;
     }
@@ -98,7 +121,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
       type: selectedType,
       dateDebut,
       dateFin,
-      dureeMois,
+      dureeMois: dureeEffective,
       titre,
       descriptionDetaillee: desc,
       quotite: selectedType === "temps_partiel" ? quotite : undefined,
@@ -109,64 +132,6 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
     };
 
     onAddEvent(newEvt);
-  };
-
-  const injectPresetScenario = (type: string) => {
-    if (type === "dispo_sans_activite") {
-      onAddEvent({
-        id: `evt-preset-${Date.now()}`,
-        type: "disponibilite",
-        dateDebut: "2025-06-01",
-        dateFin: "2026-06-01",
-        dureeMois: 12,
-        motifDisponibilite: "convenance_personnelle_sans_activite",
-        titre: "1 an de disponibilité sans activité pro",
-        descriptionDetaillee: "Suspension totale du traitement et gel de l avancement d échelon. Décalage de 12 mois de la date du prochain échelon.",
-        impacteAvancementEchelon: true,
-        impacteRemuneration: true,
-        justificatifsFournis: false,
-      });
-    } else if (type === "dispo_avec_activite") {
-      onAddEvent({
-        id: `evt-preset-${Date.now()}`,
-        type: "disponibilite",
-        dateDebut: "2025-06-01",
-        dateFin: "2026-06-01",
-        dureeMois: 12,
-        motifDisponibilite: "convenance_personnelle_avec_activite",
-        titre: "1 an de disponibilité avec activité salariée (>600h)",
-        descriptionDetaillee: "Exercice d une activité salariée dans le privé avec fiches de paie transmises. Maintien légal des droits à avancement d échelon (décret 2019-234).",
-        impacteAvancementEchelon: false,
-        impacteRemuneration: true,
-        justificatifsFournis: true,
-      });
-    } else if (type === "temps_partiel_80") {
-      onAddEvent({
-        id: `evt-preset-${Date.now()}`,
-        type: "temps_partiel",
-        dateDebut: "2025-01-01",
-        dateFin: "2027-01-01",
-        dureeMois: 24,
-        quotite: 80,
-        titre: "Temps partiel à 80% pendant 2 ans",
-        descriptionDetaillee: "Quotité 80% payée 85,7% du traitement de base. L ancienneté d avancement continue à 100% sans aucun retard !",
-        impacteAvancementEchelon: false,
-        impacteRemuneration: true,
-        justificatifsFournis: true,
-      });
-    } else if (type === "exam_pro") {
-      onAddEvent({
-        id: `evt-preset-${Date.now()}`,
-        type: "examen_professionnel",
-        dateDebut: "2026-06-15",
-        dureeMois: 0,
-        titre: "Réussite Examen Professionnel (Session 2026)",
-        descriptionDetaillee: "Attestation obtenue auprès du CDG. Déverrouille la voie d avancement accélérée dès l échelon 6.",
-        impacteAvancementEchelon: false,
-        impacteRemuneration: false,
-        justificatifsFournis: true,
-      });
-    }
   };
 
   return (
@@ -198,51 +163,6 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
         {/* Corps du Drawer */}
         <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800">
-          
-          {/* Hypothèses rapides */}
-          <div>
-            <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Hypothèses rapides en 1 clic :
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => injectPresetScenario("temps_partiel_80")}
-                className="text-left text-xs bg-slate-50 hover:bg-orange-50 hover:border-orange-300 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer"
-              >
-                <div className="font-bold text-slate-900">Temps partiel 80% (2 ans)</div>
-                <div className="text-[11px] text-slate-600 mt-0.5">Payé 85,7% • Avancement préservé</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => injectPresetScenario("exam_pro")}
-                className="text-left text-xs bg-slate-50 hover:bg-purple-50 hover:border-purple-300 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer"
-              >
-                <div className="font-bold text-slate-900">Examen pro en 2026</div>
-                <div className="text-[11px] text-slate-600 mt-0.5">Accélère l accès au grade sup.</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => injectPresetScenario("dispo_sans_activite")}
-                className="text-left text-xs bg-slate-50 hover:bg-rose-50 hover:border-rose-300 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer"
-              >
-                <div className="font-bold text-slate-900">Dispo 1 an SANS activité</div>
-                <div className="text-[11px] text-rose-700 mt-0.5">Décale l échelon de 12 mois</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => injectPresetScenario("dispo_avec_activite")}
-                className="text-left text-xs bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer"
-              >
-                <div className="font-bold text-slate-900">Dispo 1 an AVEC job &gt;600h</div>
-                <div className="text-[11px] text-emerald-800 mt-0.5">Maintien de l avancement (loi 2019)</div>
-              </button>
-            </div>
-          </div>
 
           {/* Formulaire d ajout personnalisé */}
           <form onSubmit={handleCreateEvent} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4">
@@ -259,31 +179,58 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value as TypeEvenementCarriere)}
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
               >
-                {isContractuel && (
-                  <option value="reussite_concours" className="font-bold text-emerald-700">
-                    🏆 Réussite au Concours (Mise en stage & Titularisation)
+                <option value="">Choisir...</option>
+                <option value="reussite_concours" className="font-bold text-emerald-800">
+                  {isContractuel 
+                    ? "🏆 Réussite au Concours (Mise en stage & Titularisation FPT)" 
+                    : "🏆 Réussite au Concours (Changement de catégorie C ➔ B ou B ➔ A)"}
+                </option>
+                {!isContractuel && (
+                  <option value="promotion_interne" className="font-bold text-amber-800">
+                    ⭐ Promotion Interne (Changement de catégorie sans concours - liste CDG)
                   </option>
                 )}
-                <option value="temps_partiel">Temps partiel (50%, 60%, 70%, 80%, 90%)</option>
-                <option value="conge_parental">Congé parental</option>
-                <option value="disponibilite" disabled={isContractuel}>
-                  Mise en disponibilité {isContractuel ? "— (Réservé aux fonctionnaires titulaires)" : ""}
-                </option>
-                <option value="examen_professionnel" disabled={isContractuel}>
-                  Réussite à l Examen Professionnel {isContractuel ? "— (Réservé aux fonctionnaires titulaires)" : ""}
-                </option>
+                {!isContractuel && (
+                  <option value="examen_professionnel">
+                    📝 Réussite à l Examen Professionnel (Avancement accéléré de grade)
+                  </option>
+                )}
+                <option value="temps_partiel">⏱️ Temps partiel (50%, 60%, 70%, 80%, 90%)</option>
+                <option value="conge_parental">👶 Congé parental (droits d avancement préservés)</option>
+                {!isContractuel && (
+                  <option value="disponibilite">
+                    🚪 Disponibilité (Convenance perso, élever enfant, suivre conjoint)
+                  </option>
+                )}
+                {!isContractuel && (
+                  <option value="mobilite_detachement">
+                    🔄 Mobilité / Détachement (accueil dans une autre administration)
+                  </option>
+                )}
               </select>
               {isContractuel && (
                 <div className="mt-2 bg-amber-50 border border-amber-200/90 rounded-xl p-2.5 text-[11px] text-amber-900 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <p>
-                    <strong>Règle statutaire :</strong> L examen pro d avancement et la disponibilité sont réservés aux titulaires. Pour évoluer vers le statut de fonctionnaire titulaire, choisissez l option <strong>« Réussite au Concours »</strong> ci-dessus !
+                    <strong>Règle statutaire :</strong> L examen pro d avancement de grade, la promotion interne, la disponibilité et le détachement sont réservés aux fonctionnaires titulaires. Pour évoluer vers le statut de titulaire, choisissez l option <strong>« Réussite au Concours »</strong> ci-dessus !
                   </p>
                 </div>
               )}
             </div>
+
+            {/* Invite par défaut si aucun événement sélectionné */}
+            {!selectedType && (
+              <div className="p-4 bg-orange-50/40 border border-orange-200/70 rounded-xl text-center text-xs text-slate-600 space-y-1">
+                <p className="font-bold text-orange-950">
+                  Sélectionnez un événement ci-dessus
+                </p>
+                <p className="text-[11px] text-slate-500 leading-relaxed">
+                  Choisissez la nature de l événement (concours, promotion, temps partiel, disponibilité...) pour afficher ses modalités et simuler son impact statutaire sur votre carrière.
+                </p>
+              </div>
+            )}
 
             {/* Paramètres selon le type */}
             {selectedType === "reussite_concours" && (
@@ -292,22 +239,77 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                   <span className="p-1.5 rounded-lg bg-emerald-600 text-white shadow-2xs">
                     <Sparkles className="w-4 h-4" />
                   </span>
-                  <span>Nomination Stagiaire (12 mois) & Titularisation de plein droit</span>
+                  <span>
+                    {isContractuel
+                      ? "Nomination Stagiaire (12 mois) & Titularisation de plein droit"
+                      : "Admission au Concours : Accès à la Catégorie Supérieure"}
+                  </span>
                 </div>
                 <p className="leading-relaxed text-emerald-900">
-                  La réussite au concours entraîne votre nomination en qualité de <strong>fonctionnaire stagiaire</strong> pour une durée probatoire d un an (art. L327-1 du CGFP).
+                  {isContractuel ? (
+                    <>La réussite au concours entraîne votre nomination en qualité de <strong>fonctionnaire stagiaire</strong> pour une durée probatoire d un an (art. L327-1 du CGFP).</>
+                  ) : (
+                    <>La réussite au concours vous permet de <strong>changer de catégorie hiérarchique</strong> (ex: Cat. C vers B, ou B vers A). Vous êtes nommé stagiaire en position de <strong>détachement pour stage</strong> (art. L513-7 CGFP), garantissant la conservation de votre rémunération et votre droit au retour en cas de besoin.</>
+                  )}
                 </p>
                 <div className="bg-white/85 p-3 rounded-xl border border-emerald-200/80 space-y-1.5 text-[11px] text-slate-700">
                   <div className="font-bold text-emerald-900 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     Impacts majeurs calculés sur votre carrière :
                   </div>
-                  <div>• <strong>Pendant 12 mois :</strong> Position de stagiaire avec maintien de votre rémunération indiciaire et formation d intégration CNFPT.</div>
-                  <div>• <strong>Après 12 mois :</strong> Arrêté de titularisation de plein droit pris par le Maire de Gennevilliers.</div>
-                  <div>• <strong>Déblocage total :</strong> Les échelons futurs s accélèrent à la cadence unique PPCR (garantis de plein droit) et les perspectives d avancement de grade s ouvrent !</div>
+                  <div>• <strong>Pendant 12 mois :</strong> Position de stagiaire avec maintien de votre rémunération indiciaire et formation CNFPT.</div>
+                  <div>• <strong>Après 12 mois :</strong> Arrêté de titularisation avec reclassement indiciaire favorable à indice égal ou immédiatement supérieur.</div>
+                  <div>• <strong>Déblocage statutaire :</strong> Accès aux grilles indiciaires de la catégorie supérieure et nouvelles perspectives d avancement de grade !</div>
                 </div>
               </div>
             )}
+
+            {selectedType === "promotion_interne" && (
+              <div className="bg-gradient-to-br from-amber-50 via-orange-50/60 to-amber-50/40 border border-amber-300/80 rounded-2xl p-4 text-xs text-amber-950 space-y-2.5 shadow-2xs">
+                <div className="font-extrabold text-amber-950 text-sm flex items-center gap-2">
+                  <span className="p-1.5 rounded-lg bg-amber-600 text-white shadow-2xs">
+                    <Award className="w-4 h-4" />
+                  </span>
+                  <span>Promotion Interne au Choix (sans concours)</span>
+                </div>
+                <p className="leading-relaxed text-amber-900">
+                  La promotion interne permet à un fonctionnaire titulaire d accéder à la <strong>catégorie supérieure (ex: C vers B ou B vers A)</strong> sans passer de concours, au vu de sa valeur professionnelle et après inscription sur la liste d aptitude arrêtée par le Centre de Gestion (CDG).
+                </p>
+                <div className="bg-white/85 p-3 rounded-xl border border-amber-200/80 space-y-1.5 text-[11px] text-slate-700">
+                  <div>• <strong>Nomination :</strong> Nomination en tant que stagiaire probatoire ou directe selon le cadre d emplois.</div>
+                  <div>• <strong>Garantie indiciaire :</strong> Reclassement à un indice égal ou immédiatement supérieur (aucun agent ne perd en rémunération).</div>
+                </div>
+              </div>
+            )}
+
+            {selectedType === "examen_professionnel" && (
+              <div className="bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white border border-blue-200/80 rounded-2xl p-4 text-xs text-blue-950 space-y-2 shadow-2xs">
+                <div className="font-extrabold text-blue-950 text-sm flex items-center gap-2">
+                  <span className="p-1.5 rounded-lg bg-blue-600 text-white shadow-2xs">
+                    <Award className="w-4 h-4" />
+                  </span>
+                  <span>Réussite à l Examen Professionnel</span>
+                </div>
+                <p className="leading-relaxed text-blue-900">
+                  L attestation de réussite obtenue auprès du Centre de Gestion (CDG) est <strong>valable sans limitation de durée</strong>. Elle ouvre la voie accélérée pour être proposé au tableau d avancement au grade supérieur.
+                </p>
+              </div>
+            )}
+
+            {selectedType === "mobilite_detachement" && (
+              <div className="bg-gradient-to-br from-slate-50 via-stone-50 to-white border border-slate-300 rounded-2xl p-4 text-xs text-slate-800 space-y-2 shadow-2xs">
+                <div className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                  <span className="p-1.5 rounded-lg bg-slate-700 text-white shadow-2xs">
+                    <Layers className="w-4 h-4" />
+                  </span>
+                  <span>Mobilité par Détachement</span>
+                </div>
+                <p className="leading-relaxed text-slate-700">
+                  Vous occupez un emploi permanent dans une autre collectivité territoriale ou administration d État. Vous bénéficiez du <strong>principe de la double carrière</strong> : votre avancement continue d être pris en compte dans votre cadre d emplois d origine et dans votre structure d accueil.
+                </p>
+              </div>
+            )}
+
             {selectedType === "temps_partiel" && (
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -373,42 +375,57 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
               </div>
             )}
 
-            {/* Date début & Durée */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Date de début
-                </label>
-                <input
-                  type="date"
-                  value={dateDebut}
-                  onChange={(e) => setDateDebut(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
-                />
-              </div>
-
-              {selectedType !== "examen_professionnel" && (
+            {/* Date début & Durée (uniquement si un événement est sélectionné) */}
+            {selectedType && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Durée (en mois)
+                    {selectedType === "reussite_concours"
+                      ? "Date de nomination stagiaire"
+                      : selectedType === "promotion_interne"
+                      ? "Date d inscription / nomination"
+                      : selectedType === "examen_professionnel"
+                      ? "Date de réussite à l examen"
+                      : "Date de début"}
                   </label>
                   <input
-                    type="number"
-                    min="1"
-                    max="60"
-                    value={dureeMois}
-                    onChange={(e) => setDureeMois(Number(e.target.value))}
+                    type="date"
+                    value={dateDebut}
+                    onChange={(e) => setDateDebut(e.target.value)}
                     className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                    required
                   />
                 </div>
-              )}
-            </div>
+
+                {(selectedType === "temps_partiel" || selectedType === "conge_parental" || selectedType === "disponibilite" || selectedType === "mobilite_detachement") && (
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Durée (en mois)
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="60"
+                      value={dureeMois}
+                      onChange={(e) => setDureeMois(Number(e.target.value))}
+                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                      required
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-md shadow-orange-500/20 ring-1 ring-orange-400/30 transition-all cursor-pointer"
+              disabled={!selectedType}
+              className={`w-full text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-md ${
+                !selectedType
+                  ? "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none border border-slate-300/60"
+                  : "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white shadow-orange-500/20 ring-1 ring-orange-400/30 cursor-pointer"
+              }`}
             >
-              Ajouter et recalculer la frise
+              {selectedType ? "Ajouter et recalculer la frise" : "Veuillez choisir un événement"}
             </button>
           </form>
 
