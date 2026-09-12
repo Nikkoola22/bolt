@@ -141,63 +141,63 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
         <div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-200/80">
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-xs shadow-xs shrink-0">
+              <span className="w-8 h-8 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                 1
               </span>
               <div>
-                <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                  <User className="w-4 h-4 text-blue-600" />
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <User className="w-5 h-5 text-blue-600" />
                   Votre Identité & Statut Administratif
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   Informations de base et cadre statutaire de référence
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 self-start sm:self-center">
-              <span className="text-xs bg-blue-50 text-blue-800 border border-blue-200/90 font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs">
-                <Building2 className="w-3.5 h-3.5 text-blue-600" />
+              <span className="text-xs sm:text-sm bg-blue-50 text-blue-900 border border-blue-200/90 font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs">
+                <Building2 className="w-4 h-4 text-blue-600" />
                 Collectivité de Gennevilliers
               </span>
-              <span className="text-xs bg-slate-100 text-slate-700 font-extrabold px-2.5 py-1 rounded-full border border-slate-200/70">
+              <span className="text-xs sm:text-sm bg-slate-100 text-slate-800 font-extrabold px-2.5 py-1 rounded-full border border-slate-200/70">
                 FPT
               </span>
             </div>
           </div>
 
-          <div className="mt-5 flex flex-col sm:flex-row items-start gap-5 text-xs">
+          <div className="mt-5 flex flex-col sm:flex-row items-start gap-5 text-sm">
             <div className="w-full sm:w-56 md:w-64 shrink-0">
-              <label className="block font-bold text-slate-800 mb-1.5">Votre Prénom</label>
+              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Votre Prénom</label>
               <input
                 type="text"
                 value={formData.prenom}
                 onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
                 placeholder="Ex: Sophie, Karim, Julie..."
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
+                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
                 required
               />
-              <p className="text-[11px] text-slate-500 mt-1.5">
+              <p className="text-xs text-slate-500 mt-1.5">
                 Prénom de l agent
               </p>
             </div>
 
             <div className="w-full sm:w-80 md:w-96">
-              <label className="block font-bold text-slate-800 mb-1.5">Statut juridique</label>
+              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Statut juridique</label>
               <select
                 value={formData.statut}
                 onChange={(e) => handleStatutChange(e.target.value as StatutAgent)}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs cursor-pointer"
+                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs cursor-pointer"
               >
                 <option value="titulaire">Fonctionnaire Titulaire</option>
                 <option value="stagiaire">Fonctionnaire Stagiaire (en cours de stage probatoire)</option>
                 <option value="contractuel_cdi">Contractuel de droit public en CDI</option>
                 <option value="contractuel_cdd">Contractuel de droit public en CDD</option>
               </select>
-              <p className="text-[11px] text-slate-500 mt-1.5">
+              <p className="text-xs text-slate-500 mt-1.5">
                 Régit les conditions d avancement selon le CGFP.
               </p>
               {formData.statut.startsWith("contractuel") && (
-                <div className="mt-2 text-[11px] text-amber-900 bg-amber-50/90 border border-amber-200 rounded-lg p-2.5 leading-relaxed">
+                <div className="mt-2 text-xs text-amber-900 bg-amber-50/90 border border-amber-200 rounded-lg p-2.5 leading-relaxed">
                   <strong>Régime contractuel (Décret 88-145) :</strong> Rémunération par assimilation indiciaire sur le grade d accès initial.
                 </div>
               )}
@@ -209,28 +209,28 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
         <div>
           <div className="pb-4 border-b border-slate-200/80">
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-xs shadow-xs shrink-0">
+              <span className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                 2
               </span>
               <div>
-                <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                  <Briefcase className="w-4 h-4 text-indigo-600" />
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-indigo-600" />
                   Votre Cadre d emplois, Grade & Position Indiciaire
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   Position statutaire actuelle déterminant votre grille indiciaire et votre salaire de base
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-xs">
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-sm">
             <div>
-              <label className="block font-bold text-slate-800 mb-1.5">Cadre d emplois</label>
+              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Cadre d emplois</label>
               <select
                 value={formData.cadreEmploiId}
                 onChange={(e) => handleCadreChange(e.target.value)}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
+                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-bold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
               >
                 {CADRES_EMPLOIS.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -241,11 +241,11 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             </div>
 
             <div>
-              <label className="block font-bold text-slate-800 mb-1.5">Grade actuel</label>
+              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Grade actuel</label>
               <select
                 value={formData.gradeId}
                 onChange={(e) => handleGradeChange(e.target.value)}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
+                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-bold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
               >
                 {currentCadre.grades.map((g) => {
                   const isAvancement = isGradeAvancement(currentCadre, g.id);
@@ -259,18 +259,18 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 })}
               </select>
               {formData.statut.startsWith("contractuel") && (
-                <p className="text-[11px] text-amber-800 mt-1.5 font-medium leading-tight">
+                <p className="text-xs text-amber-900 mt-1.5 font-medium leading-normal bg-amber-50 p-2 rounded-lg border border-amber-200">
                   ℹ️ Un agent contractuel ne peut être recruté que sur le 1er grade d accès. Les grades d avancement sont réservés aux titulaires.
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block font-bold text-slate-800 mb-1.5">Échelon actuel</label>
+              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Échelon actuel</label>
               <select
                 value={formData.echelonActuel}
                 onChange={(e) => setFormData({ ...formData, echelonActuel: Number(e.target.value) })}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-bold focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
+                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-extrabold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
               >
                 {currentGrade.echelons.map((ech) => (
                   <option key={ech.numero} value={ech.numero}>
@@ -282,35 +282,35 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           </div>
 
           {/* Calculateur en direct indiciaire et salarial (Card Exécutive) */}
-          <div className="mt-5 bg-gradient-to-br from-indigo-50/80 via-white to-blue-50/60 border border-indigo-200/90 rounded-2xl p-4 sm:p-6 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-5">
+          <div className="mt-5 bg-gradient-to-br from-indigo-50/90 via-white to-blue-50/70 border-2 border-indigo-200 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center font-black text-sm shadow-xs shrink-0">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center font-black text-base shadow-sm shrink-0">
                 IM
               </div>
               <div>
-                <div className="text-xs text-indigo-950 font-bold flex items-center gap-2 flex-wrap">
-                  <span>Indice Majoré : <strong className="text-indigo-700 text-sm font-extrabold">{currentEchelon.indiceMajore}</strong> (IB {currentEchelon.indiceBrut})</span>
-                  <span className="bg-indigo-100 text-indigo-800 border border-indigo-200 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+                <div className="text-sm text-indigo-950 font-bold flex items-center gap-2 flex-wrap">
+                  <span>Indice Majoré : <strong className="text-indigo-700 text-base sm:text-lg font-black">{currentEchelon.indiceMajore}</strong> (IB {currentEchelon.indiceBrut})</span>
+                  <span className="bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs px-2.5 py-0.5 rounded-full font-bold">
                     {formData.statut.startsWith("contractuel") 
                       ? "Périodicité réévaluation : 3 ans (Décret 88-145)" 
                       : `Durée d échelon : ${currentEchelon.dureeAnnees} an(s)`}
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-600 mt-1">
+                <div className="text-xs text-slate-600 mt-1 font-medium">
                   Point d indice officiel : 4,92278 € / mois
                 </div>
               </div>
             </div>
 
             <div className="text-left sm:text-right sm:border-l sm:border-indigo-200/80 sm:pl-6 shrink-0">
-              <div className="text-[10px] text-indigo-900 uppercase font-black tracking-wider">
+              <div className="text-xs text-indigo-900 uppercase font-black tracking-wider">
                 Traitement indiciaire brut de base :
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-indigo-950 tracking-tight mt-0.5">
+              <div className="text-2xl sm:text-4xl font-black text-indigo-950 tracking-tight mt-0.5">
                 {Math.round(traitementCalcule)} €
-                <span className="text-xs font-medium text-slate-500 ml-1">/ mois</span>
+                <span className="text-sm font-semibold text-slate-500 ml-1.5">/ mois</span>
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">
+              <div className="text-xs text-slate-500 mt-0.5">
                 (Hors primes, RIFSEEP et supplément familial de traitement)
               </div>
             </div>
@@ -321,22 +321,22 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
         <div>
           <div className="pb-4 border-b border-slate-200/80">
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center text-xs shadow-xs shrink-0">
+              <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                 3
               </span>
               <div>
-                <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-emerald-600" />
                   Vos Dates d Ancienneté
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   Données déterminant précisément l ouverture de vos droits à avancement d échelon et de grade
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 text-xs">
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 text-sm">
             <DateFieldWithYear
               label="Date effet échelon actuel"
               value={formData.dateEffetEchelonActuel}
@@ -349,7 +349,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block font-bold text-slate-800 text-xs">Ancienneté conservée (mois)</label>
+                <label className="block font-bold text-slate-800 text-sm">Ancienneté conservée (mois)</label>
               </div>
               <input
                 type="number"
@@ -357,9 +357,9 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 max="36"
                 value={formData.ancienneteConserveeMois}
                 onChange={(e) => setFormData({ ...formData, ancienneteConserveeMois: Number(e.target.value) })}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
+                className="w-full bg-slate-50/90 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
               />
-              <span className="text-[10px] text-slate-500 mt-1 block">Reliquat de nomination / concours</span>
+              <span className="text-xs text-slate-500 mt-1.5 block">Reliquat de nomination / concours</span>
             </div>
 
             <DateFieldWithYear

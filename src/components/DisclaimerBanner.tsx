@@ -13,17 +13,17 @@ export const DisclaimerBanner: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-extrabold text-amber-950 text-xs tracking-wider uppercase">
+              <span className="font-black text-amber-950 text-sm tracking-wider uppercase">
                 Simulation informative & statutaire
               </span>
-              <span className="text-[11px] bg-amber-200/70 text-amber-900 font-bold px-2.5 py-0.5 rounded-full border border-amber-300/40">
+              <span className="text-xs bg-amber-200/70 text-amber-900 font-bold px-2.5 py-0.5 rounded-full border border-amber-300/60">
                 Paramètres déclarés par l agent
               </span>
-              <span className="text-[11px] bg-blue-50 text-blue-800 font-bold px-2.5 py-0.5 rounded-full border border-blue-200/70 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-blue-600" /> Contrôle final par la DRH
+              <span className="text-xs bg-blue-50 text-blue-900 font-bold px-2.5 py-0.5 rounded-full border border-blue-200/70 flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Contrôle final par la DRH
               </span>
             </div>
-            <p className="text-xs text-amber-950/80 mt-1.5 leading-relaxed">
+            <p className="text-sm text-amber-950/90 mt-2 leading-relaxed">
               Cet outil pédagogique calcule vos échéances théoriques selon les décrets statutaires en vigueur (Code Général de la Fonction Publique). 
               <strong> Cette simulation ne crée aucun droit :</strong> l inscription sur un tableau d avancement ou une liste d aptitude relève du pouvoir d appréciation de l autorité territoriale dans le cadre des Lignes Directrices de Gestion (LDG).
             </p>
@@ -31,23 +31,23 @@ export const DisclaimerBanner: React.FC = () => {
         </div>
         <button
           onClick={() => setExpanded(!expanded)}
-          className="text-xs font-bold text-amber-950 hover:text-amber-800 bg-white hover:bg-amber-100/80 border border-amber-300/80 px-3 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 transition-all cursor-pointer shadow-2xs self-end sm:self-auto"
+          className="text-sm font-bold text-amber-950 hover:text-amber-800 bg-white hover:bg-amber-100/80 border border-amber-300 px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 transition-all cursor-pointer shadow-2xs self-end sm:self-auto"
           aria-expanded={expanded}
         >
           {expanded ? (
             <>
-              <span>Moins de détails</span> <ChevronUp className="w-3.5 h-3.5" />
+              <span>Moins de détails</span> <ChevronUp className="w-4 h-4" />
             </>
           ) : (
             <>
-              <span>Comprendre les règles statutaires</span> <ChevronDown className="w-3.5 h-3.5" />
+              <span>Comprendre les règles statutaires</span> <ChevronDown className="w-4 h-4" />
             </>
           )}
         </button>
       </div>
 
       {expanded && (
-        <div className="mt-4 pt-4 border-t border-amber-200/80 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700 animate-fadeIn">
+        <div className="mt-4 pt-4 border-t border-amber-200/80 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-700 animate-fadeIn">
           <div className="bg-white/90 p-4 rounded-xl border border-amber-200/80 shadow-2xs space-y-1">
             <div className="font-extrabold text-slate-900 flex items-center gap-2 mb-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>

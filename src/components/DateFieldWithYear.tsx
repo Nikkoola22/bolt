@@ -43,26 +43,26 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <label className="block font-semibold text-slate-700 text-xs">{label}</label>
-        <div className="flex items-center gap-1">
+        <label className="block font-bold text-slate-800 text-sm">{label}</label>
+        <div className="flex items-center gap-1.5">
           {badgeLabel && (
-            <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-medium">
+            <span className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded font-medium">
               {badgeLabel}
             </span>
           )}
-          <span className="text-[11px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md shadow-2xs">
+          <span className="text-xs font-mono font-black text-emerald-900 bg-emerald-100/80 border border-emerald-300 px-2 py-0.5 rounded-md shadow-2xs">
             {currentYear}
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         {/* Sélecteur direct d'année (ex: 1998 en 1 clic) */}
-        <div className="w-22 sm:w-26 shrink-0">
+        <div className="w-24 sm:w-28 shrink-0">
           <select
             value={currentYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="w-full bg-slate-100/80 hover:bg-slate-100 border border-slate-300 font-bold rounded-xl px-2 sm:px-2.5 py-2 text-slate-900 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs"
+            className="w-full bg-slate-100/90 hover:bg-slate-100 border border-slate-300 font-bold rounded-xl px-2.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs"
             title={`Choisir l'année pour : ${label}`}
           >
             {yearsList.map((y) => (
@@ -81,13 +81,13 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
             max={`${maxYear}-12-31`}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full bg-slate-50/80 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-medium text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
+            className="w-full bg-slate-50/90 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
             required={required}
           />
         </div>
       </div>
 
-      {hint && <p className="text-[10px] text-slate-500 mt-1">{hint}</p>}
+      {hint && <p className="text-xs text-slate-500 mt-1.5">{hint}</p>}
     </div>
   );
 };
