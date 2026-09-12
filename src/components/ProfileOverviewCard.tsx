@@ -27,6 +27,8 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
   const progressionPourcent = moisDureeEchelon > 0 ? Math.min(100, Math.round((moisAncienneteEchelon / moisDureeEchelon) * 100)) : 100;
   
   const moisAncienneteGrade = Math.max(0, diffMonths(profil.dateNominationGradeActuel, nowStr));
+  const dateEntreeCadre = profil.dateEntreeCadreEmploi || profil.dateNominationGradeActuel;
+  const moisAncienneteCadre = Math.max(0, diffMonths(dateEntreeCadre, nowStr));
   const moisAnciennetePublic = Math.max(0, diffMonths(profil.dateEntreeFonctionPublique, nowStr));
 
   const statutLibelle = profil.statut === "titulaire" 
@@ -238,11 +240,12 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
             <div className="text-base font-extrabold text-slate-900">
               {formatDurationInYearsAndMonths(moisAnciennetePublic)}
             </div>
-            <div className="text-xs text-slate-600 mt-1">
-              Dans le grade : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteGrade)}</span>
+            <div className="text-xs text-slate-600 mt-1 space-y-0.5">
+              <div>Dans le cadre ({grade.categorie}) : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteCadre)}</span></div>
+              <div>Dans le grade : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteGrade)}</span></div>
             </div>
           </div>
-          <div className="text-[11px] text-slate-600 mt-3 pt-2.5 border-t border-slate-100">
+          <div className="text-[11px] text-slate-600 mt-2.5 pt-2 border-t border-slate-100">
             Dans l échelon : <span className="font-semibold text-slate-800">{formatDurationInYearsAndMonths(moisAncienneteEchelon)}</span>
           </div>
         </div>

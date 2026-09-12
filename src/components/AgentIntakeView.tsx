@@ -469,7 +469,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 text-sm">
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5 text-sm">
             <DateFieldWithYear
               label="Date effet échelon actuel"
               value={formData.dateEffetEchelonActuel}
@@ -496,12 +496,30 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             </div>
 
             <DateFieldWithYear
-              label="Date nomination grade actuel"
+              label="Nomination grade actuel"
               value={formData.dateNominationGradeActuel}
-              onChange={(val) => setFormData({ ...formData, dateNominationGradeActuel: val })}
+              onChange={(val) => {
+                const prevNom = formData.dateNominationGradeActuel;
+                const wasCadreSynced = !formData.dateEntreeCadreEmploi || formData.dateEntreeCadreEmploi === prevNom;
+                setFormData({ 
+                  ...formData, 
+                  dateNominationGradeActuel: val,
+                  dateEntreeCadreEmploi: wasCadreSynced ? val : formData.dateEntreeCadreEmploi
+                });
+              }}
               minYear={1965}
               maxYear={2026}
               hint="Nomination dans le grade actuel"
+              required
+            />
+
+            <DateFieldWithYear
+              label={`Accès Cadre (Cat. ${currentCadre.categorie})`}
+              value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
+              onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
+              minYear={1965}
+              maxYear={2026}
+              hint={`Entrée en catégorie ${currentCadre.categorie} (ex: 2024)`}
               required
             />
 
@@ -512,7 +530,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               minYear={1965}
               maxYear={2026}
               highlightYear={1998}
-              hint="Année en 1 clic (ex: 1998) ou date exacte"
+              hint="Tous services publics (ex: début en B ou C)"
               required
             />
           </div>

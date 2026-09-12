@@ -244,7 +244,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
           </div>
 
           {/* Dates clés */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-200">
             <DateFieldWithYear
               label="Date d effet échelon"
               value={form.dateEffetEchelonActuel}
@@ -255,11 +255,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             />
 
             <DateFieldWithYear
-              label="Date nomination grade"
+              label="Nomination grade"
               value={form.dateNominationGradeActuel}
-              onChange={(val) => setForm({ ...form, dateNominationGradeActuel: val })}
+              onChange={(val) => {
+                const prevNom = form.dateNominationGradeActuel;
+                const wasCadreSynced = !form.dateEntreeCadreEmploi || form.dateEntreeCadreEmploi === prevNom;
+                setForm({ 
+                  ...form, 
+                  dateNominationGradeActuel: val,
+                  dateEntreeCadreEmploi: wasCadreSynced ? val : form.dateEntreeCadreEmploi
+                });
+              }}
               minYear={1965}
               maxYear={2026}
+              required
+            />
+
+            <DateFieldWithYear
+              label={`Accès Cadre (${currentCadre.categorie})`}
+              value={form.dateEntreeCadreEmploi || form.dateNominationGradeActuel}
+              onChange={(val) => setForm({ ...form, dateEntreeCadreEmploi: val })}
+              minYear={1965}
+              maxYear={2026}
+              hint={`Nomination en Cat. ${currentCadre.categorie}`}
               required
             />
 
@@ -270,7 +288,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
               minYear={1965}
               maxYear={2026}
               highlightYear={1998}
-              hint="Année en 1 clic (ex: 1998)"
+              hint="Tous services publics (C, B, A)"
               required
             />
           </div>

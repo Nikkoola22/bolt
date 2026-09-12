@@ -109,7 +109,8 @@ export interface ProfilAgent {
   collectivite: string;
   versant: VersantFonctionPublique;
   statut: StatutAgent;
-  dateEntreeFonctionPublique: string; // YYYY-MM-DD
+  dateEntreeFonctionPublique: string; // YYYY-MM-DD (Toutes catégories confondues)
+  dateEntreeCadreEmploi?: string; // YYYY-MM-DD : Date d accès au cadre d emplois / catégorie actuelle (ex: 2024-01-01)
   dateNominationGradeActuel: string; // YYYY-MM-DD
   cadreEmploiId: string;
   gradeId: string;

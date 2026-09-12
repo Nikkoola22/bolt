@@ -528,9 +528,13 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       }
 
       // Date avec ancienneté dans le cadre / catégorie
-      let dateConditionCadre = profil.dateEntreeFonctionPublique;
+      const baseEntreeCadreDate = (isContractuel && dateNominationStagiaire)
+        ? dateNominationStagiaire
+        : (profil.dateEntreeCadreEmploi || profil.dateNominationGradeActuel);
+
+      let dateConditionCadre = baseEntreeCadreDate;
       if (condition.ancienneteCadreAnnees && condition.ancienneteCadreAnnees > 0) {
-        dateConditionCadre = addMonthsToDate(profil.dateEntreeFonctionPublique, Math.round(condition.ancienneteCadreAnnees * 12) + dispoPenaltyMonths);
+        dateConditionCadre = addMonthsToDate(baseEntreeCadreDate, Math.round(condition.ancienneteCadreAnnees * 12) + dispoPenaltyMonths);
       }
 
       // Date avec services publics
@@ -591,7 +595,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       // Ancienneté dans le cadre / catégorie
       if (condition.ancienneteCadreAnnees && condition.ancienneteCadreAnnees > 0) {
         const moisRequis = condition.ancienneteCadreAnnees * 12;
-        const moisActuels = diffMonths(profil.dateEntreeFonctionPublique, nowStr);
+        const moisActuels = diffMonths(baseEntreeCadreDate, nowStr);
         const cadreRempli = moisActuels >= moisRequis;
         const evalCadre: EvaluationCondition = {
           libelle: `Ancienneté de ${condition.ancienneteCadreAnnees} ans dans le cadre d emplois / catégorie ${cadre.categorie}`,
@@ -600,8 +604,8 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
           valeurRequise: formatDurationInYearsAndMonths(moisRequis),
           progressionPourcent: Math.min(100, Math.round((moisActuels / moisRequis) * 100)),
           tempsRestantTexte: cadreRempli ? "Validée" : `Manque ${formatDurationInYearsAndMonths(moisRequis - moisActuels)}`,
-          detailsExplicatifs: "Services effectifs validés dans le cadre d emplois.",
-          piecesAFournir: ["État récapitulatif des services publics"],
+          detailsExplicatifs: `Services effectifs validés dans le cadre d emplois de ${cadre.nom} (Catégorie ${cadre.categorie}) depuis le ${formatDateFrench(baseEntreeCadreDate)}. Les services antérieurs accomplis dans une autre catégorie statutaire ne sont pas comptabilisés.`,
+          piecesAFournir: ["Arrêté initial de nomination dans le cadre d emplois / catégorie"],
           actesAdministratifs: []
         };
         if (cadreRempli) conditionsRemplies.push(evalCadre); else conditionsManquantes.push(evalCadre);
