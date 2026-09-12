@@ -492,7 +492,9 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 onChange={(e) => setFormData({ ...formData, ancienneteConserveeMois: Number(e.target.value) })}
                 className="w-full bg-slate-50/90 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
               />
-              <span className="text-xs text-slate-500 mt-1.5 block">Reliquat de nomination / concours</span>
+              <span className="text-xs text-slate-500 mt-1.5 block leading-normal">
+                Si vous avez un reliquat mentionné sur votre arrêté : vous saisissez ce nombre de mois (ex: 6 ou 8).
+              </span>
             </div>
 
             <DateFieldWithYear

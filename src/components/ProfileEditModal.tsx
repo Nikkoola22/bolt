@@ -224,6 +224,9 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                 onChange={(e) => setForm({ ...form, ancienneteConserveeMois: Number(e.target.value) })}
                 className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:bg-white focus:ring-2 focus:ring-indigo-500"
               />
+              <span className="text-xs text-slate-500 mt-1 block">
+                Si vous avez un reliquat mentionné sur votre arrêté : vous saisissez ce nombre de mois (ex: 6 ou 8).
+              </span>
             </div>
 
             <div>
