@@ -35,6 +35,17 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   // Question active : "echelon" (Échelons supplémentaires) ou "promotion" (Avancement / Promotion au choix)
   const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion">("echelon");
 
+  const handleSelectQuestion = (question: "echelon" | "promotion") => {
+    setActiveQuestion(question);
+    setTimeout(() => {
+      const targetId = question === "echelon" ? "block-premier-palier" : "block-avancement-choix";
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 70);
+  };
+
   const { cadre, grade } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
   const isContractuel = profil.statut.startsWith("contractuel");
   const todayStr = new Date().toISOString().split("T")[0];
@@ -155,7 +166,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           {/* Bouton 1 : Échelons supplémentaires (Évolution sur 2 échelons) */}
           <button
             type="button"
-            onClick={() => setActiveQuestion("echelon")}
+            onClick={() => handleSelectQuestion("echelon")}
             className={`p-5 sm:p-6 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
               activeQuestion === "echelon"
                 ? "bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 border-emerald-600 shadow-md ring-4 ring-emerald-500/15 scale-[1.01]"
@@ -203,7 +214,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           {/* Bouton 2 : Avancement / Promotion (Voie Au Choix) */}
           <button
             type="button"
-            onClick={() => setActiveQuestion("promotion")}
+            onClick={() => handleSelectQuestion("promotion")}
             className={`p-5 sm:p-6 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
               activeQuestion === "promotion"
                 ? "bg-gradient-to-br from-purple-50/90 via-white to-violet-50/40 border-purple-600 shadow-md ring-4 ring-purple-500/15 scale-[1.01]"
@@ -260,7 +271,10 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     
                     {/* CARTE 1 : 1ER PROCHAIN ÉCHELON */}
-                    <div className="bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 border-2 border-emerald-400/90 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs">
+                    <div 
+                      id="block-premier-palier"
+                      className="bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 border-2 border-emerald-400/90 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs scroll-mt-8"
+                    >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
                           <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-300 px-3 py-0.5 rounded-full">
@@ -432,7 +446,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                 </div>
               ) : (
-                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600">
+                <div id="block-premier-palier" className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600 scroll-mt-8">
                   Vous avez atteint l échelon sommital de votre grade. Votre évolution indiciaire ultérieure passe par un avancement de grade.
                 </div>
               )}
@@ -443,7 +457,10 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           {activeQuestion === "promotion" && (
             <div className="space-y-6 animate-fadeIn">
               {prochainePromouvabilite ? (
-                <div className="bg-gradient-to-br from-purple-50/80 via-white to-violet-50/40 border border-purple-300 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+                <div 
+                  id="block-avancement-choix"
+                  className="bg-gradient-to-br from-purple-50/80 via-white to-violet-50/40 border border-purple-300 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs scroll-mt-8"
+                >
                   
                   {/* En-tête de la promouvabilité au choix */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -554,7 +571,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   )}
                 </div>
               ) : (
-                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600">
+                <div id="block-avancement-choix" className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600 scroll-mt-8">
                   Aucune perspective d avancement direct identifiée pour ce grade. Vous êtes au sommet de votre cadre d emplois.
                 </div>
               )}
