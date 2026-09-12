@@ -114,9 +114,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white leading-tight">
             Renseignez votre situation pour simuler votre carrière
           </h1>
-          <p className="text-xs sm:text-sm text-slate-300 mt-2.5 leading-relaxed">
-            Remplissez ce formulaire pour générer votre frise chronologique prospective. L outil calculera vos passages d échelon garantis, votre promouvabilité de grade, et l impact réel de vos projets (temps partiel, disponibilité, congé parental, examen pro).
-          </p>
+
         </div>
 
         {/* Flash info : Munissez-vous de votre dernier arrêté et de votre bulletin de paie */}
