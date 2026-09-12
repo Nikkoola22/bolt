@@ -216,14 +216,17 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
             <div>
               <label className="block font-semibold text-slate-700 mb-1">Ancienneté conservée (mois)</label>
-              <input
-                type="number"
-                min="0"
-                max="36"
-                value={form.ancienneteConserveeMois}
-                onChange={(e) => setForm({ ...form, ancienneteConserveeMois: Number(e.target.value) })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:bg-white focus:ring-2 focus:ring-indigo-500"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max="36"
+                  value={form.ancienneteConserveeMois}
+                  onChange={(e) => setForm({ ...form, ancienneteConserveeMois: Number(e.target.value) })}
+                  className="w-20 sm:w-24 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-sm text-center focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-xs text-slate-500 font-semibold">mois</span>
+              </div>
               <span className="text-xs text-slate-500 mt-1 block">
                 Si vous avez un reliquat mentionné sur votre arrêté : vous saisissez ce nombre de mois (ex: 6 ou 8).
               </span>

@@ -56,24 +56,24 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Sélecteur direct d'année (ex: 1998 en 1 clic) */}
-        <div className="w-24 sm:w-28 shrink-0">
+      <div className="flex items-center gap-1.5">
+        {/* Sélecteur compact d'année (ex: 1998) */}
+        <div className="w-[66px] shrink-0">
           <select
             value={currentYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="w-full bg-slate-100/90 hover:bg-slate-100 border border-slate-300 font-bold rounded-xl px-2.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs"
+            className="w-full bg-slate-100/90 hover:bg-slate-100 border border-slate-300 font-bold rounded-xl px-1 py-2 text-slate-900 text-xs sm:text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs text-center"
             title={`Choisir l'année pour : ${label}`}
           >
             {yearsList.map((y) => (
               <option key={y} value={String(y)}>
-                {y} {y === 1998 ? "★ 1998" : ""}
+                {y}
               </option>
             ))}
           </select>
         </div>
 
-        {/* Datepicker HTML standard */}
+        {/* Datepicker HTML standard visible en entier */}
         <div className="flex-1 min-w-0">
           <input
             type="date"
@@ -81,7 +81,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
             max={`${maxYear}-12-31`}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full bg-slate-50/90 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
+            className="w-full min-w-0 bg-slate-50/90 border border-slate-300 rounded-xl px-2 py-2 text-slate-900 font-semibold text-xs sm:text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
             required={required}
           />
         </div>
