@@ -536,6 +536,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               {/* 3. Nomination grade actuel (Thème Violet) */}
               <DateFieldWithYear
                 label="Nomination grade actuel"
+                subLabel={currentGrade.nom}
                 value={formData.dateNominationGradeActuel}
                 onChange={(val) => {
                   const prevNom = formData.dateNominationGradeActuel;
@@ -548,11 +549,11 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 }}
                 minYear={1965}
                 maxYear={2026}
-                hint="Nomination dans le grade actuel"
+                hint={`Date de votre arrêté de nomination dans le grade actuel (${currentGrade.nom})`}
                 required
                 cardMode
                 themeColor="purple"
-                icon={<Award className="w-4 h-4" />}
+                icon={<Award className="w-3.5 h-3.5" />}
                 badgeLabel="Grade"
               />
 

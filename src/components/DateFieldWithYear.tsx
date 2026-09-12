@@ -4,6 +4,7 @@ export type DateFieldTheme = "emerald" | "purple" | "blue" | "indigo" | "amber" 
 
 export interface DateFieldWithYearProps {
   label: string;
+  subLabel?: string;
   value: string;
   onChange: (val: string) => void;
   required?: boolean;
@@ -23,6 +24,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
   hoverBorder: string;
   iconBg: string;
   labelText: string;
+  subLabelText: string;
   yearBadge: string;
   focusRing: string;
 }> = {
@@ -32,6 +34,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     hoverBorder: "hover:border-emerald-500",
     iconBg: "bg-emerald-600",
     labelText: "text-emerald-950",
+    subLabelText: "text-emerald-700",
     yearBadge: "bg-emerald-100 text-emerald-950 border-emerald-300",
     focusRing: "focus:ring-emerald-500/20 focus:border-emerald-500",
   },
@@ -41,6 +44,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     hoverBorder: "hover:border-purple-500",
     iconBg: "bg-purple-600",
     labelText: "text-purple-950",
+    subLabelText: "text-purple-700",
     yearBadge: "bg-purple-100 text-purple-950 border-purple-300",
     focusRing: "focus:ring-purple-500/20 focus:border-purple-500",
   },
@@ -50,6 +54,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     hoverBorder: "hover:border-blue-500",
     iconBg: "bg-blue-600",
     labelText: "text-blue-950",
+    subLabelText: "text-blue-700",
     yearBadge: "bg-blue-100 text-blue-950 border-blue-300",
     focusRing: "focus:ring-blue-500/20 focus:border-blue-500",
   },
@@ -59,6 +64,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     hoverBorder: "hover:border-indigo-500",
     iconBg: "bg-indigo-600",
     labelText: "text-indigo-950",
+    subLabelText: "text-indigo-700",
     yearBadge: "bg-indigo-100 text-indigo-950 border-indigo-300",
     focusRing: "focus:ring-indigo-500/20 focus:border-indigo-500",
   },
@@ -68,6 +74,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     hoverBorder: "hover:border-amber-500",
     iconBg: "bg-amber-500",
     labelText: "text-amber-950",
+    subLabelText: "text-amber-700",
     yearBadge: "bg-amber-100 text-amber-950 border-amber-300",
     focusRing: "focus:ring-amber-500/20 focus:border-amber-500",
   },
@@ -77,6 +84,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
     hoverBorder: "hover:border-slate-500",
     iconBg: "bg-slate-700",
     labelText: "text-slate-900",
+    subLabelText: "text-slate-600",
     yearBadge: "bg-slate-100 text-slate-900 border-slate-300",
     focusRing: "focus:ring-slate-500/20 focus:border-slate-500",
   },
@@ -84,6 +92,7 @@ const THEME_STYLES: Record<DateFieldTheme, {
 
 export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
   label,
+  subLabel,
   value,
   onChange,
   required = false,
@@ -119,18 +128,25 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
     return (
       <div className={`border-2 ${styles.border} ${styles.hoverBorder} ${styles.cardBg} rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-xs transition-all duration-200 flex flex-col justify-between group`}>
         <div>
-          <div className="flex items-center justify-between gap-2 mb-1.5">
-            <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-start justify-between gap-2 mb-1.5">
+            <div className="flex items-start gap-2 min-w-0">
               {icon && (
-                <div className={`w-6 h-6 rounded-md ${styles.iconBg} text-white flex items-center justify-center shadow-2xs shrink-0`}>
+                <div className={`w-6 h-6 rounded-md ${styles.iconBg} text-white flex items-center justify-center shadow-2xs shrink-0 mt-0.5`}>
                   {icon}
                 </div>
               )}
-              <label className={`block font-black ${styles.labelText} text-xs tracking-wide uppercase truncate`} title={label}>
-                {label}
-              </label>
+              <div className="min-w-0">
+                <label className={`block font-black ${styles.labelText} text-xs tracking-wide uppercase truncate`} title={subLabel ? `${label} (${subLabel})` : label}>
+                  {label}
+                </label>
+                {subLabel && (
+                  <p className={`text-[11px] font-bold ${styles.subLabelText} truncate leading-tight mt-0.5`} title={subLabel}>
+                    {subLabel}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1 shrink-0 mt-0.5">
               {badgeLabel && (
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/90 text-slate-700 border border-slate-200 shadow-2xs">
                   {badgeLabel}
@@ -186,8 +202,17 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <label className="block font-bold text-slate-800 text-xs">{label}</label>
-        <div className="flex items-center gap-1.5">
+        <div className="min-w-0">
+          <label className="block font-bold text-slate-800 text-xs truncate" title={subLabel ? `${label} (${subLabel})` : label}>
+            {label}
+          </label>
+          {subLabel && (
+            <span className={`block text-[11px] font-semibold ${styles.subLabelText} truncate`} title={subLabel}>
+              {subLabel}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
           {badgeLabel && (
             <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-medium">
               {badgeLabel}

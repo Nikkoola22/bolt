@@ -270,6 +270,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
             <DateFieldWithYear
               label="Nomination grade"
+              subLabel={currentGrade.nom}
               value={form.dateNominationGradeActuel}
               onChange={(val) => {
                 const prevNom = form.dateNominationGradeActuel;
