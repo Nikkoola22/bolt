@@ -13,7 +13,8 @@ import {
   Building2,
   Zap,
   Award,
-  TrendingUp
+  TrendingUp,
+  FileText
 } from "lucide-react";
 
 interface AgentIntakeViewProps {
@@ -118,19 +119,60 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           </p>
         </div>
 
-        {/* Flash info : Munissez-vous de votre dernier arrêté et votre bulletin de paie */}
-        <div className="relative mt-5 pt-4 border-t border-slate-800/80">
-          <div className="bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-orange-500/15 border border-amber-400/30 rounded-xl p-3 sm:p-3.5 flex flex-col sm:flex-row items-start sm:items-center gap-3 backdrop-blur-xs">
-            <span className="p-2 rounded-lg bg-amber-400/20 text-amber-300 shrink-0 border border-amber-400/30 shadow-2xs">
-              <Zap className="w-4 h-4" />
-            </span>
-            <div className="text-xs">
-              <span className="inline-flex items-center font-extrabold text-amber-300 uppercase tracking-wider text-[10px] mr-2 px-2 py-0.5 rounded-md bg-amber-400/20 border border-amber-400/30 mb-1 sm:mb-0">
-                ⚡ Flash
-              </span>
-              <span className="font-semibold text-slate-100">
-                Munissez-vous de votre <strong className="text-white font-black underline decoration-amber-400/50 underline-offset-2">dernier arrêté</strong> et de votre <strong className="text-white font-black underline decoration-amber-400/50 underline-offset-2">bulletin de paie</strong> pour faciliter votre saisie.
-              </span>
+        {/* Flash info : Munissez-vous de votre dernier arrêté et de votre bulletin de paie */}
+        <div className="relative mt-6 pt-5 border-t border-slate-800/80">
+          <div className="relative overflow-hidden bg-gradient-to-r from-amber-500/25 via-amber-400/15 to-orange-500/20 border-2 border-amber-400/60 hover:border-amber-300 rounded-2xl p-4 sm:p-5 shadow-lg shadow-amber-500/10 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group">
+            
+            {/* Lueur d'ambiance dorée en arrière-plan */}
+            <div className="absolute -top-10 -right-10 w-44 h-44 bg-amber-400/20 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-400/30 transition-all"></div>
+
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              
+              {/* Badge Icone Éclair Néon Doré */}
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-slate-950 flex items-center justify-center shadow-md shadow-amber-500/40 ring-2 ring-amber-300/60 shrink-0">
+                  <Zap className="w-6 h-6 fill-slate-950 stroke-slate-950" />
+                </div>
+                
+                {/* Badge FLASH en mobile */}
+                <div className="sm:hidden flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 font-black text-amber-950 uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-400 border border-amber-200 shadow-xs">
+                    <span className="w-2 h-2 rounded-full bg-amber-950 animate-ping"></span>
+                    ⚡ FLASH
+                  </span>
+                </div>
+              </div>
+
+              {/* Contenu textuel agrandi avec documents stylisés */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span className="hidden sm:inline-flex items-center gap-1.5 font-black text-amber-950 uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-400 border border-amber-200 shadow-xs">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-950 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-950"></span>
+                    </span>
+                    ⚡ FLASH
+                  </span>
+                  <span className="text-amber-300 font-extrabold text-xs tracking-wider uppercase">
+                    Documents recommandés pour votre simulation
+                  </span>
+                </div>
+
+                <p className="text-sm sm:text-base font-semibold text-slate-100 mt-2 leading-relaxed">
+                  Munissez-vous de votre{" "}
+                  <span className="inline-flex items-center gap-1.5 bg-amber-400/25 hover:bg-amber-400/35 text-amber-100 border border-amber-300/60 px-2.5 py-0.5 rounded-lg font-black shadow-2xs transition-colors">
+                    <FileText className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                    dernier arrêté
+                  </span>{" "}
+                  et de votre{" "}
+                  <span className="inline-flex items-center gap-1.5 bg-amber-400/25 hover:bg-amber-400/35 text-amber-100 border border-amber-300/60 px-2.5 py-0.5 rounded-lg font-black shadow-2xs transition-colors">
+                    <FileText className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                    bulletin de paie
+                  </span>{" "}
+                  pour faciliter votre saisie.
+                </p>
+              </div>
+
             </div>
           </div>
         </div>
