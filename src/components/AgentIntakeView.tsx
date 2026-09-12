@@ -3,13 +3,13 @@ import type { ProfilAgent, StatutAgent } from "../types/career";
 import { CADRES_EMPLOIS } from "../data/gradesData";
 import { calculateTraitementBrut, isGradeAvancement } from "../services/simulationEngine";
 import { DateFieldWithYear } from "./DateFieldWithYear";
+import { DisclaimerBanner } from "./DisclaimerBanner";
 import { 
   User, 
   Briefcase, 
   Calendar, 
   Sparkles, 
   ArrowRight, 
-  ShieldCheck, 
   Building2,
   Zap
 } from "lucide-react";
@@ -165,8 +165,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs">
-            <div>
+          <div className="mt-5 flex flex-col sm:flex-row items-start gap-5 text-xs">
+            <div className="w-full sm:w-56 md:w-64 shrink-0">
               <label className="block font-bold text-slate-800 mb-1.5">Votre Prénom</label>
               <input
                 type="text"
@@ -177,11 +177,11 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 required
               />
               <p className="text-[11px] text-slate-500 mt-1.5">
-                Seul le prénom est requis pour personnaliser votre simulation.
+                Prénom de l agent
               </p>
             </div>
 
-            <div>
+            <div className="w-full sm:w-80 md:w-96">
               <label className="block font-bold text-slate-800 mb-1.5">Statut juridique</label>
               <select
                 value={formData.statut}
@@ -194,11 +194,11 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 <option value="contractuel_cdd">Contractuel de droit public en CDD</option>
               </select>
               <p className="text-[11px] text-slate-500 mt-1.5">
-                Régit les conditions d avancement selon le Code Général de la Fonction Publique.
+                Régit les conditions d avancement selon le CGFP.
               </p>
               {formData.statut.startsWith("contractuel") && (
                 <div className="mt-2 text-[11px] text-amber-900 bg-amber-50/90 border border-amber-200 rounded-lg p-2.5 leading-relaxed">
-                  <strong>Régime contractuel (Décret 88-145) :</strong> Rémunération par assimilation indiciaire sur le grade d accès initial. Les grades d avancement sont statutairement fermés au recrutement direct.
+                  <strong>Régime contractuel (Décret 88-145) :</strong> Rémunération par assimilation indiciaire sur le grade d accès initial.
                 </div>
               )}
             </div>
@@ -297,7 +297,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-600 mt-1">
-                  Point d indice officiel : 4,92278 € / mois (59,0734 € / an)
+                  Point d indice officiel : 4,92278 € / mois
                 </div>
               </div>
             </div>
@@ -385,20 +385,20 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           </div>
         </div>
 
-        {/* Bouton de soumission principal */}
-        <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-slate-500 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Simulation indicative fondée sur vos déclarations • Contrôle final par la DRH</span>
-          </div>
+        {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE */}
+        <div className="pt-6 border-t border-slate-200 space-y-4">
+          <DisclaimerBanner />
 
-          <button
-            type="submit"
-            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white text-sm font-extrabold px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer"
-          >
-            <span>Lancer la simulation</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          {/* Bouton de soumission principal */}
+          <div className="flex justify-end pt-1">
+            <button
+              type="submit"
+              className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white text-sm font-extrabold px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer"
+            >
+              <span>Lancer la simulation</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
       </form>

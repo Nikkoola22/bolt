@@ -410,10 +410,12 @@ export function App() {
           </>
         )}
 
-        {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE en bas de page */}
-        <div className="pt-2">
-          <DisclaimerBanner />
-        </div>
+        {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE en bas de page pour les modes de consultation */}
+        {appMode !== "saisie" && (
+          <div className="pt-2">
+            <DisclaimerBanner />
+          </div>
+        )}
 
       </main>
 
