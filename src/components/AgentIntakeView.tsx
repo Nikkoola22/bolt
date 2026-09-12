@@ -477,110 +477,116 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4 text-sm">
-            {/* 1. Date effet échelon actuel (Thème Émeraude) */}
-            <DateFieldWithYear
-              label="Date effet échelon actuel"
-              value={formData.dateEffetEchelonActuel}
-              onChange={(val) => setFormData({ ...formData, dateEffetEchelonActuel: val })}
-              minYear={1990}
-              maxYear={2026}
-              hint="Prise d effet de l échelon détenu"
-              required
-              cardMode
-              themeColor="emerald"
-              icon={<TrendingUp className="w-3.5 h-3.5" />}
-              badgeLabel={`Éch. ${formData.echelonActuel}`}
-            />
+          <div className="mt-5 space-y-4 text-sm">
+            {/* Ligne 1 : Échelon actuel & Reliquat d'ancienneté (2 cartes statutaires spacieuses) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* 1. Date effet échelon actuel (Thème Émeraude) */}
+              <DateFieldWithYear
+                label="Date effet échelon actuel"
+                value={formData.dateEffetEchelonActuel}
+                onChange={(val) => setFormData({ ...formData, dateEffetEchelonActuel: val })}
+                minYear={1990}
+                maxYear={2026}
+                hint="Prise d effet de l échelon détenu"
+                required
+                cardMode
+                themeColor="emerald"
+                icon={<TrendingUp className="w-4 h-4" />}
+                badgeLabel={`Éch. ${formData.echelonActuel}`}
+              />
 
-            {/* 2. Ancienneté conservée (Thème Ambre) */}
-            <div className="border-2 border-amber-300 hover:border-amber-500 bg-gradient-to-b from-amber-50/90 via-white to-amber-50/40 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2.5">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center shadow-2xs shrink-0">
-                      <Clock className="w-3.5 h-3.5" />
+              {/* 2. Ancienneté conservée (Thème Ambre) */}
+              <div className="border-2 border-amber-300 hover:border-amber-500 bg-gradient-to-b from-amber-50/90 via-white to-amber-50/40 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center shadow-2xs shrink-0">
+                        <Clock className="w-4 h-4" />
+                      </div>
+                      <label className="block font-black text-amber-950 text-xs sm:text-sm tracking-wide uppercase truncate" title="Ancienneté conservée (mois)">
+                        Ancienneté conservée
+                      </label>
                     </div>
-                    <label className="block font-black text-amber-950 text-xs sm:text-sm tracking-wide uppercase truncate" title="Ancienneté conservée (mois)">
-                      Ancienneté conservée
-                    </label>
+                    <span className="text-xs font-mono font-black px-2 py-0.5 rounded-md shadow-2xs bg-amber-100 text-amber-950 border border-amber-300 shrink-0">
+                      {formData.ancienneteConserveeMois || 0} mois
+                    </span>
                   </div>
-                  <span className="text-xs font-mono font-black px-2 py-0.5 rounded-md shadow-2xs bg-amber-100 text-amber-950 border border-amber-300 shrink-0">
-                    {formData.ancienneteConserveeMois || 0} mois
-                  </span>
+
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="number"
+                      min="0"
+                      max="36"
+                      value={formData.ancienneteConserveeMois}
+                      onChange={(e) => setFormData({ ...formData, ancienneteConserveeMois: Number(e.target.value) })}
+                      className="w-24 bg-white border border-amber-300 rounded-xl px-2.5 py-2 text-slate-900 font-bold text-xs sm:text-sm text-center focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-2xs"
+                    />
+                    <span className="text-xs font-bold text-amber-900">mois</span>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2 mt-2">
-                  <input
-                    type="number"
-                    min="0"
-                    max="36"
-                    value={formData.ancienneteConserveeMois}
-                    onChange={(e) => setFormData({ ...formData, ancienneteConserveeMois: Number(e.target.value) })}
-                    className="w-20 sm:w-24 bg-white border border-amber-300 rounded-xl px-2.5 py-2 text-slate-900 font-bold text-xs sm:text-xs text-center focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-2xs"
-                  />
-                  <span className="text-xs font-bold text-amber-900">mois</span>
+                <div className="mt-3 pt-2.5 border-t border-slate-200/70 text-[11px] text-slate-600 font-medium leading-tight">
+                  Si mentionné sur votre arrêté (ex: 6 ou 8).
                 </div>
-              </div>
-
-              <div className="mt-3 pt-2.5 border-t border-slate-200/70 text-[11px] text-slate-600 font-medium leading-tight">
-                Si mentionné sur votre arrêté (ex: 6 ou 8).
               </div>
             </div>
 
-            {/* 3. Nomination grade actuel (Thème Violet) */}
-            <DateFieldWithYear
-              label="Nomination grade actuel"
-              value={formData.dateNominationGradeActuel}
-              onChange={(val) => {
-                const prevNom = formData.dateNominationGradeActuel;
-                const wasCadreSynced = !formData.dateEntreeCadreEmploi || formData.dateEntreeCadreEmploi === prevNom;
-                setFormData({ 
-                  ...formData, 
-                  dateNominationGradeActuel: val,
-                  dateEntreeCadreEmploi: wasCadreSynced ? val : formData.dateEntreeCadreEmploi
-                });
-              }}
-              minYear={1965}
-              maxYear={2026}
-              hint="Nomination dans le grade actuel"
-              required
-              cardMode
-              themeColor="purple"
-              icon={<Award className="w-3.5 h-3.5" />}
-              badgeLabel="Grade"
-            />
+            {/* Ligne 2 : Parcours statutaire, Cadre d'emploi & Carrière (3 cartes statutaires spacieuses) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* 3. Nomination grade actuel (Thème Violet) */}
+              <DateFieldWithYear
+                label="Nomination grade actuel"
+                value={formData.dateNominationGradeActuel}
+                onChange={(val) => {
+                  const prevNom = formData.dateNominationGradeActuel;
+                  const wasCadreSynced = !formData.dateEntreeCadreEmploi || formData.dateEntreeCadreEmploi === prevNom;
+                  setFormData({ 
+                    ...formData, 
+                    dateNominationGradeActuel: val,
+                    dateEntreeCadreEmploi: wasCadreSynced ? val : formData.dateEntreeCadreEmploi
+                  });
+                }}
+                minYear={1965}
+                maxYear={2026}
+                hint="Nomination dans le grade actuel"
+                required
+                cardMode
+                themeColor="purple"
+                icon={<Award className="w-4 h-4" />}
+                badgeLabel="Grade"
+              />
 
-            {/* 4. Accès Cadre (Thème Bleu) */}
-            <DateFieldWithYear
-              label={`Accès Cadre (Cat. ${currentCadre.categorie})`}
-              value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
-              onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
-              minYear={1965}
-              maxYear={2026}
-              hint={`Entrée en catégorie ${currentCadre.categorie} (ex: 2024)`}
-              required
-              cardMode
-              themeColor="blue"
-              icon={<Briefcase className="w-3.5 h-3.5" />}
-              badgeLabel={`Cat. ${currentCadre.categorie}`}
-            />
+              {/* 4. Accès Cadre (Thème Bleu) */}
+              <DateFieldWithYear
+                label={`Accès Cadre (Cat. ${currentCadre.categorie})`}
+                value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
+                onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
+                minYear={1965}
+                maxYear={2026}
+                hint={`Entrée en catégorie ${currentCadre.categorie} (ex: 2024)`}
+                required
+                cardMode
+                themeColor="blue"
+                icon={<Briefcase className="w-4 h-4" />}
+                badgeLabel={`Cat. ${currentCadre.categorie}`}
+              />
 
-            {/* 5. Entrée Fonction Publique (Thème Indigo) */}
-            <DateFieldWithYear
-              label="Entrée Fonction Publique"
-              value={formData.dateEntreeFonctionPublique}
-              onChange={(val) => setFormData({ ...formData, dateEntreeFonctionPublique: val })}
-              minYear={1965}
-              maxYear={2026}
-              highlightYear={1998}
-              hint="Tous services publics (ex: début en B ou C)"
-              required
-              cardMode
-              themeColor="indigo"
-              icon={<ShieldCheck className="w-3.5 h-3.5" />}
-              badgeLabel="Tous services"
-            />
+              {/* 5. Entrée Fonction Publique (Thème Indigo) */}
+              <DateFieldWithYear
+                label="Entrée Fonction Publique"
+                value={formData.dateEntreeFonctionPublique}
+                onChange={(val) => setFormData({ ...formData, dateEntreeFonctionPublique: val })}
+                minYear={1965}
+                maxYear={2026}
+                highlightYear={1998}
+                hint="Tous services publics (ex: début en B ou C)"
+                required
+                cardMode
+                themeColor="indigo"
+                icon={<ShieldCheck className="w-4 h-4" />}
+                badgeLabel="Tous services"
+              />
+            </div>
           </div>
         </div>
 

@@ -148,7 +148,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
               <select
                 value={currentYear}
                 onChange={(e) => handleYearChange(e.target.value)}
-                className="w-full bg-white hover:bg-slate-50 border border-slate-300 font-bold rounded-xl px-1 py-2 text-slate-900 text-xs sm:text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs text-center"
+                className={`w-full bg-white hover:bg-slate-50 border border-slate-300 font-bold rounded-xl px-1 py-2 text-slate-900 text-xs sm:text-sm focus:bg-white focus:ring-2 ${styles.focusRing} transition-all cursor-pointer shadow-2xs text-center`}
                 title={`Choisir l'année pour : ${label}`}
               >
                 {yearsList.map((y) => (
@@ -167,7 +167,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
                 max={`${maxYear}-12-31`}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full min-w-0 bg-white border border-slate-300 rounded-xl px-2 py-2 text-slate-900 font-bold text-xs sm:text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
+                className={`w-full min-w-0 bg-white border border-slate-300 rounded-xl px-2.5 py-2 text-slate-900 font-bold text-xs sm:text-sm focus:bg-white focus:ring-2 ${styles.focusRing} transition-all shadow-2xs`}
                 required={required}
               />
             </div>
