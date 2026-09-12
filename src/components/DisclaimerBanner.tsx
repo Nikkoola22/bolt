@@ -30,7 +30,12 @@ export const DisclaimerBanner: React.FC = () => {
           </div>
         </div>
         <button
-          onClick={() => setExpanded(!expanded)}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
           className="text-sm font-bold text-amber-950 hover:text-amber-800 bg-white hover:bg-amber-100/80 border border-amber-300 px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 transition-all cursor-pointer shadow-2xs self-end sm:self-auto"
           aria-expanded={expanded}
         >
