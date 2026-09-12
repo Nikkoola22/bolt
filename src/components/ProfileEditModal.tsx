@@ -145,11 +145,19 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                 onChange={(e) => handleCadreChange(e.target.value)}
                 className="w-full bg-white border border-blue-300/80 rounded-lg px-3 py-2 font-extrabold text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-2xs cursor-pointer"
               >
-                {CADRES_EMPLOIS.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nom} (Catégorie {c.categorie})
-                  </option>
-                ))}
+                {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
+                  const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
+                  if (cadresInFil.length === 0) return null;
+                  return (
+                    <optgroup key={fil} label={`Filière ${fil}`}>
+                      {cadresInFil.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.nom} (Cat. {c.categorie})
+                        </option>
+                      ))}
+                    </optgroup>
+                  );
+                })}
               </select>
             </div>
 

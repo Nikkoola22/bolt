@@ -292,11 +292,19 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                     onChange={(e) => handleCadreChange(e.target.value)}
                     className="w-full bg-white text-slate-900 font-extrabold text-sm sm:text-base rounded-xl px-3.5 py-3 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 shadow-2xs transition-all cursor-pointer"
                   >
-                    {CADRES_EMPLOIS.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.nom} (Catégorie {c.categorie})
-                      </option>
-                    ))}
+                    {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
+                      const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
+                      if (cadresInFil.length === 0) return null;
+                      return (
+                        <optgroup key={fil} label={`Filière ${fil}`}>
+                          {cadresInFil.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.nom} (Cat. {c.categorie})
+                            </option>
+                          ))}
+                        </optgroup>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
@@ -307,7 +315,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                   <span>{currentCadre.grades.length} grades statutaires</span>
                 </span>
                 <span className="bg-blue-100/80 text-blue-800 px-2 py-0.5 rounded font-mono text-[11px]">
-                  FPT
+                  Filière {currentCadre.filiere}
                 </span>
               </div>
             </div>

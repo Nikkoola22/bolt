@@ -145,9 +145,14 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
             <div className="font-black text-slate-950 text-base sm:text-lg leading-snug group-hover:text-blue-700 transition-colors mt-1">
               {grade.nom}
             </div>
-            <div className="mt-2.5 inline-flex items-center gap-1.5 bg-blue-100/80 border border-blue-200/90 text-blue-950 text-xs font-semibold px-2.5 py-1 rounded-lg">
-              <span className="text-blue-700 font-medium">Cadre d emplois :</span>
-              <span className="font-black">{cadre.nom}</span>
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              <div className="inline-flex items-center gap-1.5 bg-blue-100/80 border border-blue-200/90 text-blue-950 text-xs font-semibold px-2.5 py-1 rounded-lg">
+                <span className="text-blue-700 font-medium">Cadre d emplois :</span>
+                <span className="font-black">{cadre.nom}</span>
+              </div>
+              <span className="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                Filière {cadre.filiere}
+              </span>
             </div>
           </div>
           <div className="text-xs text-slate-500 mt-3 pt-2.5 border-t border-blue-100 flex items-center gap-1">

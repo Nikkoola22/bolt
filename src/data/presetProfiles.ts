@@ -119,5 +119,39 @@ export const PROFILS_PREDEFINIS: ProfilAgent[] = [
     ancienneteConserveeMois: 0,
     quotiteActuelle: 100,
     evenementsSimules: []
+  },
+  {
+    id: "camille_culture",
+    prenom: "Camille",
+    matricule: "RH-83120",
+    collectivite: "Collectivité de Gennevilliers",
+    versant: "FPT",
+    statut: "titulaire",
+    dateEntreeFonctionPublique: "2019-09-01",
+    dateNominationGradeActuel: "2021-01-01",
+    cadreEmploiId: "assistant_conservation",
+    gradeId: "assistant_conservation_classe_normale",
+    echelonActuel: 5,
+    dateEffetEchelonActuel: "2024-01-01",
+    ancienneteConserveeMois: 0,
+    quotiteActuelle: 100,
+    evenementsSimules: []
+  },
+  {
+    id: "leila_eje",
+    prenom: "Leïla",
+    matricule: "RH-94510",
+    collectivite: "Collectivité de Gennevilliers",
+    versant: "FPT",
+    statut: "titulaire",
+    dateEntreeFonctionPublique: "2020-01-01",
+    dateNominationGradeActuel: "2021-09-01",
+    cadreEmploiId: "educateur_jeunes_enfants",
+    gradeId: "educateur_jeunes_enfants_normal",
+    echelonActuel: 4,
+    dateEffetEchelonActuel: "2024-03-01",
+    ancienneteConserveeMois: 0,
+    quotiteActuelle: 100,
+    evenementsSimules: []
   }
 ];
