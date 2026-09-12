@@ -27,8 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-3">
           {/* Logo avec accent tricolore républicain subtil */}
           <div className="relative flex items-center">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-slate-900 flex items-center justify-center text-white font-black text-sm shadow-sm ring-1 ring-white/20 tracking-wider">
-              PA
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 flex items-center justify-center text-white font-black text-xs shadow-sm ring-1 ring-white/20 tracking-wider">
+              CFDT
             </div>
             {/* Discrète barre tricolore républicaine */}
             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex h-0.75 w-6 rounded-full overflow-hidden shadow-xs">
@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2.5">
             <div className="flex items-center gap-2">
               <span className="text-base font-black text-white tracking-tight">
-                Simulateur « Parcours Agent »
+                CFDT " MA CARRIERE"
               </span>
             </div>
             <div className="flex items-center gap-1.5 mt-0.5 sm:mt-0">
