@@ -92,8 +92,6 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                   <span>{statutLibelle}</span>
                 </span>
                 <span className="text-slate-600">•</span>
-                <span>Matricule : {profil.matricule || "N/A"}</span>
-                <span className="text-slate-600">•</span>
                 <span className="text-emerald-300 font-medium flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-amber-400" />
                   Situation à jour au 11 sept. 2026
