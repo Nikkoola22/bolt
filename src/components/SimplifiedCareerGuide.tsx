@@ -41,7 +41,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
       const targetId = question === "echelon" ? "block-premier-palier" : "block-avancement-choix";
       const el = document.getElementById(targetId);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, 70);
   };
@@ -273,7 +273,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                     {/* CARTE 1 : 1ER PROCHAIN ÉCHELON */}
                     <div 
                       id="block-premier-palier"
-                      className="bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 border-2 border-emerald-400/90 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs scroll-mt-8"
+                      className="bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 border-2 border-emerald-400/90 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs scroll-mt-24"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
@@ -446,7 +446,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                 </div>
               ) : (
-                <div id="block-premier-palier" className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600 scroll-mt-8">
+                <div id="block-premier-palier" className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600 scroll-mt-24">
                   Vous avez atteint l échelon sommital de votre grade. Votre évolution indiciaire ultérieure passe par un avancement de grade.
                 </div>
               )}
@@ -459,7 +459,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               {prochainePromouvabilite ? (
                 <div 
                   id="block-avancement-choix"
-                  className="bg-gradient-to-br from-purple-50/80 via-white to-violet-50/40 border border-purple-300 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs scroll-mt-8"
+                  className="bg-gradient-to-br from-purple-50/80 via-white to-violet-50/40 border border-purple-300 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs scroll-mt-24"
                 >
                   
                   {/* En-tête de la promouvabilité au choix */}
@@ -571,7 +571,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   )}
                 </div>
               ) : (
-                <div id="block-avancement-choix" className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600 scroll-mt-8">
+                <div id="block-avancement-choix" className="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center text-xs text-slate-600 scroll-mt-24">
                   Aucune perspective d avancement direct identifiée pour ce grade. Vous êtes au sommet de votre cadre d emplois.
                 </div>
               )}
