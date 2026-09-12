@@ -287,7 +287,8 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             />
 
             <DateFieldWithYear
-              label={`Accès Cadre (${currentCadre.categorie})`}
+              label="Ancienneté dans ton cadre d'emploi"
+              subLabel={currentCadre.nom}
               value={form.dateEntreeCadreEmploi || form.dateNominationGradeActuel}
               onChange={(val) => setForm({ ...form, dateEntreeCadreEmploi: val })}
               minYear={1965}

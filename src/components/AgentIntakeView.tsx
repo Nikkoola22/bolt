@@ -557,9 +557,10 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 badgeLabel="Grade"
               />
 
-              {/* 4. Accès Cadre (Thème Orange CFDT) */}
+              {/* 4. Ancienneté dans ton cadre d'emploi (Thème Orange CFDT) */}
               <DateFieldWithYear
-                label={`Accès Cadre (Cat. ${currentCadre.categorie})`}
+                label="Ancienneté dans ton cadre d'emploi"
+                subLabel={currentCadre.nom}
                 value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
                 onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
                 minYear={1965}
