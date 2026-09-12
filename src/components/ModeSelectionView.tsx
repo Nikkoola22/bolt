@@ -112,22 +112,22 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
         {/* CARTE 2 : VERSION COMPLÈTE */}
         <div 
           onClick={onSelectComplete}
-          className="bg-white hover:bg-gradient-to-br hover:from-blue-50/40 hover:via-white hover:to-indigo-50/30 border-2 border-slate-200/90 hover:border-blue-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
+          className="bg-white hover:bg-gradient-to-br hover:from-orange-50/40 hover:via-white hover:to-amber-50/30 border-2 border-slate-200/90 hover:border-orange-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
         >
           {/* Liseré subtil supérieur */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-600 to-blue-600 opacity-80"></div>
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 opacity-80"></div>
 
           <div>
             <div className="flex items-center justify-between gap-3 mb-5">
-              <span className="w-13 h-13 rounded-2xl bg-blue-500/10 text-blue-600 border border-blue-300/60 flex items-center justify-center font-black text-xl shadow-xs group-hover:scale-110 transition-transform">
-                <Layers className="w-7 h-7 text-blue-600" />
+              <span className="w-13 h-13 rounded-2xl bg-orange-500/10 text-orange-600 border border-orange-300/60 flex items-center justify-center font-black text-xl shadow-xs group-hover:scale-110 transition-transform">
+                <Layers className="w-7 h-7 text-orange-600" />
               </span>
-              <span className="text-[11px] font-black uppercase tracking-wider text-blue-900 bg-blue-100/80 border border-blue-300 px-3 py-1 rounded-full">
+              <span className="text-[11px] font-black uppercase tracking-wider text-orange-950 bg-orange-100/80 border border-orange-300 px-3 py-1 rounded-full">
                 Parcours exhaustif
               </span>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-blue-800 transition-colors">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orange-800 transition-colors">
               Version Complète
             </h2>
             
@@ -135,17 +135,17 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
               Le processus complet avec la frise chronologique prospective sur 15 ans, vos perspectives et le comparateur :
             </p>
 
-            <ul className="mt-5 space-y-2.5 bg-blue-50/50 p-4 rounded-2xl border border-blue-200/70 text-xs text-slate-700">
+            <ul className="mt-5 space-y-2.5 bg-orange-50/40 p-4 rounded-2xl border border-orange-200/70 text-xs text-slate-700">
               <li className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
                 <span><strong>Frise chronologique interactive</strong> avec calculs indiciaires échelon par échelon</span>
               </li>
               <li className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
                 <span><strong>Checklist des perspectives</strong> (au choix vs examen pro vs promotion interne)</span>
               </li>
               <li className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
                 <span><strong>Comparateur d impacts (« What-If »)</strong> et simulation d événements de vie</span>
               </li>
             </ul>
@@ -154,7 +154,7 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
           <div className="mt-7 pt-5 border-t border-slate-100">
             <button
               type="button"
-              className="w-full py-3.5 px-5 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 px-5 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Choisir la Version Complète</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

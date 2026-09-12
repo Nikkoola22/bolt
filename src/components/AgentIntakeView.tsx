@@ -104,12 +104,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
     <div className="space-y-6 animate-fadeIn">
       
       {/* Block ESPACE DE SAISIE PERSONNALISÉE tout en haut */}
-      <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white rounded-2xl p-4 sm:p-7 lg:p-8 shadow-xs border border-slate-800/90 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/80 text-white rounded-2xl p-4 sm:p-7 lg:p-8 shadow-xs border border-slate-800/90 relative overflow-hidden">
         {/* Lueur subtile en arrière-plan */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
 
         <div className="relative max-w-4xl">
-          <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 border border-blue-400/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 bg-orange-500/20 text-orange-300 border border-orange-400/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             ESPACE DE SAISIE PERSONNALISÉE
           </div>
@@ -181,16 +181,16 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
       {/* Formulaire de saisie principal */}
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xs border border-slate-200/90 p-4 sm:p-7 lg:p-8 space-y-8 sm:space-y-10">
         
-        {/* Section 1 : Identité & Statut administratif (Thème Bleu) */}
+        {/* Section 1 : Identité & Statut administratif (Thème Orange CFDT) */}
         <div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-200/80">
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
+              <span className="w-8 h-8 rounded-xl bg-orange-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                 1
               </span>
               <div>
                 <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                  <User className="w-5 h-5 text-blue-600" />
+                  <User className="w-5 h-5 text-orange-600" />
                   Votre Identité & Statut Administratif
                 </h3>
                 <p className="text-sm text-slate-500 mt-0.5">
@@ -199,8 +199,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-2 self-start sm:self-center">
-              <span className="text-xs sm:text-sm bg-blue-50 text-blue-900 border border-blue-200/90 font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs">
-                <Building2 className="w-4 h-4 text-blue-600" />
+              <span className="text-xs sm:text-sm bg-orange-50 text-orange-950 border border-orange-200/90 font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs">
+                <Building2 className="w-4 h-4 text-orange-600" />
                 Collectivité de Gennevilliers
               </span>
               <span className="text-xs sm:text-sm bg-slate-100 text-slate-800 font-extrabold px-2.5 py-1 rounded-full border border-slate-200/70">
@@ -217,7 +217,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 value={formData.prenom}
                 onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
                 placeholder="Ex: Atlas, Sophie, Karim..."
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
+                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all shadow-2xs"
                 required
               />
               <p className="text-xs text-slate-500 mt-1.5">
@@ -269,19 +269,19 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           </div>
 
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-sm">
-            {/* 1. Cadre d'emplois (Thème Bleu Roi / Indigo) */}
-            <div className="bg-gradient-to-b from-blue-50/90 via-white to-blue-50/40 border-2 border-blue-300 hover:border-blue-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:border-blue-600 flex flex-col justify-between group">
+            {/* 1. Cadre d'emplois (Thème Orange CFDT) */}
+            <div className="bg-gradient-to-b from-orange-50/90 via-white to-amber-50/40 border-2 border-orange-300 hover:border-orange-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 focus-within:ring-4 focus-within:ring-orange-500/20 focus-within:border-orange-600 flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2.5">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-2xs shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center shadow-2xs shrink-0">
                       <Briefcase className="w-3.5 h-3.5" />
                     </div>
-                    <label className="block font-black text-blue-950 text-sm sm:text-base tracking-wide uppercase">
+                    <label className="block font-black text-orange-950 text-sm sm:text-base tracking-wide uppercase">
                       Cadre d emplois
                     </label>
                   </div>
-                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300 shadow-2xs shrink-0">
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-950 border border-orange-300 shadow-2xs shrink-0">
                     Cat. {currentCadre.categorie}
                   </span>
                 </div>
@@ -290,7 +290,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                   <select
                     value={formData.cadreEmploiId}
                     onChange={(e) => handleCadreChange(e.target.value)}
-                    className="w-full bg-white text-slate-900 font-extrabold text-sm sm:text-base rounded-xl px-3.5 py-3 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 shadow-2xs transition-all cursor-pointer"
+                    className="w-full bg-white text-slate-900 font-extrabold text-sm sm:text-base rounded-xl px-3.5 py-3 border-2 border-orange-200 hover:border-orange-400 focus:border-orange-600 focus:ring-2 focus:ring-orange-500/20 shadow-2xs transition-all cursor-pointer"
                   >
                     {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
                       const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
@@ -309,12 +309,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 </div>
               </div>
 
-              <div className="mt-3 pt-2.5 border-t border-blue-100/90 flex items-center justify-between text-xs text-blue-900 font-bold">
+              <div className="mt-3 pt-2.5 border-t border-orange-100/90 flex items-center justify-between text-xs text-orange-950 font-bold">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
                   <span>{currentCadre.grades.length} grades statutaires</span>
                 </span>
-                <span className="bg-blue-100/80 text-blue-800 px-2 py-0.5 rounded font-mono text-[11px]">
+                <span className="bg-orange-100/80 text-orange-900 px-2 py-0.5 rounded font-mono text-[11px]">
                   Filière {currentCadre.filiere}
                 </span>
               </div>
@@ -557,7 +557,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 badgeLabel="Grade"
               />
 
-              {/* 4. Accès Cadre (Thème Bleu) */}
+              {/* 4. Accès Cadre (Thème Orange CFDT) */}
               <DateFieldWithYear
                 label={`Accès Cadre (Cat. ${currentCadre.categorie})`}
                 value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
@@ -567,7 +567,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 hint={`Entrée en catégorie ${currentCadre.categorie} (ex: 2024)`}
                 required
                 cardMode
-                themeColor="blue"
+                themeColor="orange"
                 icon={<Briefcase className="w-3.5 h-3.5" />}
                 badgeLabel={`Cat. ${currentCadre.categorie}`}
               />
@@ -599,7 +599,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           <div className="flex justify-end pt-1">
             <button
               type="submit"
-              className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white text-sm font-extrabold px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer"
+              className="w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-sm font-extrabold px-8 py-3.5 rounded-xl shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 ring-2 ring-orange-400/30 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer"
             >
               <span>Lancer la simulation</span>
               <ArrowRight className="w-4 h-4" />

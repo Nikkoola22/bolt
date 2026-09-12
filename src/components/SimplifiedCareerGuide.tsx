@@ -103,9 +103,9 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
     <div className="space-y-6 animate-fadeIn">
       
       {/* Bandeau d en-tête avec rappel du profil de l agent */}
-      <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/80 text-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black text-lg shadow-md shrink-0 ring-2 ring-white/10">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white font-black text-lg shadow-md shrink-0 ring-2 ring-white/10">
             {profil.prenom.charAt(0).toUpperCase()}
           </div>
           <div>
@@ -113,7 +113,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               <span className="font-extrabold text-lg text-white">
                 Version Simplifiée • {profil.prenom}
               </span>
-              <span className="text-[11px] bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-0.5 rounded-full font-bold">
+              <span className="text-[11px] bg-orange-500/20 text-orange-200 border border-orange-400/30 px-2 py-0.5 rounded-full font-bold">
                 {isContractuel ? "Agent Contractuel" : "Fonctionnaire Titulaire"}
               </span>
             </div>
@@ -122,7 +122,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                 <Award className="w-3.5 h-3.5 text-purple-300" />
                 <span>{grade.nom}</span>
               </span>
-              <span className="bg-blue-500/25 text-blue-200 border border-blue-400/40 px-2.5 py-0.5 rounded-lg text-xs font-semibold shadow-2xs">
+              <span className="bg-orange-500/20 text-orange-200 border border-orange-400/30 px-2.5 py-0.5 rounded-lg text-xs font-semibold shadow-2xs">
                 Cadre : <strong className="text-white font-bold">{cadre.nom}</strong>
               </span>
               <span className="bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 shadow-2xs">
@@ -138,13 +138,13 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             onClick={onEditProfile}
             className="text-xs font-bold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700 px-3.5 py-2 rounded-xl border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
           >
-            <FileEdit className="w-3.5 h-3.5 text-blue-400" />
+            <FileEdit className="w-3.5 h-3.5 text-orange-400" />
             <span>Modifier ma saisie</span>
           </button>
 
           <button
             onClick={onSwitchToComplete}
-            className="text-xs font-black bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-blue-600/25"
+            className="text-xs font-black bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-orange-500/25"
           >
             <Layers className="w-3.5 h-3.5" />
             <span>Voir Version Complète</span>

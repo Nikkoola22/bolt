@@ -30,13 +30,13 @@ export const PrintSummary: React.FC<PrintSummaryProps> = ({
         {/* Barre d actions d impression */}
         <div className="bg-slate-900 p-4 text-white flex items-center justify-between print:hidden">
           <div className="flex items-center gap-2">
-            <Printer className="w-5 h-5 text-blue-400" />
+            <Printer className="w-5 h-5 text-orange-400" />
             <span className="text-sm font-bold">Fiche de Synthèse Carrière - Prête pour l Entretien Professionnel</span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="text-xs bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
             >
               <Printer className="w-4 h-4" />
               Imprimer / Enregistrer en PDF
@@ -69,7 +69,7 @@ export const PrintSummary: React.FC<PrintSummaryProps> = ({
             <div className="text-right text-xs text-slate-500">
               <div>Date d édition : 11 septembre 2026</div>
               <div className="font-semibold text-slate-800">{profil.collectivite}</div>
-              <div className="text-[11px] text-blue-600 font-medium">Versant : {profil.versant}</div>
+              <div className="text-[11px] text-orange-700 font-bold">Versant : {profil.versant}</div>
             </div>
           </div>
 
@@ -81,7 +81,7 @@ export const PrintSummary: React.FC<PrintSummaryProps> = ({
           {/* Bloc 1 : Identité & Situation statutaire actuelle */}
           <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-1.5">
-              <User className="w-4 h-4 text-blue-600" />
+              <User className="w-4 h-4 text-orange-600" />
               1. Situation statutaire déclarée au 11/09/2026
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
@@ -217,7 +217,7 @@ export const PrintSummary: React.FC<PrintSummaryProps> = ({
         {/* Footer */}
         <div className="p-4 bg-slate-100 border-t border-slate-200 flex items-center justify-between print:hidden">
           <span className="text-xs text-slate-500">
-            Document généré par le Simulateur « Parcours Agent »
+            Document généré par CFDT "MA CARRIÈRE"
           </span>
           <button
             onClick={onClose}

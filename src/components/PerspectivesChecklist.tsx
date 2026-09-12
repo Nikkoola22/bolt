@@ -279,7 +279,7 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
 
                   <button
                     onClick={() => onSelectJalon(jalon)}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer ml-auto"
+                    className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer ml-auto"
                   >
                     <span>Détails complets</span>
                     <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />

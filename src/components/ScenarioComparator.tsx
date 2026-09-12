@@ -34,7 +34,7 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
     <div className="bg-white rounded-2xl shadow-xs border border-slate-200/90 p-5 sm:p-7 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200/80">
         <div className="flex items-center gap-2.5">
-          <span className="p-2 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200/60 shadow-2xs">
+          <span className="p-2 rounded-xl bg-orange-50 text-orange-600 border border-orange-200/60 shadow-2xs">
             <GitCompare className="w-5 h-5" />
           </span>
           <div>
@@ -49,7 +49,7 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
 
         <span className={`text-xs font-bold px-3 py-1 rounded-full border self-start sm:self-center shadow-2xs ${
           hasSimulatedEvents
-            ? "bg-indigo-50 text-indigo-900 border-indigo-200"
+            ? "bg-orange-50 text-orange-950 border-orange-200"
             : "bg-slate-100 text-slate-700 border-slate-200"
         }`}>
           {hasSimulatedEvents
@@ -110,15 +110,15 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
         {/* Colonne 2 : Scénario Simulé */}
         <div className={`border rounded-2xl p-5 space-y-3.5 shadow-2xs transition-all ${
           hasSimulatedEvents
-            ? "bg-indigo-50/50 border-indigo-200/90 ring-2 ring-indigo-500/10"
+            ? "bg-orange-50/50 border-orange-200/90 ring-2 ring-orange-500/10"
             : "bg-slate-50/80 border-slate-200/90"
         }`}>
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-950 flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-orange-950 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-pulse"></span>
               Scénario Actuellement Simulé
             </span>
-            <span className="text-[11px] bg-indigo-100 text-indigo-900 px-2.5 py-0.5 rounded-md font-bold border border-indigo-200/70">
+            <span className="text-[11px] bg-orange-100 text-orange-950 px-2.5 py-0.5 rounded-md font-bold border border-orange-200/70">
               Vos choix déclarés
             </span>
           </div>
@@ -136,7 +136,7 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
                   </span>
                 )}
               </div>
-              <div className="text-[11px] text-indigo-700 font-bold mt-0.5">
+              <div className="text-[11px] text-orange-700 font-bold mt-0.5">
                 {simNextEch ? `${simNextEch.echelonNumero}e échelon (IM ${simNextEch.indiceMajore})` : ""}
               </div>
             </div>
@@ -158,10 +158,10 @@ export const ScenarioComparator: React.FC<ScenarioComparatorProps> = ({
 
             <div className="text-[11px] text-slate-700">
               {hasSimulatedEvents ? (
-                <div className="space-y-1.5 bg-indigo-100/50 p-3 rounded-xl border border-indigo-200/60">
+                <div className="space-y-1.5 bg-orange-100/50 p-3 rounded-xl border border-orange-200/60">
                   {currentResult.synthesePedagogique.alertesVigilance.map((alt, idx) => (
-                    <div key={idx} className="flex items-start gap-1.5 text-indigo-950 font-medium">
-                      <span className="text-indigo-600 font-bold">•</span>
+                    <div key={idx} className="flex items-start gap-1.5 text-orange-950 font-medium">
+                      <span className="text-orange-600 font-bold">•</span>
                       <span>{alt}</span>
                     </div>
                   ))}

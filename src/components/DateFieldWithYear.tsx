@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-export type DateFieldTheme = "emerald" | "purple" | "blue" | "indigo" | "amber" | "slate";
+export type DateFieldTheme = "emerald" | "purple" | "blue" | "indigo" | "amber" | "orange" | "slate";
 
 export interface DateFieldWithYearProps {
   label: string;
@@ -28,6 +28,16 @@ const THEME_STYLES: Record<DateFieldTheme, {
   yearBadge: string;
   focusRing: string;
 }> = {
+  orange: {
+    cardBg: "bg-gradient-to-b from-orange-50/90 via-white to-amber-50/40",
+    border: "border-orange-300",
+    hoverBorder: "hover:border-orange-500",
+    iconBg: "bg-orange-600",
+    labelText: "text-orange-950",
+    subLabelText: "text-orange-700",
+    yearBadge: "bg-orange-100 text-orange-950 border-orange-300",
+    focusRing: "focus:ring-orange-500/20 focus:border-orange-500",
+  },
   emerald: {
     cardBg: "bg-gradient-to-b from-emerald-50/90 via-white to-emerald-50/40",
     border: "border-emerald-300",

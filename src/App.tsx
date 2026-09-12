@@ -226,7 +226,7 @@ export function App() {
                     onClick={() => setActiveTab("frise")}
                     className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
                       activeTab === "frise"
-                        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-500/30 scale-[1.02]"
+                        ? "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/30 ring-2 ring-orange-400/30 scale-[1.02]"
                         : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
                     }`}
                   >
@@ -235,7 +235,7 @@ export function App() {
                     <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
                       activeTab === "frise"
                         ? "bg-white/25 text-white ring-1 ring-white/30"
-                        : "bg-blue-100 text-blue-800"
+                        : "bg-orange-100 text-orange-950"
                     }`}>
                       {resultatSimulation.jalons.length}
                     </span>
@@ -351,7 +351,7 @@ export function App() {
               {/* Colonne 1 : Conseils pour l entretien annuel */}
               <div className="bg-slate-50/80 border border-slate-200 rounded-2xl p-5 space-y-3.5 shadow-2xs">
                 <div className="flex items-center gap-2">
-                  <span className="p-1.5 rounded-lg bg-blue-100 text-blue-700">
+                  <span className="p-1.5 rounded-lg bg-orange-100 text-orange-700">
                     <FileText className="w-4 h-4" />
                   </span>
                   <h4 className="font-bold text-slate-900 text-sm">
@@ -361,12 +361,12 @@ export function App() {
                 <ul className="space-y-2.5">
                   {resultatSimulation.synthesePedagogique.conseilsEntretienPro.map((c, idx) => (
                     <li key={idx} className="flex items-start gap-2.5 text-slate-700">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 shrink-0"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-orange-600 mt-1.5 shrink-0"></span>
                       <span className="leading-relaxed">{c}</span>
                     </li>
                   ))}
                   <li className="flex items-start gap-2.5 text-slate-700">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-600 mt-1.5 shrink-0"></span>
                     <span className="leading-relaxed">Consultez les Lignes Directrices de Gestion (LDG) de votre collectivité pour connaître les critères de valorisation des dossiers.</span>
                   </li>
                 </ul>
@@ -404,7 +404,7 @@ export function App() {
               </span>
               <button
                 onClick={() => setIsPrintSummaryOpen(true)}
-                className="w-full sm:w-auto text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-xs hover:shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto text-xs font-bold bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-5 py-2.5 rounded-xl shadow-md shadow-orange-500/20 ring-1 ring-orange-400/30 transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Générer la Fiche Récapitulative d Entretien Pro</span>

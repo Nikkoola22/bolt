@@ -49,7 +49,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200/80">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="p-2 rounded-xl bg-blue-50 text-blue-600 border border-blue-200/60 shadow-2xs">
+            <span className="p-2 rounded-xl bg-orange-50 text-orange-600 border border-orange-200/60 shadow-2xs">
               <Calendar className="w-5 h-5" />
             </span>
             <div>
@@ -144,7 +144,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
       </div>
 
       {/* Trace chronologique verticale / responsive */}
-      <div className="mt-6 relative pl-7 sm:pl-9 before:absolute before:left-3.5 sm:before:left-4 before:top-4 before:bottom-4 before:w-0.5 before:bg-gradient-to-b before:from-blue-600 before:via-indigo-300 before:to-slate-200">
+      <div className="mt-6 relative pl-7 sm:pl-9 before:absolute before:left-3.5 sm:before:left-4 before:top-4 before:bottom-4 before:w-0.5 before:bg-gradient-to-b before:from-orange-600 before:via-amber-400 before:to-slate-200">
         <div className="space-y-5">
           {filteredJalons.map((jalon) => {
             const isSelected = selectedJalonId === jalon.id;
@@ -156,21 +156,21 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
             let badgeBg = "bg-slate-100 text-slate-700 border-slate-200";
             let typeLabel = "Jalon";
             let cardBg = "bg-gradient-to-br from-slate-50/80 via-white to-slate-100/50 border-slate-200/90 hover:border-slate-400 hover:shadow-md";
-            let selectedBorder = "border-blue-600 ring-4 ring-blue-500/25 shadow-md";
-            let titleHover = "group-hover:text-blue-700";
+            let selectedBorder = "border-orange-600 ring-4 ring-orange-500/25 shadow-md";
+            let titleHover = "group-hover:text-orange-700";
 
             if (jalon.typeJalon === "situation_actuelle") {
               dotNode = (
                 <div className="relative flex items-center justify-center">
-                  <span className="animate-ping absolute inline-flex h-5 w-5 rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-4 w-4 bg-blue-600 ring-4 ring-blue-200 border-2 border-white"></span>
+                  <span className="animate-ping absolute inline-flex h-5 w-5 rounded-full bg-orange-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-4 w-4 bg-orange-600 ring-4 ring-orange-200 border-2 border-white"></span>
                 </div>
               );
-              badgeBg = "bg-blue-100 text-blue-900 font-extrabold border-blue-300";
+              badgeBg = "bg-orange-100 text-orange-950 font-extrabold border-orange-300";
               typeLabel = "Aujourd hui (Situation déclarée)";
-              cardBg = "bg-gradient-to-br from-blue-50/90 via-white to-indigo-50/40 border-blue-300 hover:border-blue-500 hover:shadow-blue-500/10";
-              selectedBorder = "border-blue-600 ring-4 ring-blue-500/25 shadow-md";
-              titleHover = "group-hover:text-blue-800";
+              cardBg = "bg-gradient-to-br from-orange-50/90 via-white to-amber-50/40 border-orange-300 hover:border-orange-500 hover:shadow-orange-500/10";
+              selectedBorder = "border-orange-600 ring-4 ring-orange-500/25 shadow-md";
+              titleHover = "group-hover:text-orange-800";
             } else if (jalon.typeJalon === "avancement_echelon") {
               const isContractuelEch = jalon.statutValidation === "simule";
               dotNode = (
@@ -269,12 +269,12 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                       <span className={`text-[11px] px-2.5 py-0.5 rounded-full border ${badgeBg}`}>
                         {typeLabel}
                       </span>
-                      <span className="animate-blink-date text-xs font-black text-blue-950 bg-blue-50 border border-blue-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs transition-all">
+                      <span className="animate-blink-date text-xs font-black text-orange-950 bg-orange-50 border border-orange-200/90 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs transition-all">
                         <span className="relative flex h-2 w-2 shrink-0">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span>
                         </span>
-                        <Clock className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                        <Clock className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                         <span className="tracking-tight">{formatDateFrench(jalon.date)}</span>
                       </span>
                     </div>
@@ -326,12 +326,12 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                     {jalon.pourquoi}
                   </p>
 
-                  <div className="mt-3.5 flex items-center justify-between text-xs text-blue-600 font-bold">
+                  <div className="mt-3.5 flex items-center justify-between text-xs text-orange-600 font-bold">
                     <span className="flex items-center gap-1.5 hover:underline">
-                      <HelpCircle className="w-4 h-4 text-blue-500" />
+                      <HelpCircle className="w-4 h-4 text-orange-500" />
                       Consulter les conditions et justificatifs nécessaires
                     </span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5 text-blue-500" />
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5 text-orange-500" />
                   </div>
                 </div>
               </div>

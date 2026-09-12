@@ -38,10 +38,10 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
         
         {/* Header modal */}
-        <div className="bg-gradient-to-r from-slate-900 to-blue-900 p-4 sm:p-5 text-white flex items-start justify-between gap-4">
+        <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/80 p-4 sm:p-5 text-white flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs bg-blue-500/30 text-blue-200 border border-blue-400/30 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-xs bg-orange-500/20 text-orange-300 border border-orange-400/30 px-2 py-0.5 rounded-full font-medium">
                 Jalon au {formatDateFrench(jalon.date)}
               </span>
               {jalon.statutValidation === "garanti" && (
@@ -81,9 +81,9 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
         <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 text-slate-800">
           
           {/* Section 1 : POURQUOI CETTE DATE ET CE RÉSULTAT ? */}
-          <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3.5 sm:p-4">
-            <div className="flex items-center gap-2 text-blue-900 font-bold text-sm mb-2">
-              <HelpCircle className="w-4 h-4 text-blue-600" />
+          <div className="bg-orange-50/80 border border-orange-200/90 rounded-xl p-3.5 sm:p-4">
+            <div className="flex items-center gap-2 text-orange-950 font-bold text-sm mb-2">
+              <HelpCircle className="w-4 h-4 text-orange-600" />
               Pourquoi cette date et cette situation ?
             </div>
             <p className="text-xs text-slate-700 leading-relaxed">
@@ -92,10 +92,10 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
 
             {/* Impact financier et indiciaire si applicable */}
             {jalon.gainIndiciaire && jalon.gainIndiciaire > 0 ? (
-              <div className="mt-3 pt-3 border-t border-blue-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                <div className="flex items-center gap-1.5 text-blue-950 font-semibold">
-                  <Award className="w-4 h-4 text-blue-600" />
-                  Nouvel Indice Majoré : <span className="text-sm font-bold text-blue-700">IM {jalon.indiceMajore}</span> (+{jalon.gainIndiciaire} points)
+              <div className="mt-3 pt-3 border-t border-orange-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-1.5 text-orange-950 font-semibold">
+                  <Award className="w-4 h-4 text-orange-600" />
+                  Nouvel Indice Majoré : <span className="text-sm font-bold text-orange-700">IM {jalon.indiceMajore}</span> (+{jalon.gainIndiciaire} points)
                 </div>
                 <div className="flex items-center gap-1.5 text-emerald-800 font-semibold bg-emerald-100/80 px-2.5 py-1 rounded-md self-start sm:self-auto">
                   <DollarSign className="w-3.5 h-3.5" />
@@ -194,7 +194,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
               {/* Pièces fournies par l agent */}
               <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
                 <div className="font-bold text-slate-900 flex items-center gap-1.5 mb-2 text-xs">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-orange-600" />
                   À fournir par l agent :
                 </div>
                 {jalon.justificatifsRequis.length === 0 ? (
@@ -203,7 +203,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                   <ul className="space-y-1.5">
                     {jalon.justificatifsRequis.map((piece, i) => (
                       <li key={i} className="flex items-start gap-2 text-slate-700">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0"></span>
                         <span>{piece}</span>
                       </li>
                     ))}

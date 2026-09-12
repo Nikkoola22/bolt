@@ -86,7 +86,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
         {/* Header */}
         <div className="bg-slate-900 p-4 sm:p-5 text-white flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-600 rounded-lg text-white">
+            <div className="p-2 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg text-white">
               <SlidersHorizontal className="w-5 h-5" />
             </div>
             <div>
@@ -121,29 +121,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                 required
               />
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-2.5 text-xs text-blue-900">
+            <div className="bg-orange-50 border border-orange-200/90 rounded-lg p-2.5 text-xs text-orange-950">
               <span className="font-bold block">Collectivité de Gennevilliers</span>
-              <span className="text-blue-700 text-[11px]">Fonction Publique Territoriale (FPT)</span>
+              <span className="text-orange-700 text-[11px]">Fonction Publique Territoriale (FPT)</span>
             </div>
           </div>
 
           {/* Cadre & Grade */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2 border-t border-slate-200">
             {/* Cadre d'emplois */}
-            <div className="bg-gradient-to-b from-blue-50/90 via-white to-blue-50/40 border-2 border-blue-200 hover:border-blue-400 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl p-3.5 shadow-2xs transition-all">
+            <div className="bg-gradient-to-b from-orange-50/90 via-white to-amber-50/40 border-2 border-orange-200 hover:border-orange-400 focus-within:border-orange-600 focus-within:ring-2 focus-within:ring-orange-500/20 rounded-xl p-3.5 shadow-2xs transition-all">
               <div className="flex items-center justify-between mb-1.5">
-                <label className="font-bold text-blue-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
-                  <Briefcase className="w-3.5 h-3.5 text-blue-600" />
+                <label className="font-bold text-orange-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5 text-orange-600" />
                   Cadre d emplois
                 </label>
-                <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300">
+                <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-orange-100 text-orange-950 border border-orange-300">
                   Cat. {currentCadre.categorie}
                 </span>
               </div>
               <select
                 value={form.cadreEmploiId}
                 onChange={(e) => handleCadreChange(e.target.value)}
-                className="w-full bg-white border border-blue-300/80 rounded-lg px-3 py-2 font-extrabold text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-2xs cursor-pointer"
+                className="w-full bg-white border border-orange-300/80 rounded-lg px-3 py-2 font-extrabold text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-2xs cursor-pointer"
               >
                 {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
                   const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
@@ -344,7 +344,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </button>
             <button
               type="submit"
-              className="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+              className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-md shadow-orange-500/25 ring-1 ring-orange-400/30 cursor-pointer"
             >
               <Save className="w-4 h-4" />
               Appliquer et actualiser

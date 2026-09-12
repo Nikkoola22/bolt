@@ -176,7 +176,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
         {/* Header Drawer */}
         <div className="bg-slate-900 p-4 sm:p-5 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-blue-600 rounded-lg text-white">
+            <div className="p-2 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg text-white">
               <Layers className="w-5 h-5" />
             </div>
             <div>
@@ -196,12 +196,12 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
           </button>
         </div>
 
-        {/* Contenu déroulant */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-5 sm:space-y-6 text-slate-800">
+        {/* Corps du Drawer */}
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-slate-800">
           
-          {/* Scénarios rapides en 1 clic */}
+          {/* Hypothèses rapides */}
           <div>
-            <div className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               Hypothèses rapides en 1 clic :
             </div>
@@ -209,7 +209,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
               <button
                 type="button"
                 onClick={() => injectPresetScenario("temps_partiel_80")}
-                className="text-left text-xs bg-slate-50 hover:bg-blue-50 hover:border-blue-300 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer"
+                className="text-left text-xs bg-slate-50 hover:bg-orange-50 hover:border-orange-300 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer"
               >
                 <div className="font-bold text-slate-900">Temps partiel 80% (2 ans)</div>
                 <div className="text-[11px] text-slate-600 mt-0.5">Payé 85,7% • Avancement préservé</div>
@@ -247,7 +247,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
           {/* Formulaire d ajout personnalisé */}
           <form onSubmit={handleCreateEvent} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4">
             <div className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-              <Plus className="w-4 h-4 text-blue-600" />
+              <Plus className="w-4 h-4 text-orange-600" />
               Ajouter un événement personnalisé :
             </div>
 
@@ -259,7 +259,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value as TypeEvenementCarriere)}
-                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
               >
                 {isContractuel && (
                   <option value="reussite_concours" className="font-bold text-emerald-700">
@@ -321,7 +321,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                       onClick={() => setQuotite(q)}
                       className={`text-xs py-1.5 rounded-lg font-bold border transition-colors cursor-pointer ${
                         quotite === q
-                          ? "bg-blue-600 text-white border-blue-600"
+                          ? "bg-orange-600 text-white border-orange-600 shadow-xs"
                           : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100"
                       }`}
                     >
@@ -329,7 +329,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                     </button>
                   ))}
                 </div>
-                <p className="text-[11px] text-blue-900 mt-1.5 font-medium">
+                <p className="text-[11px] text-orange-950 mt-1.5 font-medium">
                   {quotite === 80 && "Règle de rémunération : 80% donne droit à 6/7ème du traitement brut (soit 85,71%)."}
                   {quotite === 90 && "Règle de rémunération : 90% donne droit à 32/35ème du traitement brut (soit 91,43%)."}
                   {quotite < 80 && `Rémunération strictement proportionnelle à la quotité (${quotite}%).`}
@@ -346,7 +346,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                   <select
                     value={motifDispo}
                     onChange={(e) => setMotifDispo(e.target.value as MotifDisponibilite["code"])}
-                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                   >
                     {MOTIFS_DISPONIBILITE.map((m) => (
                       <option key={m.code} value={m.code}>
@@ -357,15 +357,15 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                 </div>
 
                 {motifDispo === "convenance_personnelle_avec_activite" && (
-                  <div className="flex items-start gap-2 bg-blue-50 border border-blue-200 p-2.5 rounded-lg">
+                  <div className="flex items-start gap-2 bg-orange-50 border border-orange-200 p-2.5 rounded-lg">
                     <input
                       type="checkbox"
                       id="chk-justifs"
                       checked={justificatifsFournis}
                       onChange={(e) => setJustificatifsFournis(e.target.checked)}
-                      className="mt-0.5 rounded text-blue-600"
+                      className="mt-0.5 rounded text-orange-600 focus:ring-orange-500"
                     />
-                    <label htmlFor="chk-justifs" className="text-xs text-blue-950 font-medium cursor-pointer">
+                    <label htmlFor="chk-justifs" className="text-xs text-orange-950 font-medium cursor-pointer">
                       Je certifie transmettre annuellement à ma DRH les bulletins de paie (&gt; 600h/an) pour maintenir mes droits à l avancement d échelon.
                     </label>
                   </div>
@@ -383,7 +383,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                   type="date"
                   value={dateDebut}
                   onChange={(e) => setDateDebut(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                 />
               </div>
 
@@ -398,7 +398,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                     max="60"
                     value={dureeMois}
                     onChange={(e) => setDureeMois(Number(e.target.value))}
-                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                   />
                 </div>
               )}
@@ -406,7 +406,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm transition-colors cursor-pointer"
+              className="w-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-md shadow-orange-500/20 ring-1 ring-orange-400/30 transition-all cursor-pointer"
             >
               Ajouter et recalculer la frise
             </button>

@@ -45,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <div className="flex items-center gap-1.5 mt-0.5 sm:mt-0">
-              <span className="text-[11px] bg-blue-500/15 text-blue-300 border border-blue-400/25 px-2 py-0.5 rounded-md font-semibold tracking-wide">
+              <span className="text-[11px] bg-orange-500/15 text-orange-300 border border-orange-400/25 px-2 py-0.5 rounded-md font-semibold tracking-wide">
                 Collectivité de Gennevilliers
               </span>
               <span className="hidden md:inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/60 px-2 py-0.5 rounded-md">
@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
               title="Consulter le lexique statutaire (CGFP, PPCR, LDG...)"
             >
-              <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+              <BookOpen className="w-3.5 h-3.5 text-orange-400" />
               <span className="hidden sm:inline font-medium">Lexique Statutaire</span>
             </button>
           )}
@@ -84,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
           {onOpenPrintSummary && (
             <button
               onClick={onOpenPrintSummary}
-              className="text-xs text-slate-200 hover:text-white px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-600/90 to-indigo-600/90 hover:from-blue-600 hover:to-indigo-600 border border-blue-400/30 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5 cursor-pointer font-medium"
+              className="text-xs text-white px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 border border-orange-400/30 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5 cursor-pointer font-bold"
               title="Exporter la fiche récapitulative pour votre entretien professionnel"
             >
               <Printer className="w-3.5 h-3.5 text-white" />

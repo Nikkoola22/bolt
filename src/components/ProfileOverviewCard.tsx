@@ -46,7 +46,7 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
       case "B":
         return "bg-indigo-500/20 text-indigo-200 border-indigo-400/30";
       default:
-        return "bg-blue-500/20 text-blue-200 border-blue-400/30";
+        return "bg-orange-500/20 text-orange-200 border-orange-400/30";
     }
   };
 
@@ -57,20 +57,20 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
       case "B":
         return "bg-indigo-100 text-indigo-800 border border-indigo-200";
       default:
-        return "bg-blue-100 text-blue-800 border border-blue-200";
+        return "bg-orange-100 text-orange-950 border border-orange-300";
     }
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-xs border border-slate-200/90 overflow-hidden ring-1 ring-slate-900/5 transition-all">
       {/* Header card avec look exécutif et badge autorité */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 p-4 sm:p-6 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/70 p-4 sm:p-6 text-white relative overflow-hidden">
         {/* Lueur d'ambiance en arrière-plan */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
 
         <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-inner ring-2 ring-white/20 shrink-0">
+            <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white font-black text-xl shadow-inner ring-2 ring-white/20 shrink-0">
               {profil.prenom ? profil.prenom[0].toUpperCase() : "A"}
             </div>
             <div>
@@ -81,14 +81,14 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${getCategoryBadgeClass(grade.categorie)}`}>
                   Catégorie {grade.categorie}
                 </span>
-                <span className="text-xs bg-blue-500/20 text-blue-200 border border-blue-400/30 px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1">
-                  <Building2 className="w-3 h-3 text-blue-300" />
+                <span className="text-xs bg-orange-500/20 text-orange-200 border border-orange-400/30 px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1">
+                  <Building2 className="w-3 h-3 text-orange-300" />
                   {profil.collectivite || "Collectivité de Gennevilliers"}
                 </span>
               </div>
               <p className="text-xs text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
                 <span className="flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-blue-400" />
+                  <User className="w-3.5 h-3.5 text-orange-400" />
                   <span>{statutLibelle}</span>
                 </span>
                 <span className="text-slate-600">•</span>
@@ -106,17 +106,17 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
               className="text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer backdrop-blur-xs shadow-xs hover:shadow-sm"
               title="Modifier ma situation statutaire"
             >
-              <Edit3 className="w-3.5 h-3.5 text-blue-300" />
+              <Edit3 className="w-3.5 h-3.5 text-orange-300" />
               <span>Modifier ma situation</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Alerte statutaire informative pour les contractuels */}
+      {/* Alerte contractuel explicative */}
       {isContractuel && (
-        <div className="mx-4 sm:mx-6 mt-4 p-3.5 bg-amber-50/95 border border-amber-300/90 rounded-xl flex items-start gap-3 shadow-2xs">
-          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+        <div className="p-4 sm:p-5 bg-amber-50/90 border-b border-amber-200/90 flex items-start gap-3 text-slate-800">
+          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="text-xs text-amber-950 leading-relaxed">
             <strong>Statut Contractuel de droit public (Décret n° 88-145) :</strong> Vous ne bénéficiez pas d'avancement d'échelon de plein droit ni d'avancement de grade automatique. Votre rémunération fait l'objet d'une <strong>réévaluation triennale indicative</strong> par avenant de la collectivité. Pour devenir fonctionnaire titulaire, préparez le <strong>Concours Interne</strong> (consultez le jalon dédié sur votre frise).
           </div>
@@ -126,12 +126,12 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
       {/* Grille des 4 blocs indicateurs statutaires (KPIs) */}
       <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 bg-slate-50/40 border-b border-slate-200/80">
         
-        {/* 1. Grade actuel & Cadre d'emplois (Thème Bleu Roi / Indigo) */}
-        <div className="bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/40 p-5 rounded-2xl border-2 border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between group">
+        {/* 1. Grade actuel & Cadre d'emplois (Thème Orange CFDT) */}
+        <div className="bg-gradient-to-br from-orange-50/80 via-white to-amber-50/40 p-5 rounded-2xl border-2 border-orange-200/90 shadow-xs hover:shadow-md hover:border-orange-400 transition-all flex flex-col justify-between group">
           <div>
             <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-bold flex items-center gap-1.5 text-blue-950 uppercase tracking-wider text-[11px]">
-                <span className="p-1.5 rounded-lg bg-blue-600 text-white shadow-2xs">
+              <span className="font-bold flex items-center gap-1.5 text-orange-950 uppercase tracking-wider text-[11px]">
+                <span className="p-1.5 rounded-lg bg-orange-600 text-white shadow-2xs">
                   <Briefcase className="w-3.5 h-3.5" />
                 </span>
                 Grade actuel
@@ -140,12 +140,12 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 Cat. {grade.categorie}
               </span>
             </div>
-            <div className="font-black text-slate-950 text-base sm:text-lg leading-snug group-hover:text-blue-700 transition-colors mt-1">
+            <div className="font-black text-slate-950 text-base sm:text-lg leading-snug group-hover:text-orange-700 transition-colors mt-1">
               {grade.nom}
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-              <div className="inline-flex items-center gap-1.5 bg-blue-100/80 border border-blue-200/90 text-blue-950 text-xs font-semibold px-2.5 py-1 rounded-lg">
-                <span className="text-blue-700 font-medium">Cadre d emplois :</span>
+              <div className="inline-flex items-center gap-1.5 bg-orange-100/80 border border-orange-200/90 text-orange-950 text-xs font-semibold px-2.5 py-1 rounded-lg">
+                <span className="text-orange-700 font-medium">Cadre d emplois :</span>
                 <span className="font-black">{cadre.nom}</span>
               </div>
               <span className="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
@@ -153,8 +153,8 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
               </span>
             </div>
           </div>
-          <div className="text-xs text-slate-500 mt-3 pt-2.5 border-t border-blue-100 flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-blue-400" />
+          <div className="text-xs text-slate-500 mt-3 pt-2.5 border-t border-orange-100 flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5 text-orange-500" />
             <span>Nommé(e) le {formatDateFrench(profil.dateNominationGradeActuel)}</span>
           </div>
         </div>
@@ -277,7 +277,7 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
           </div>
           <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200/80 p-0.5">
             <div
-              className="h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-xs"
+              className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-xs"
               style={{ width: `${progressionPourcent}%` }}
             ></div>
           </div>
