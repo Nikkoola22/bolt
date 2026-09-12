@@ -129,14 +129,14 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
       <div className={`border-2 ${styles.border} ${styles.hoverBorder} ${styles.cardBg} rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-xs transition-all duration-200 flex flex-col justify-between group`}>
         <div>
           <div className="flex items-start justify-between gap-2 mb-1.5">
-            <div className="flex items-start gap-2 min-w-0">
+            <div className="flex items-start gap-2 min-w-0 flex-1">
               {icon && (
                 <div className={`w-6 h-6 rounded-md ${styles.iconBg} text-white flex items-center justify-center shadow-2xs shrink-0 mt-0.5`}>
                   {icon}
                 </div>
               )}
-              <div className="min-w-0">
-                <label className={`block font-black ${styles.labelText} text-xs tracking-wide uppercase truncate`} title={subLabel ? `${label} (${subLabel})` : label}>
+              <div className="min-w-0 flex-1">
+                <label className={`block font-black ${styles.labelText} text-xs uppercase leading-snug`} title={subLabel ? `${label} (${subLabel})` : label}>
                   {label}
                 </label>
                 {subLabel && (
@@ -202,8 +202,8 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <div className="min-w-0">
-          <label className="block font-bold text-slate-800 text-xs truncate" title={subLabel ? `${label} (${subLabel})` : label}>
+        <div className="min-w-0 flex-1">
+          <label className="block font-bold text-slate-800 text-xs leading-snug" title={subLabel ? `${label} (${subLabel})` : label}>
             {label}
           </label>
           {subLabel && (

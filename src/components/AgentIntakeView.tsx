@@ -568,7 +568,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 required
                 cardMode
                 themeColor="blue"
-                icon={<Briefcase className="w-4 h-4" />}
+                icon={<Briefcase className="w-3.5 h-3.5" />}
                 badgeLabel={`Cat. ${currentCadre.categorie}`}
               />
 
@@ -584,8 +584,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 required
                 cardMode
                 themeColor="indigo"
-                icon={<ShieldCheck className="w-4 h-4" />}
-                badgeLabel="Tous services"
+                icon={<ShieldCheck className="w-3.5 h-3.5" />}
+                badgeLabel="FP"
               />
             </div>
           </div>
