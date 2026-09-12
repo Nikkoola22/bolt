@@ -16,20 +16,7 @@ export const PROFILS_PREDEFINIS: ProfilAgent[] = [
     dateEffetEchelonActuel: "2024-03-01",
     ancienneteConserveeMois: 0,
     quotiteActuelle: 100,
-    evenementsSimules: [
-      {
-        id: "evt-karim-1",
-        type: "examen_professionnel",
-        dateDebut: "2026-11-15",
-        dureeMois: 0,
-        titre: "Candidature & Réussite à l Examen Pro Rédacteur Principal 2e cl.",
-        descriptionDetaillee: "Inscription à la session 2026 organisée par le Centre de Gestion (CDG). Obtention de l attestation de réussite.",
-        impacteAvancementEchelon: false,
-        impacteRemuneration: false,
-        justificatifsFournis: true,
-        notesAgent: "Permet d accélérer l accès au grade supérieur dès l échelon 6 sans attendre le 8e échelon au choix."
-      }
-    ]
+    evenementsSimules: []
   },
   {
     id: "julie_adjoint",
@@ -46,22 +33,7 @@ export const PROFILS_PREDEFINIS: ProfilAgent[] = [
     dateEffetEchelonActuel: "2024-07-01",
     ancienneteConserveeMois: 0,
     quotiteActuelle: 100,
-    evenementsSimules: [
-      {
-        id: "evt-julie-tp",
-        type: "temps_partiel",
-        dateDebut: "2025-01-01",
-        dateFin: "2027-01-01",
-        dureeMois: 24,
-        quotite: 80,
-        titre: "Temps partiel à 80% (2 ans)",
-        descriptionDetaillee: "Passage à 80% pour convenance personnelle (mercredi non travaillé). Rémunération versée à hauteur de 85,7% (formule 6/7).",
-        impacteAvancementEchelon: false,
-        impacteRemuneration: true,
-        justificatifsFournis: true,
-        notesAgent: "Article L612-4 CGFP : Le temps partiel compte à 100% pour l ancienneté d avancement d échelon et de grade !"
-      }
-    ]
+    evenementsSimules: []
   },
   {
     id: "claire_attache",
@@ -78,21 +50,7 @@ export const PROFILS_PREDEFINIS: ProfilAgent[] = [
     dateEffetEchelonActuel: "2024-09-01",
     ancienneteConserveeMois: 4,
     quotiteActuelle: 100,
-    evenementsSimules: [
-      {
-        id: "evt-claire-cp",
-        type: "conge_parental",
-        dateDebut: "2025-03-01",
-        dateFin: "2026-03-01",
-        dureeMois: 12,
-        titre: "Congé parental de 12 mois",
-        descriptionDetaillee: "Congé parental pris à l arrivée du premier enfant. Conservation intégrale des droits à avancement d échelon et de grade (limite légale de 5 ans sur la carrière).",
-        impacteAvancementEchelon: false,
-        impacteRemuneration: true,
-        justificatifsFournis: true,
-        notesAgent: "Traitement suspendu mais déroulement de carrière non ralenti sur cette période (loi 2019)."
-      }
-    ]
+    evenementsSimules: []
   },
   {
     id: "moussa_adjoint_tech",

@@ -396,7 +396,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             type="submit"
             className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white text-sm font-extrabold px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer"
           >
-            <span>Lancer la simulation & afficher ma frise</span>
+            <span>Lancer la simulation</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

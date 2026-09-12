@@ -14,6 +14,8 @@ import { GlossaryModal } from "./components/GlossaryModal";
 import { PrintSummary } from "./components/PrintSummary";
 import { ProfileEditModal } from "./components/ProfileEditModal";
 import { AgentIntakeView } from "./components/AgentIntakeView";
+import { ModeSelectionView } from "./components/ModeSelectionView";
+import { SimplifiedCareerGuide } from "./components/SimplifiedCareerGuide";
 import confetti from "canvas-confetti";
 import { 
   Calendar, 
@@ -22,15 +24,24 @@ import {
   Lightbulb, 
   Sparkles, 
   FileText, 
-  ShieldCheck
+  ShieldCheck,
+  Zap,
+  FileEdit
 } from "lucide-react";
 
 export function App() {
   // Profil sélectionné
   const [currentProfile, setCurrentProfile] = useState<ProfilAgent>(PROFILS_PREDEFINIS[0]);
 
-  // Onglet actif dans le simulateur
-  const [activeTab, setActiveTab] = useState<"saisie" | "frise" | "perspectives" | "comparateur" | "conseils">("saisie");
+  // Mode de navigation :
+  // - "saisie" : Formulaire d'accueil initial (sans onglets de frise)
+  // - "choix_mode" : Page intermédiaire avec les 2 boutons (Version simplifiée vs Version complète)
+  // - "simplifiee" : Les 2 questions directes (échelon ? avancement/promotion ?)
+  // - "complete" : Le processus normal complet avec frise chronologique, comparateur, etc.
+  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete">("saisie");
+
+  // Onglet actif dans le mode complet
+  const [activeTab, setActiveTab] = useState<"frise" | "perspectives" | "comparateur" | "conseils">("frise");
 
   // Modals et tiroirs
   const [selectedJalon, setSelectedJalon] = useState<JalonTimeline | null>(null);
@@ -113,139 +124,185 @@ export function App() {
       {/* Contenu principal */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6">
 
-        {/* Bloc 1 : Où en est l agent dans sa carrière ? (Affiché sur les onglets de consultation) */}
-        {activeTab !== "saisie" && (
-          <ProfileOverviewCard
-            profil={currentProfile}
-            prochainEchelonJalon={resultatSimulation.prochainEchelonJalon}
-            onEditProfile={() => setIsEditProfileOpen(true)}
-            onScrollToNextMilestone={() => {
-              if (resultatSimulation.prochainEchelonJalon) {
-                setSelectedJalon(resultatSimulation.prochainEchelonJalon);
-              }
-            }}
-          />
-        )}
-
-        {/* Barre de navigation par onglets thématiques (Style Dashboard Moderne & Visible) */}
-        <div className="bg-white/95 backdrop-blur-md p-1.5 sm:p-2.5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 sm:gap-3">
-          <div className="w-full overflow-x-auto no-scrollbar py-0.5">
-            <div className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap min-w-max">
-              <button
-                onClick={() => setActiveTab("saisie")}
-                className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === "saisie"
-                    ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-500/30 scale-[1.02]"
-                    : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
-                }`}
-              >
-                <FileText className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                <span>Saisie & Mon Profil</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab("frise")}
-                className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === "frise"
-                    ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-500/30 scale-[1.02]"
-                    : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
-                }`}
-              >
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                <span>Ma carrière</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
-                  activeTab === "frise"
-                    ? "bg-white/25 text-white ring-1 ring-white/30"
-                    : "bg-blue-100 text-blue-800"
-                }`}>
-                  {resultatSimulation.jalons.length}
-                </span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab("perspectives")}
-                className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === "perspectives"
-                    ? "bg-gradient-to-r from-purple-600 to-violet-700 text-white shadow-md shadow-purple-600/30 ring-2 ring-purple-500/30 scale-[1.02]"
-                    : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
-                }`}
-              >
-                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                <span>Avancement / Promotion</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab("comparateur")}
-                className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === "comparateur"
-                    ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-600/30 ring-2 ring-indigo-500/30 scale-[1.02]"
-                    : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
-                }`}
-              >
-                <GitCompare className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                <span>Comparateur (« What-If »)</span>
-                {currentProfile.evenementsSimules.length > 0 && (
-                  <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
-                    activeTab === "comparateur"
-                      ? "bg-white/25 text-white ring-1 ring-white/30"
-                      : "bg-indigo-100 text-indigo-800"
-                  }`}>
-                    {currentProfile.evenementsSimules.length}
-                  </span>
-                )}
-              </button>
-
-              <button
-                onClick={() => setActiveTab("conseils")}
-                className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === "conseils"
-                    ? "bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-600/30 ring-2 ring-amber-500/30 scale-[1.02]"
-                    : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
-                }`}
-              >
-                <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                <span>Conseils DRH & Justificatifs</span>
-              </button>
-            </div>
-          </div>
-
-          <button
-            onClick={() => handleOpenAddEventWithType()}
-            className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-600 text-white shadow-md shadow-emerald-600/25 hover:shadow-lg hover:shadow-emerald-600/35 active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-emerald-400/40"
-          >
-            <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-300 animate-pulse shrink-0" />
-            <span>Simuler un événement</span>
-          </button>
-        </div>
-
-        {/* Affichage conditionnel selon l onglet actif */}
-        {activeTab === "saisie" && (
+        {/* MODE 1 : SAISIE DU PROFIL (Écran d'accueil pur, sans barre d'onglets de frise) */}
+        {appMode === "saisie" && (
           <AgentIntakeView
             currentProfile={currentProfile}
             onSaveProfileAndSimulate={(p) => {
               setCurrentProfile(p);
-              setActiveTab("frise");
+              setAppMode("choix_mode");
               try {
-                confetti({ particleCount: 70, spread: 80, origin: { y: 0.5 } });
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 } });
               } catch (e) {}
             }}
             onSelectPreset={(p) => {
               setCurrentProfile(p);
-              setActiveTab("frise");
+              setAppMode("choix_mode");
             }}
           />
         )}
 
-        {activeTab === "frise" && (
-          <div className="space-y-6">
-            <TimelineInteractive
-              jalons={resultatSimulation.jalons}
-              selectedJalonId={selectedJalon ? selectedJalon.id : null}
-              onSelectJalon={(j) => setSelectedJalon(j)}
-              onOpenAddEvent={() => handleOpenAddEventWithType()}
-            />
-          </div>
+        {/* MODE 2 : PAGE DE CHOIX (Affichée après clic sur 'Lancer la simulation') */}
+        {appMode === "choix_mode" && (
+          <ModeSelectionView
+            profil={currentProfile}
+            resultatSimulation={resultatSimulation}
+            onSelectSimplified={() => {
+              setAppMode("simplifiee");
+            }}
+            onSelectComplete={() => {
+              setAppMode("complete");
+              setActiveTab("frise");
+            }}
+            onBackToSaisie={() => {
+              setAppMode("saisie");
+            }}
+          />
         )}
+
+        {/* MODE 3 : VERSION SIMPLIFIÉE (2 boutons de questions directes & réponses claires) */}
+        {appMode === "simplifiee" && (
+          <SimplifiedCareerGuide
+            profil={currentProfile}
+            resultatSimulation={resultatSimulation}
+            onSwitchToComplete={() => {
+              setAppMode("complete");
+              setActiveTab("frise");
+            }}
+            onEditProfile={() => {
+              setAppMode("saisie");
+            }}
+            onOpenAddEvent={(type) => handleOpenAddEventWithType(type)}
+          />
+        )}
+
+        {/* MODE 4 : VERSION COMPLÈTE (Processus normal : Frise, Perspectives, Comparateur, Conseils) */}
+        {appMode === "complete" && (
+          <>
+            {/* Bloc 1 : Où en est l'agent dans sa carrière ? */}
+            <ProfileOverviewCard
+              profil={currentProfile}
+              prochainEchelonJalon={resultatSimulation.prochainEchelonJalon}
+              onEditProfile={() => setAppMode("saisie")}
+              onScrollToNextMilestone={() => {
+                if (resultatSimulation.prochainEchelonJalon) {
+                  setSelectedJalon(resultatSimulation.prochainEchelonJalon);
+                }
+              }}
+            />
+
+            {/* Barre de navigation par onglets thématiques (Style Dashboard Moderne) */}
+            <div className="bg-white/95 backdrop-blur-md p-1.5 sm:p-2.5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 sm:gap-3">
+              <div className="w-full overflow-x-auto no-scrollbar py-0.5">
+                <div className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap min-w-max">
+                  {/* Raccourci vers la Saisie */}
+                  <button
+                    onClick={() => setAppMode("saisie")}
+                    className="flex items-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all cursor-pointer shrink-0"
+                    title="Revenir à la saisie du profil"
+                  >
+                    <FileEdit className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Modifier saisie</span>
+                  </button>
+
+                  {/* Raccourci vers la Version Simplifiée */}
+                  <button
+                    onClick={() => setAppMode("simplifiee")}
+                    className="flex items-center gap-1.5 py-2 px-3 rounded-xl text-xs font-black text-amber-900 bg-amber-100/90 hover:bg-amber-200/90 border border-amber-300 transition-all cursor-pointer shrink-0 shadow-2xs"
+                    title="Accéder directement aux 2 questions clés"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+                    <span>Version Simplifiée</span>
+                  </button>
+
+                  <div className="h-6 w-px bg-slate-200 mx-1"></div>
+
+                  <button
+                    onClick={() => setActiveTab("frise")}
+                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
+                      activeTab === "frise"
+                        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-500/30 scale-[1.02]"
+                        : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span>Ma carrière</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
+                      activeTab === "frise"
+                        ? "bg-white/25 text-white ring-1 ring-white/30"
+                        : "bg-blue-100 text-blue-800"
+                    }`}>
+                      {resultatSimulation.jalons.length}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("perspectives")}
+                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
+                      activeTab === "perspectives"
+                        ? "bg-gradient-to-r from-purple-600 to-violet-700 text-white shadow-md shadow-purple-600/30 ring-2 ring-purple-500/30 scale-[1.02]"
+                        : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
+                    }`}
+                  >
+                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span>Avancement / Promotion</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("comparateur")}
+                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
+                      activeTab === "comparateur"
+                        ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-600/30 ring-2 ring-indigo-500/30 scale-[1.02]"
+                        : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
+                    }`}
+                  >
+                    <GitCompare className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span>Comparateur (« What-If »)</span>
+                    {currentProfile.evenementsSimules.length > 0 && (
+                      <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
+                        activeTab === "comparateur"
+                          ? "bg-white/25 text-white ring-1 ring-white/30"
+                          : "bg-indigo-100 text-indigo-800"
+                      }`}>
+                        {currentProfile.evenementsSimules.length}
+                      </span>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("conseils")}
+                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
+                      activeTab === "conseils"
+                        ? "bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-600/30 ring-2 ring-amber-500/30 scale-[1.02]"
+                        : "text-slate-700 hover:text-slate-900 bg-slate-50/80 hover:bg-slate-100 border border-slate-200/70"
+                    }`}
+                  >
+                    <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span>Conseils DRH & Justificatifs</span>
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleOpenAddEventWithType()}
+                className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-600 text-white shadow-md shadow-emerald-600/25 hover:shadow-lg hover:shadow-emerald-600/35 active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-emerald-400/40"
+              >
+                <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-300 animate-pulse shrink-0" />
+                <span>Simuler un événement</span>
+              </button>
+            </div>
+
+            {/* Onglet actif du parcours complet */}
+            {activeTab === "frise" && (
+              <div className="space-y-6">
+                <TimelineInteractive
+                  jalons={resultatSimulation.jalons}
+                  selectedJalonId={selectedJalon ? selectedJalon.id : null}
+                  onSelectJalon={(j) => setSelectedJalon(j)}
+                  onOpenAddEvent={() => handleOpenAddEventWithType()}
+                />
+              </div>
+            )}
 
         {activeTab === "perspectives" && (
           <div className="space-y-6">
@@ -349,6 +406,8 @@ export function App() {
               </button>
             </div>
           </div>
+        )}
+          </>
         )}
 
         {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE en bas de page */}
