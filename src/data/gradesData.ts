@@ -7,7 +7,7 @@ export const VALEUR_POINT_INDICE_MENSUEL = 4.92278;
 export const VALEUR_POINT_INDICE_ANNUEL = VALEUR_POINT_INDICE_MENSUEL * 12; // 59,07336 €
 export const INDICE_MINIMUM_TRAITEMENT_GARANTI = 366; // Minimum garanti SMIC Fonction Publique (au 01/01/2024)
 
-export const CADRES_EMPLOIS: CadreEmploiDefinition[] = [
+const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
   {
     id: "redacteur_territorial",
     nom: "Rédacteur territorial",
@@ -1099,6 +1099,11 @@ export const CADRES_EMPLOIS: CadreEmploiDefinition[] = [
       }
     ]
   }
+];
+
+export const CADRES_EMPLOIS: CadreEmploiDefinition[] = [
+  CADRES_EMPLOIS_RAW.find(c => c.id === "adjoint_administratif")!,
+  ...CADRES_EMPLOIS_RAW.filter(c => c.id !== "adjoint_administratif")
 ];
 
 export const MOTIFS_DISPONIBILITE = [

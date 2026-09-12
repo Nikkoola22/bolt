@@ -2,17 +2,17 @@ import type { ProfilAgent } from "../types/career";
 
 export const PROFILS_PREDEFINIS: ProfilAgent[] = [
   {
-    id: "karim_redacteur",
-    prenom: "Karim",
+    id: "atlas_adjoint",
+    prenom: "Atlas",
     matricule: "RH-78412",
     collectivite: "Collectivité de Gennevilliers",
     versant: "FPT",
     statut: "titulaire",
     dateEntreeFonctionPublique: "2019-01-01",
     dateNominationGradeActuel: "2020-01-01",
-    cadreEmploiId: "redacteur_territorial",
-    gradeId: "redacteur_classe_normale",
-    echelonActuel: 5,
+    cadreEmploiId: "adjoint_administratif",
+    gradeId: "adjoint_adm",
+    echelonActuel: 1,
     dateEffetEchelonActuel: "2024-03-01",
     ancienneteConserveeMois: 0,
     quotiteActuelle: 100,

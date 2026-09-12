@@ -216,7 +216,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 type="text"
                 value={formData.prenom}
                 onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                placeholder="Ex: Sophie, Karim, Julie..."
+                placeholder="Ex: Atlas, Sophie, Karim..."
                 className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
                 required
               />
