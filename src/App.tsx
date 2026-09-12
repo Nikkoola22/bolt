@@ -130,6 +130,7 @@ export function App() {
             currentProfile={currentProfile}
             onSaveProfileAndSimulate={(p) => {
               setCurrentProfile(p);
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("choix_mode");
               try {
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 } });
@@ -137,6 +138,7 @@ export function App() {
             }}
             onSelectPreset={(p) => {
               setCurrentProfile(p);
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("choix_mode");
             }}
           />
@@ -148,13 +150,16 @@ export function App() {
             profil={currentProfile}
             resultatSimulation={resultatSimulation}
             onSelectSimplified={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("simplifiee");
             }}
             onSelectComplete={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("complete");
               setActiveTab("frise");
             }}
             onBackToSaisie={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("saisie");
             }}
           />

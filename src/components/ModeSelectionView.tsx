@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { ProfilAgent, ResultatSimulation } from "../types/career";
+import { findCadreAndGrade } from "../services/simulationEngine";
 import { Zap, Layers, ArrowRight, FileEdit, CheckCircle2, Sparkles } from "lucide-react";
 
 interface ModeSelectionViewProps {
@@ -17,16 +18,30 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
   onSelectComplete,
   onBackToSaisie,
 }) => {
+  // S'assurer que la page s'affiche directement tout en haut
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+
+  const { cadre } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
   const isContractuel = profil.statut.startsWith("contractuel");
+  const statutLibelle = isContractuel 
+    ? "Contractuel" 
+    : profil.statut === "stagiaire" 
+    ? "Stagiaire" 
+    : "Titulaire";
+  const cadreLibelle = cadre?.nom || resultatSimulation.jalonActuel.gradeNom;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn py-4 sm:py-8">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn py-2 sm:py-6">
       
-      {/* En-tête de validation de simulation */}
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200/90 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xs">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>Données enregistrées pour <strong>{profil.prenom}</strong> • {resultatSimulation.jalonActuel.gradeNom} ({isContractuel ? "Contractuel" : "Titulaire"})</span>
+      {/* En-tête de validation de simulation affiché en haut */}
+      <div className="text-center space-y-3.5">
+        <div className="inline-flex items-center gap-2.5 bg-emerald-50 text-emerald-900 border-2 border-emerald-300 px-4 py-2 rounded-full text-xs sm:text-sm font-bold shadow-xs">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>
+            Données enregistrées pour <strong>{profil.prenom}</strong> • {cadreLibelle} ({statutLibelle})
+          </span>
         </div>
 
         <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
