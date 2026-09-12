@@ -126,67 +126,68 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
       {/* Grille des 4 blocs indicateurs statutaires (KPIs) */}
       <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 bg-slate-50/40 border-b border-slate-200/80">
         
-        {/* 1. Grade & Cadre */}
-        <div className="bg-white p-4.5 rounded-xl border border-slate-200/80 shadow-2xs hover:shadow-sm hover:border-blue-200 transition-all flex flex-col justify-between group">
+        {/* 1. Grade actuel & Cadre d'emplois (Thème Bleu Roi / Indigo) */}
+        <div className="bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/40 p-5 rounded-2xl border-2 border-blue-200/90 shadow-xs hover:shadow-md hover:border-blue-400 transition-all flex flex-col justify-between group">
           <div>
             <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-semibold flex items-center gap-1.5 text-slate-700">
-                <span className="p-1 rounded-lg bg-blue-50 text-blue-600 border border-blue-100">
+              <span className="font-bold flex items-center gap-1.5 text-blue-950 uppercase tracking-wider text-[11px]">
+                <span className="p-1.5 rounded-lg bg-blue-600 text-white shadow-2xs">
                   <Briefcase className="w-3.5 h-3.5" />
                 </span>
                 Grade actuel
               </span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${getCategoryTagClass(grade.categorie)}`}>
+              <span className={`text-xs font-black px-2.5 py-0.5 rounded-full border shadow-2xs ${getCategoryTagClass(grade.categorie)}`}>
                 Cat. {grade.categorie}
               </span>
             </div>
-            <div className="font-extrabold text-slate-900 text-sm leading-snug group-hover:text-blue-700 transition-colors">
+            <div className="font-black text-slate-950 text-base sm:text-lg leading-snug group-hover:text-blue-700 transition-colors mt-1">
               {grade.nom}
             </div>
-            <div className="text-xs text-slate-600 mt-1.5">
-              Cadre : <span className="font-semibold text-slate-800">{cadre.nom}</span>
+            <div className="mt-2.5 inline-flex items-center gap-1.5 bg-blue-100/80 border border-blue-200/90 text-blue-950 text-xs font-semibold px-2.5 py-1 rounded-lg">
+              <span className="text-blue-700 font-medium">Cadre d emplois :</span>
+              <span className="font-black">{cadre.nom}</span>
             </div>
           </div>
-          <div className="text-[11px] text-slate-500 mt-3 pt-2.5 border-t border-slate-100 flex items-center gap-1">
-            <Clock className="w-3 h-3 text-slate-400" />
+          <div className="text-xs text-slate-500 mt-3 pt-2.5 border-t border-blue-100 flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5 text-blue-400" />
             <span>Nommé(e) le {formatDateFrench(profil.dateNominationGradeActuel)}</span>
           </div>
         </div>
 
-        {/* 2. Échelon & Indice */}
-        <div className="bg-white p-4.5 rounded-xl border border-slate-200/80 shadow-2xs hover:shadow-sm hover:border-emerald-200 transition-all flex flex-col justify-between group">
+        {/* 2. Échelon actuel & Position indiciaire (Thème Émeraude / Menthe) */}
+        <div className="bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/40 p-5 rounded-2xl border-2 border-emerald-200/90 shadow-xs hover:shadow-md hover:border-emerald-400 transition-all flex flex-col justify-between group">
           <div>
             <div className="flex items-center justify-between text-xs text-slate-600 mb-2">
-              <span className="font-semibold flex items-center gap-1.5 text-slate-700">
-                <span className="p-1 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100">
+              <span className="font-bold flex items-center gap-1.5 text-emerald-950 uppercase tracking-wider text-[11px]">
+                <span className="p-1.5 rounded-lg bg-emerald-600 text-white shadow-2xs">
                   <Award className="w-3.5 h-3.5" />
                 </span>
-                Position indiciaire
+                Échelon actuel
               </span>
-              <span className="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md text-[10px] border border-emerald-200/70">
+              <span className="bg-emerald-600 text-white font-black px-2.5 py-1 rounded-lg text-xs shadow-2xs">
                 {profil.echelonActuel}e échelon
               </span>
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-black text-slate-900 tracking-tight">
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl sm:text-3xl font-black text-emerald-950 tracking-tight">
                 IM {currentEchelon.indiceMajore}
               </span>
-              <span className="text-xs font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+              <span className="text-xs font-black text-emerald-900 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-md">
                 IB {currentEchelon.indiceBrut}
               </span>
             </div>
-            <div className="text-xs text-slate-600 mt-1.5 flex items-center gap-1">
-              <span>Effet : <strong className="text-slate-800">{formatDateFrench(profil.dateEffetEchelonActuel)}</strong></span>
+            <div className="text-xs text-emerald-950 mt-1.5 flex items-center gap-1 font-medium">
+              <span>Date d effet : <strong className="text-slate-900 font-bold">{formatDateFrench(profil.dateEffetEchelonActuel)}</strong></span>
             </div>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-slate-100">
+          <div className="mt-3 pt-2.5 border-t border-emerald-100">
             {profil.ancienneteConserveeMois > 0 ? (
-              <div className="text-[11px] text-emerald-700 font-bold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <div className="text-xs text-emerald-800 font-bold flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>+{profil.ancienneteConserveeMois} mois d ancienneté conservée</span>
               </div>
             ) : (
-              <div className="text-[11px] text-slate-500">
+              <div className="text-xs text-slate-600 font-medium">
                 {isContractuel ? "Périodicité réévaluation : 3 ans (triennale)" : `Durée normale : ${currentEchelon.dureeAnnees} an(s)`}
               </div>
             )}

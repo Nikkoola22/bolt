@@ -3,7 +3,7 @@ import type { ProfilAgent, StatutAgent } from "../types/career";
 import { CADRES_EMPLOIS } from "../data/gradesData";
 import { isGradeAvancement } from "../services/simulationEngine";
 import { DateFieldWithYear } from "./DateFieldWithYear";
-import { X, Save, SlidersHorizontal } from "lucide-react";
+import { X, Save, SlidersHorizontal, Briefcase, Award, TrendingUp } from "lucide-react";
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -24,6 +24,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
   const currentCadre = CADRES_EMPLOIS.find((c) => c.id === form.cadreEmploiId) || CADRES_EMPLOIS[0];
   const currentGrade = currentCadre.grades.find((g) => g.id === form.gradeId) || currentCadre.grades[0];
+  const currentEchelon = currentGrade.echelons.find((e) => e.numero === form.echelonActuel) || currentGrade.echelons[0];
 
   const handleStatutChange = (newStatut: StatutAgent) => {
     const isNewContractuel = newStatut.startsWith("contractuel");
@@ -127,13 +128,22 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
           </div>
 
           {/* Cadre & Grade */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Cadre d emplois</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2 border-t border-slate-200">
+            {/* Cadre d'emplois */}
+            <div className="bg-gradient-to-b from-blue-50/90 via-white to-blue-50/40 border-2 border-blue-200 hover:border-blue-400 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl p-3.5 shadow-2xs transition-all">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="font-bold text-blue-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5 text-blue-600" />
+                  Cadre d emplois
+                </label>
+                <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300">
+                  Cat. {currentCadre.categorie}
+                </span>
+              </div>
               <select
                 value={form.cadreEmploiId}
                 onChange={(e) => handleCadreChange(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                className="w-full bg-white border border-blue-300/80 rounded-lg px-3 py-2 font-extrabold text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-2xs cursor-pointer"
               >
                 {CADRES_EMPLOIS.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -143,12 +153,21 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
               </select>
             </div>
 
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Grade actuel</label>
+            {/* Grade actuel */}
+            <div className="bg-gradient-to-b from-purple-50/90 via-white to-purple-50/40 border-2 border-purple-200 hover:border-purple-400 focus-within:border-purple-600 focus-within:ring-2 focus-within:ring-purple-500/20 rounded-xl p-3.5 shadow-2xs transition-all">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="font-bold text-purple-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-purple-600" />
+                  Grade actuel
+                </label>
+                <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-300">
+                  {currentCadre.grades.findIndex((g) => g.id === currentGrade.id) === 0 ? "1er grade (Accès)" : `${currentCadre.grades.findIndex((g) => g.id === currentGrade.id) + 1}e grade (Avancement)`}
+                </span>
+              </div>
               <select
                 value={form.gradeId}
                 onChange={(e) => handleGradeChange(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                className="w-full bg-white border border-purple-300/80 rounded-lg px-3 py-2 font-extrabold text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 shadow-2xs cursor-pointer"
               >
                 {currentCadre.grades.map((g) => {
                   const isAvancement = isGradeAvancement(currentCadre, g.id);
@@ -162,7 +181,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                 })}
               </select>
               {form.statut.startsWith("contractuel") && (
-                <p className="text-[11px] text-amber-800 mt-1 font-medium leading-tight">
+                <p className="text-[11px] text-amber-800 mt-1.5 font-medium leading-tight bg-amber-50 p-1.5 rounded border border-amber-200">
                   Les grades d avancement sont statutairement fermés aux contractuels.
                 </p>
               )}
@@ -171,16 +190,25 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
           {/* Échelon & Quotité */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Échelon actuel</label>
+            {/* Échelon actuel */}
+            <div className="bg-gradient-to-b from-emerald-50/90 via-white to-emerald-50/40 border-2 border-emerald-200 hover:border-emerald-400 focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-500/20 rounded-xl p-3 shadow-2xs transition-all">
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="font-bold text-emerald-950 text-xs uppercase tracking-wide flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+                  Échelon actuel
+                </label>
+                <span className="text-[11px] font-mono font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-950 border border-emerald-300">
+                  IM {currentEchelon.indiceMajore}
+                </span>
+              </div>
               <select
                 value={form.echelonActuel}
                 onChange={(e) => setForm({ ...form, echelonActuel: Number(e.target.value) })}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                className="w-full bg-white border border-emerald-300/80 rounded-lg px-3 py-2 font-black text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-2xs cursor-pointer"
               >
                 {currentGrade.echelons.map((ech) => (
                   <option key={ech.numero} value={ech.numero}>
-                    {ech.numero}e échelon (IM {ech.indiceMajore})
+                    {ech.numero}e échelon (IM {ech.indiceMajore} - IB {ech.indiceBrut})
                   </option>
                 ))}
               </select>

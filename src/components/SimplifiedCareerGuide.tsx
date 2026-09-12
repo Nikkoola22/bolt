@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { ProfilAgent, ResultatSimulation } from "../types/career";
-import { formatDateFrench, diffMonths, formatDurationInYearsAndMonths } from "../services/simulationEngine";
+import { formatDateFrench, diffMonths, formatDurationInYearsAndMonths, findCadreAndGrade } from "../services/simulationEngine";
 import { 
   Clock, 
   TrendingUp, 
@@ -36,6 +36,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   // Question active : "echelon" (Échelons supplémentaires) ou "promotion" (Avancement / Promotion au choix)
   const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion">("echelon");
 
+  const { cadre, grade } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
   const isContractuel = profil.statut.startsWith("contractuel");
   const todayStr = new Date().toISOString().split("T")[0];
 
@@ -106,9 +107,19 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                 {isContractuel ? "Agent Contractuel" : "Fonctionnaire Titulaire"}
               </span>
             </div>
-            <p className="text-xs text-slate-300 mt-0.5">
-              {resultatSimulation.jalonActuel.gradeNom} • Échelon {profil.echelonActuel} (IM {resultatSimulation.jalonActuel.indiceMajore})
-            </p>
+            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+              <span className="bg-purple-500/25 text-purple-200 border border-purple-400/40 px-2.5 py-0.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                <Award className="w-3.5 h-3.5 text-purple-300" />
+                <span>{grade.nom}</span>
+              </span>
+              <span className="bg-blue-500/25 text-blue-200 border border-blue-400/40 px-2.5 py-0.5 rounded-lg text-xs font-semibold shadow-2xs">
+                Cadre : <strong className="text-white font-bold">{cadre.nom}</strong>
+              </span>
+              <span className="bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 shadow-2xs">
+                <TrendingUp className="w-3.5 h-3.5 text-emerald-300" />
+                <span>{profil.echelonActuel}e échelon (IM {resultatSimulation.jalonActuel.indiceMajore})</span>
+              </span>
+            </div>
           </div>
         </div>
 

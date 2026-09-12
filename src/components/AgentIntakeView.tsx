@@ -11,7 +11,9 @@ import {
   Sparkles, 
   ArrowRight, 
   Building2,
-  Zap
+  Zap,
+  Award,
+  TrendingUp
 } from "lucide-react";
 
 interface AgentIntakeViewProps {
@@ -225,59 +227,148 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           </div>
 
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-sm">
-            <div>
-              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Cadre d emplois</label>
-              <select
-                value={formData.cadreEmploiId}
-                onChange={(e) => handleCadreChange(e.target.value)}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-bold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
-              >
-                {CADRES_EMPLOIS.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nom} (Catégorie {c.categorie})
-                  </option>
-                ))}
-              </select>
+            {/* 1. Cadre d'emplois (Thème Bleu Roi / Indigo) */}
+            <div className="bg-gradient-to-b from-blue-50/90 via-white to-blue-50/40 border-2 border-blue-300 hover:border-blue-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:border-blue-600 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-2xs shrink-0">
+                      <Briefcase className="w-3.5 h-3.5" />
+                    </div>
+                    <label className="block font-black text-blue-950 text-sm sm:text-base tracking-wide uppercase">
+                      Cadre d emplois
+                    </label>
+                  </div>
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300 shadow-2xs shrink-0">
+                    Cat. {currentCadre.categorie}
+                  </span>
+                </div>
+
+                <div className="relative">
+                  <select
+                    value={formData.cadreEmploiId}
+                    onChange={(e) => handleCadreChange(e.target.value)}
+                    className="w-full bg-white text-slate-900 font-extrabold text-sm sm:text-base rounded-xl px-3.5 py-3 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 shadow-2xs transition-all cursor-pointer"
+                  >
+                    {CADRES_EMPLOIS.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.nom} (Catégorie {c.categorie})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-blue-100/90 flex items-center justify-between text-xs text-blue-900 font-bold">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                  <span>{currentCadre.grades.length} grades statutaires</span>
+                </span>
+                <span className="bg-blue-100/80 text-blue-800 px-2 py-0.5 rounded font-mono text-[11px]">
+                  FPT
+                </span>
+              </div>
             </div>
 
-            <div>
-              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Grade actuel</label>
-              <select
-                value={formData.gradeId}
-                onChange={(e) => handleGradeChange(e.target.value)}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-bold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
-              >
-                {currentCadre.grades.map((g) => {
-                  const isAvancement = isGradeAvancement(currentCadre, g.id);
-                  const isContractuel = formData.statut.startsWith("contractuel");
-                  const isDisabled = isContractuel && isAvancement;
-                  return (
-                    <option key={g.id} value={g.id} disabled={isDisabled}>
-                      {g.nom} {isDisabled ? "— (Réservé aux fonctionnaires titulaires)" : ""}
-                    </option>
-                  );
-                })}
-              </select>
-              {formData.statut.startsWith("contractuel") && (
-                <p className="text-xs text-amber-900 mt-1.5 font-medium leading-normal bg-amber-50 p-2 rounded-lg border border-amber-200">
-                  ℹ️ Un agent contractuel ne peut être recruté que sur le 1er grade d accès. Les grades d avancement sont réservés aux titulaires.
-                </p>
+            {/* 2. Grade actuel (Thème Violet Royal / Améthyste) */}
+            <div className="bg-gradient-to-b from-purple-50/90 via-white to-purple-50/40 border-2 border-purple-300 hover:border-purple-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 focus-within:ring-4 focus-within:ring-purple-500/20 focus-within:border-purple-600 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-2xs shrink-0">
+                      <Award className="w-3.5 h-3.5" />
+                    </div>
+                    <label className="block font-black text-purple-950 text-sm sm:text-base tracking-wide uppercase">
+                      Grade actuel
+                    </label>
+                  </div>
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-300 shadow-2xs shrink-0">
+                    {currentCadre.grades.findIndex((g) => g.id === currentGrade.id) === 0 ? "1er grade (Accès)" : `${currentCadre.grades.findIndex((g) => g.id === currentGrade.id) + 1}e grade (Avancement)`}
+                  </span>
+                </div>
+
+                <div className="relative">
+                  <select
+                    value={formData.gradeId}
+                    onChange={(e) => handleGradeChange(e.target.value)}
+                    className="w-full bg-white text-slate-900 font-extrabold text-sm sm:text-base rounded-xl px-3.5 py-3 border-2 border-purple-200 hover:border-purple-400 focus:border-purple-600 focus:ring-2 focus:ring-purple-500/20 shadow-2xs transition-all cursor-pointer"
+                  >
+                    {currentCadre.grades.map((g) => {
+                      const isAvancement = isGradeAvancement(currentCadre, g.id);
+                      const isContractuel = formData.statut.startsWith("contractuel");
+                      const isDisabled = isContractuel && isAvancement;
+                      return (
+                        <option key={g.id} value={g.id} disabled={isDisabled}>
+                          {g.nom} {isDisabled ? "— (Réservé aux fonctionnaires titulaires)" : ""}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                {formData.statut.startsWith("contractuel") && (
+                  <p className="text-xs text-amber-900 mt-2 font-medium leading-normal bg-amber-50 p-2 rounded-lg border border-amber-200">
+                    ℹ️ Un agent contractuel ne peut être recruté que sur le 1er grade d accès. Les grades d avancement sont réservés aux titulaires.
+                  </p>
+                )}
+              </div>
+
+              {!formData.statut.startsWith("contractuel") && (
+                <div className="mt-3 pt-2.5 border-t border-purple-100/90 flex items-center justify-between text-xs text-purple-900 font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+                    <span>{currentGrade.echelons.length} échelons</span>
+                  </span>
+                  <span className="bg-purple-100/80 text-purple-800 px-2 py-0.5 rounded font-mono text-[11px]">
+                    Actif
+                  </span>
+                </div>
               )}
             </div>
 
-            <div>
-              <label className="block font-bold text-slate-800 mb-1.5 text-sm">Échelon actuel</label>
-              <select
-                value={formData.echelonActuel}
-                onChange={(e) => setFormData({ ...formData, echelonActuel: Number(e.target.value) })}
-                className="w-full bg-slate-50/70 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-extrabold text-sm sm:text-base focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs cursor-pointer"
-              >
-                {currentGrade.echelons.map((ech) => (
-                  <option key={ech.numero} value={ech.numero}>
-                    {ech.numero}e échelon (IM {ech.indiceMajore} - IB {ech.indiceBrut})
-                  </option>
-                ))}
-              </select>
+            {/* 3. Échelon actuel (Thème Émeraude / Menthe) */}
+            <div className="bg-gradient-to-b from-emerald-50/90 via-white to-emerald-50/40 border-2 border-emerald-300 hover:border-emerald-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 focus-within:ring-4 focus-within:ring-emerald-500/20 focus-within:border-emerald-600 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center shadow-2xs shrink-0">
+                      <TrendingUp className="w-3.5 h-3.5" />
+                    </div>
+                    <label className="block font-black text-emerald-950 text-sm sm:text-base tracking-wide uppercase">
+                      Échelon actuel
+                    </label>
+                  </div>
+                  <span className="text-xs font-mono font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-950 border border-emerald-300 shadow-2xs shrink-0">
+                    IM {currentEchelon.indiceMajore}
+                  </span>
+                </div>
+
+                <div className="relative">
+                  <select
+                    value={formData.echelonActuel}
+                    onChange={(e) => setFormData({ ...formData, echelonActuel: Number(e.target.value) })}
+                    className="w-full bg-white text-slate-900 font-black text-sm sm:text-base rounded-xl px-3.5 py-3 border-2 border-emerald-200 hover:border-emerald-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
+                  >
+                    {currentGrade.echelons.map((ech) => (
+                      <option key={ech.numero} value={ech.numero}>
+                        {ech.numero}e échelon (IM {ech.indiceMajore} - IB {ech.indiceBrut})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-emerald-100/90 flex items-center justify-between text-xs text-emerald-950 font-bold">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>
+                    Durée : {formData.statut.startsWith("contractuel") ? "3 ans (triennale)" : `${currentEchelon.dureeAnnees} an(s)`}
+                  </span>
+                </span>
+                <span className="bg-emerald-100/80 text-emerald-800 px-2 py-0.5 rounded font-mono text-[11px]">
+                  IB {currentEchelon.indiceBrut}
+                </span>
+              </div>
             </div>
           </div>
 
