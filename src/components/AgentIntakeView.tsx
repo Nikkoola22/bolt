@@ -143,18 +143,24 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
-                    Munissez-vous de votre{" "}
-                    <span className="inline-flex items-center gap-1.5 bg-white dark:bg-white/10 text-slate-900 dark:text-white border border-black/[0.08] dark:border-white/[0.12] px-2.5 py-0.5 rounded-full font-bold shadow-2xs">
-                      <FileText className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                      dernier arrêté
-                    </span>{" "}
-                    et de votre{" "}
-                    <span className="inline-flex items-center gap-1.5 bg-white dark:bg-white/10 text-slate-900 dark:text-white border border-black/[0.08] dark:border-white/[0.12] px-2.5 py-0.5 rounded-full font-bold shadow-2xs">
-                      <FileText className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                      bulletin de paie
-                    </span>{" "}
-                    pour faciliter votre saisie.
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed flex items-center flex-wrap gap-2">
+                    <span>Munissez-vous de votre</span>
+                    <span className="relative group/arrete inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-amber-950 dark:text-amber-100 bg-gradient-to-r from-amber-100 via-orange-50 to-amber-100 dark:from-amber-950/70 dark:via-orange-950/50 dark:to-amber-950/70 border border-amber-300/90 dark:border-amber-500/50 shadow-sm shadow-amber-500/25 hover:shadow-md hover:shadow-amber-500/35 hover:scale-105 active:scale-95 transition-all duration-300 ring-2 ring-amber-400/30 dark:ring-amber-400/30 overflow-hidden cursor-default">
+                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 dark:via-white/25 to-transparent animate-shimmer pointer-events-none"></span>
+                      <span className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                        <FileText className="w-3 h-3" />
+                      </span>
+                      <span>dernier arrêté</span>
+                    </span>
+                    <span>et de votre</span>
+                    <span className="relative group/paie inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-emerald-950 dark:text-emerald-100 bg-gradient-to-r from-emerald-100 via-teal-50 to-emerald-100 dark:from-emerald-950/70 dark:via-teal-950/50 dark:to-emerald-950/70 border border-emerald-300/90 dark:border-emerald-500/50 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/35 hover:scale-105 active:scale-95 transition-all duration-300 ring-2 ring-emerald-400/30 dark:ring-emerald-400/30 overflow-hidden cursor-default">
+                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 dark:via-white/25 to-transparent animate-shimmer pointer-events-none"></span>
+                      <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                        <FileText className="w-3 h-3" />
+                      </span>
+                      <span>bulletin de paie</span>
+                    </span>
+                    <span>pour faciliter votre saisie.</span>
                   </p>
                 </div>
               </div>

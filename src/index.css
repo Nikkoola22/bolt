@@ -100,3 +100,12 @@
     display: none !important;
   }
 }
+
+@keyframes shimmer {
+  0% { transform: translateX(-150%); }
+  45%, 100% { transform: translateX(150%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
