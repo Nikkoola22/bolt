@@ -133,21 +133,21 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-center">
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
           <button
             onClick={onEditProfile}
-            className="text-xs font-bold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700 px-3.5 py-2 rounded-xl border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            className="text-xs font-bold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700 px-3 py-2.5 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
           >
-            <FileEdit className="w-3.5 h-3.5 text-orange-400" />
-            <span>Modifier ma saisie</span>
+            <FileEdit className="w-3.5 h-3.5 text-orange-400 shrink-0" />
+            <span className="truncate">Modifier saisie</span>
           </button>
 
           <button
             onClick={onSwitchToComplete}
-            className="text-xs font-black bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-orange-500/25"
+            className="text-xs font-black bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-3 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-orange-500/25"
           >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Voir Version Complète</span>
+            <Layers className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Version Complète</span>
           </button>
         </div>
       </div>

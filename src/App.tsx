@@ -202,103 +202,106 @@ export function App() {
               }}
             />
 
-            {/* Barre de navigation par onglets thématiques (Style Dashboard Moderne) */}
-            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-1.5 sm:p-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 sm:gap-3">
-              <div className="w-full overflow-x-auto no-scrollbar py-0.5">
-                <div className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap min-w-max">
-                  {/* Raccourci vers la Saisie */}
-                  <button
-                    onClick={() => setAppMode("saisie")}
-                    className="flex items-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shrink-0"
-                    title="Revenir à la saisie du profil"
-                  >
-                    <FileEdit className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-                    <span>Modifier saisie</span>
-                  </button>
+            {/* Barre de navigation par onglets thématiques (Optimisée Mobile iPhone & Desktop - 100% visible sans slider) */}
+            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-2 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-3">
+              
+              {/* Groupe 1 : Raccourcis Modes Saisie & Version Simplifiée (2 colonnes sur mobile, ligne sur desktop) */}
+              <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 shrink-0">
+                <button
+                  onClick={() => setAppMode("saisie")}
+                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-2xs"
+                  title="Revenir à la saisie du profil"
+                >
+                  <FileEdit className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 shrink-0" />
+                  <span className="truncate">Modifier saisie</span>
+                </button>
 
-                  {/* Raccourci vers la Version Simplifiée */}
-                  <button
-                    onClick={() => setAppMode("simplifiee")}
-                    className="flex items-center gap-1.5 py-2 px-3 rounded-xl text-xs font-black text-amber-900 dark:text-amber-200 bg-amber-100/90 dark:bg-amber-950/60 hover:bg-amber-200/90 dark:hover:bg-amber-900/60 border border-amber-300 dark:border-amber-700 transition-all cursor-pointer shrink-0 shadow-2xs"
-                    title="Accéder directement aux 2 questions clés"
-                  >
-                    <Zap className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 fill-amber-500" />
-                    <span>Version Simplifiée</span>
-                  </button>
-
-                  <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
-
-                  <button
-                    onClick={() => setActiveTab("frise")}
-                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                      activeTab === "frise"
-                        ? "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/30 ring-2 ring-orange-400/30 scale-[1.02]"
-                        : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/70 dark:border-slate-700"
-                    }`}
-                  >
-                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                    <span>Ma carrière</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
-                      activeTab === "frise"
-                        ? "bg-white/25 text-white ring-1 ring-white/30"
-                        : "bg-orange-100 dark:bg-orange-950/80 text-orange-950 dark:text-orange-200"
-                    }`}>
-                      {resultatSimulation.jalons.length}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab("perspectives")}
-                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                      activeTab === "perspectives"
-                        ? "bg-gradient-to-r from-purple-600 to-violet-700 text-white shadow-md shadow-purple-600/30 ring-2 ring-purple-500/30 scale-[1.02]"
-                        : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/70 dark:border-slate-700"
-                    }`}
-                  >
-                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                    <span>Avancement / Promotion</span>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab("comparateur")}
-                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                      activeTab === "comparateur"
-                        ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-600/30 ring-2 ring-indigo-500/30 scale-[1.02]"
-                        : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/70 dark:border-slate-700"
-                    }`}
-                  >
-                    <GitCompare className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                    <span>Comparateur (« What-If »)</span>
-                    {currentProfile.evenementsSimules.length > 0 && (
-                      <span className={`px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black ${
-                        activeTab === "comparateur"
-                          ? "bg-white/25 text-white ring-1 ring-white/30"
-                          : "bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-200"
-                      }`}>
-                        {currentProfile.evenementsSimules.length}
-                      </span>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab("conseils")}
-                    className={`flex items-center gap-2 py-2.5 px-3.5 sm:py-3 sm:px-5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
-                      activeTab === "conseils"
-                        ? "bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-600/30 ring-2 ring-amber-500/30 scale-[1.02]"
-                        : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/70 dark:border-slate-700"
-                    }`}
-                  >
-                    <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                    <span>Conseils DRH & Justificatifs</span>
-                  </button>
-                </div>
+                <button
+                  onClick={() => setAppMode("simplifiee")}
+                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-black text-amber-950 dark:text-amber-100 bg-amber-100/90 dark:bg-amber-950/70 hover:bg-amber-200/90 dark:hover:bg-amber-900/70 border border-amber-300 dark:border-amber-700 transition-all cursor-pointer shadow-2xs"
+                  title="Accéder directement aux 2 questions clés"
+                >
+                  <Zap className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 fill-amber-500 shrink-0" />
+                  <span className="truncate">Version Simplifiée</span>
+                </button>
               </div>
 
+              {/* Séparateur visible uniquement sur grand écran */}
+              <div className="hidden lg:block h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1 shrink-0"></div>
+
+              {/* Groupe 2 : Les 4 Onglets thématiques en Grille 2x2 sur Mobile iPhone, et 4 colonnes sur sm / lg */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 flex-1">
+                <button
+                  onClick={() => setActiveTab("frise")}
+                  className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
+                    activeTab === "frise"
+                      ? "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/25 ring-2 ring-orange-400/30"
+                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+                  }`}
+                >
+                  <Calendar className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Ma carrière</span>
+                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black shrink-0 ${
+                    activeTab === "frise"
+                      ? "bg-white/25 text-white ring-1 ring-white/30"
+                      : "bg-orange-100 dark:bg-orange-950/80 text-orange-950 dark:text-orange-200"
+                  }`}>
+                    {resultatSimulation.jalons.length}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab("perspectives")}
+                  className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
+                    activeTab === "perspectives"
+                      ? "bg-gradient-to-r from-purple-600 to-violet-700 text-white shadow-md shadow-purple-600/25 ring-2 ring-purple-500/30"
+                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+                  }`}
+                >
+                  <TrendingUp className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Avancement / Promotion</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab("comparateur")}
+                  className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
+                    activeTab === "comparateur"
+                      ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-600/25 ring-2 ring-indigo-500/30"
+                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+                  }`}
+                >
+                  <GitCompare className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Comparateur</span>
+                  {currentProfile.evenementsSimules.length > 0 && (
+                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black shrink-0 ${
+                      activeTab === "comparateur"
+                        ? "bg-white/25 text-white ring-1 ring-white/30"
+                        : "bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-200"
+                    }`}>
+                      {currentProfile.evenementsSimules.length}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setActiveTab("conseils")}
+                  className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
+                    activeTab === "conseils"
+                      ? "bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-600/25 ring-2 ring-amber-500/30"
+                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
+                  }`}
+                >
+                  <Lightbulb className="w-4 h-4 shrink-0" />
+                  <span className="truncate">Conseils DRH</span>
+                </button>
+              </div>
+
+              {/* Groupe 3 : Bouton Simuler un événement */}
               <button
                 onClick={() => handleOpenAddEventWithType()}
-                className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-600 text-white shadow-md shadow-emerald-600/25 hover:shadow-lg hover:shadow-emerald-600/35 active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-emerald-400/40"
+                className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-600 text-white shadow-md shadow-emerald-600/25 hover:shadow-lg hover:shadow-emerald-600/35 active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-emerald-400/40"
               >
-                <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-300 animate-pulse shrink-0" />
+                <Sparkles className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
                 <span>Simuler un événement</span>
               </button>
             </div>

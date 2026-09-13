@@ -69,8 +69,8 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
         </div>
       </div>
 
-      {/* Filtres de catégorie de jalons */}
-      <div className="flex items-center gap-1.5 py-1 overflow-x-auto no-scrollbar border-b border-slate-100 dark:border-slate-800 text-xs pb-3">
+      {/* Filtres de catégorie de jalons (flex-wrap pour être 100% visible sans slider sur iPhone) */}
+      <div className="flex items-center gap-1.5 py-1 flex-wrap border-b border-slate-100 dark:border-slate-800 text-xs pb-3">
         <span className="text-slate-500 dark:text-slate-400 font-bold mr-1 flex items-center gap-1 shrink-0 text-[11px] uppercase tracking-wider">
           <Filter className="w-3.5 h-3.5" /> Filtrer :
         </span>
