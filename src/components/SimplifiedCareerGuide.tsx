@@ -43,6 +43,18 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen)
   const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion">("echelon");
 
+  // Fonction de sélection avec défilement fluide vers le bloc cible
+  const handleSelectQuestion = (question: "echelon" | "promotion") => {
+    setActiveQuestion(question);
+    setTimeout(() => {
+      const targetId = question === "echelon" ? "block-progression-automatique" : "block-prochain-metier";
+      const el = document.getElementById(targetId) || document.getElementById(question === "echelon" ? "block-progression-automatique" : "block-monter-grade");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 60);
+  };
+
   // Accordéons d'explications avancées (fermés par défaut pour éviter la surcharge de texte)
   const [showLegalEchelon, setShowLegalEchelon] = useState(false);
   const [showLegalPromo, setShowLegalPromo] = useState(false);
@@ -245,7 +257,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           {/* CARTE QUESTION 1 : ÉCHELON (HAUSSE AUTOMATIQUE) */}
           <button
             type="button"
-            onClick={() => setActiveQuestion("echelon")}
+            onClick={() => handleSelectQuestion("echelon")}
             className={`p-5 sm:p-6 rounded-3xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden group ${
               activeQuestion === "echelon"
                 ? "bg-white dark:bg-slate-900 border-emerald-500 dark:border-emerald-400 shadow-lg ring-4 ring-emerald-500/10 scale-[1.01]"
@@ -290,7 +302,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
           {/* CARTE QUESTION 2 : GRADE SANS EXAMEN (AU CHOIX) */}
           <button
             type="button"
-            onClick={() => setActiveQuestion("promotion")}
+            onClick={() => handleSelectQuestion("promotion")}
             className={`p-5 sm:p-6 rounded-3xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden group ${
               activeQuestion === "promotion"
                 ? "bg-white dark:bg-slate-900 border-purple-500 dark:border-purple-400 shadow-lg ring-4 ring-purple-500/10 scale-[1.01]"
@@ -339,7 +351,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
         
         {/* CAS 1 : HAUSSE DE SALAIRE AUTOMATIQUE (ÉCHELON) */}
         {activeQuestion === "echelon" && (
-          <div className="space-y-6">
+          <div id="block-progression-automatique" className="space-y-6 scroll-mt-24">
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
@@ -553,7 +565,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
         {/* CAS 2 : MONTER DE GRADE SANS EXAMEN (AU CHOIX) */}
         {activeQuestion === "promotion" && (
-          <div className="space-y-6">
+          <div id="block-monter-grade" className="space-y-6 scroll-mt-24">
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
@@ -573,14 +585,22 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             {prochainePromouvabilite ? (
               <div className="space-y-6">
                 
-                {/* CARTE D'IMPACT MAJEUR */}
-                <div className="bg-gradient-to-br from-purple-500/5 via-transparent to-violet-500/5 dark:from-purple-950/30 dark:to-violet-950/20 border-2 border-purple-500 dark:border-purple-500 rounded-3xl p-6 sm:p-7 space-y-6">
+                {/* CARTE D'IMPACT MAJEUR (PROCHAIN NIVEAU DE MÉTIER VISÉ / PROMOUVABILITÉ) */}
+                <div 
+                  id="block-prochain-metier"
+                  className="bg-gradient-to-br from-purple-500/5 via-transparent to-violet-500/5 dark:from-purple-950/30 dark:to-violet-950/20 border-2 border-purple-500 dark:border-purple-500 rounded-3xl p-6 sm:p-7 space-y-6 scroll-mt-24"
+                >
                   
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                      <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
-                        Prochain niveau de métier visé :
-                      </span>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
+                          Prochain niveau de métier visé :
+                        </span>
+                        <span className="text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-200 border border-purple-300 dark:border-purple-700">
+                          Promouvabilité
+                        </span>
+                      </div>
                       <h4 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                         {prochainePromouvabilite.titre}
                       </h4>
@@ -595,7 +615,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       </div>
                       <div>
                         <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">
-                          Date d'éligibilité
+                          Date d'éligibilité (Promouvabilité)
                         </span>
                         <span className="text-sm sm:text-base font-black text-purple-700 dark:text-purple-300">
                           {formatDateFrench(prochainePromouvabilite.date)}
