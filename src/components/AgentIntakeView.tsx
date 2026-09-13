@@ -103,83 +103,71 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       
-      {/* Block ESPACE DE SAISIE PERSONNALISÉE tout en haut */}
-      <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/80 text-white rounded-2xl p-4 sm:p-7 lg:p-8 shadow-xs border border-slate-800/90 relative overflow-hidden">
-        {/* Lueur subtile en arrière-plan */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+      {/* Block ESPACE DE SAISIE PERSONNALISÉE en Double-Bezel Apple-grade */}
+      <div className="p-1.5 sm:p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] shadow-sm">
+        <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-6 sm:p-8 lg:p-9 relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]">
+          {/* Lueur d ambiance Apple douce */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-orange-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
-        <div className="relative max-w-4xl">
-          <div className="inline-flex items-center gap-2 bg-orange-500/20 text-orange-300 border border-orange-400/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            ESPACE DE SAISIE PERSONNALISÉE
-          </div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white leading-tight">
-            Renseignez votre situation pour simuler votre carrière
-          </h1>
-
-        </div>
-
-        {/* Flash info : Munissez-vous de votre dernier arrêté et de votre bulletin de paie */}
-        <div className="relative mt-6 pt-5 border-t border-slate-800/80">
-          <div className="relative overflow-hidden bg-gradient-to-r from-amber-500/25 via-amber-400/15 to-orange-500/20 border-2 border-amber-400/60 hover:border-amber-300 rounded-2xl p-4 sm:p-5 shadow-lg shadow-amber-500/10 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group">
+          <div className="relative max-w-4xl">
+            <div className="inline-flex items-center gap-2 bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 px-3.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+              Espace de Saisie Personnalisée
+            </div>
             
-            {/* Lueur d'ambiance dorée en arrière-plan */}
-            <div className="absolute -top-10 -right-10 w-44 h-44 bg-amber-400/20 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-400/30 transition-all"></div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight">
+              Renseignez votre situation pour simuler votre carrière
+            </h1>
 
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-2xl leading-relaxed">
+              Vos informations permettent de projeter vos prochains paliers de salaire, vos opportunités d avancement et vos conditions d éligibilité.
+            </p>
+          </div>
+
+          {/* Flash info : Documents recommandés en capsule Apple élégante */}
+          <div className="relative mt-6 pt-5 border-t border-black/[0.05] dark:border-white/[0.06]">
+            <div className="rounded-2xl p-4 sm:p-5 bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
               
-              {/* Badge Icone Éclair Néon Doré */}
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-slate-950 flex items-center justify-center shadow-md shadow-amber-500/40 ring-2 ring-amber-300/60 shrink-0">
-                  <Zap className="w-6 h-6 fill-slate-950 stroke-slate-950" />
+              <div className="flex items-start sm:items-center gap-3.5">
+                <div className="w-10 h-10 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shrink-0">
+                  <Zap className="w-5 h-5" />
                 </div>
-                
-                {/* Badge FLASH en mobile */}
-                <div className="sm:hidden flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 font-black text-amber-950 uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-400 border border-amber-200 shadow-xs">
-                    <span className="w-2 h-2 rounded-full bg-amber-950 animate-ping"></span>
-                    ⚡ FLASH
-                  </span>
-                </div>
-              </div>
 
-              {/* Contenu textuel agrandi avec documents stylisés */}
-              <div className="flex-1">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="hidden sm:inline-flex items-center gap-1.5 font-black text-amber-950 uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-400 border border-amber-200 shadow-xs">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-950 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-950"></span>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20">
+                      Conseil pratique
                     </span>
-                    ⚡ FLASH
-                  </span>
-                  <span className="text-amber-300 font-extrabold text-xs tracking-wider uppercase">
-                    Documents recommandés pour votre simulation
-                  </span>
-                </div>
+                    <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Documents recommandés pour votre simulation
+                    </span>
+                  </div>
 
-                <p className="text-sm sm:text-base font-semibold text-slate-100 mt-2 leading-relaxed">
-                  Munissez-vous de votre{" "}
-                  <span className="inline-flex items-center gap-1.5 bg-amber-400/25 hover:bg-amber-400/35 text-amber-100 border border-amber-300/60 px-2.5 py-0.5 rounded-lg font-black shadow-2xs transition-colors">
-                    <FileText className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                    dernier arrêté
-                  </span>{" "}
-                  et de votre{" "}
-                  <span className="inline-flex items-center gap-1.5 bg-amber-400/25 hover:bg-amber-400/35 text-amber-100 border border-amber-300/60 px-2.5 py-0.5 rounded-lg font-black shadow-2xs transition-colors">
-                    <FileText className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                    bulletin de paie
-                  </span>{" "}
-                  pour faciliter votre saisie.
-                </p>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                    Munissez-vous de votre{" "}
+                    <span className="inline-flex items-center gap-1.5 bg-white dark:bg-white/10 text-slate-900 dark:text-white border border-black/[0.08] dark:border-white/[0.12] px-2.5 py-0.5 rounded-full font-bold shadow-2xs">
+                      <FileText className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                      dernier arrêté
+                    </span>{" "}
+                    et de votre{" "}
+                    <span className="inline-flex items-center gap-1.5 bg-white dark:bg-white/10 text-slate-900 dark:text-white border border-black/[0.08] dark:border-white/[0.12] px-2.5 py-0.5 rounded-full font-bold shadow-2xs">
+                      <FileText className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                      bulletin de paie
+                    </span>{" "}
+                    pour faciliter votre saisie.
+                  </p>
+                </div>
               </div>
 
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Formulaire de saisie principal */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800 p-4 sm:p-7 lg:p-8 space-y-8 sm:space-y-10">
+      {/* Formulaire de saisie principal en Double-Bezel */}
+      <form onSubmit={handleSubmit} className="p-1.5 sm:p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] shadow-sm">
+        <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-5 sm:p-8 lg:p-9 space-y-8 sm:space-y-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]">
         
         {/* Section 1 : Identité & Statut administratif (Thème Orange CFDT) */}
         <div>
@@ -608,6 +596,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           </div>
         </div>
 
+        </div>
       </form>
     </div>
   );
