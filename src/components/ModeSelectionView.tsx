@@ -32,151 +32,155 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
   const cadreLibelle = cadre?.nom || resultatSimulation.jalonActuel.gradeNom;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn py-2 sm:py-6">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn py-4 sm:py-8">
       
-      {/* En-tête de validation de simulation */}
-      <div className="text-center space-y-3.5">
-        <div className="inline-flex items-center gap-2.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border-2 border-emerald-300 dark:border-emerald-700 px-4 py-2 rounded-full text-xs sm:text-sm font-bold shadow-xs">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+      {/* En-tête Apple Keynote épuré */}
+      <div className="text-center space-y-4">
+        <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 px-4 py-1.5 rounded-full text-xs font-semibold shadow-2xs">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
           <span>
-            Données prêtes pour <strong>{profil.prenom}</strong> • {cadreLibelle} ({statutLibelle})
+            Simulation prête pour <strong>{profil.prenom}</strong> • {cadreLibelle} ({statutLibelle})
           </span>
         </div>
 
-        <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-          Comment souhaitez-vous consulter votre carrière ?
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1d1d1f] dark:text-[#f5f5f7] tracking-tight leading-tight">
+          Comment explorer votre carrière ?
         </h1>
 
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Choisissez le mode d'exploration le plus adapté à votre besoin du moment. Vous pourrez basculer de l'un à l'autre à tout instant.
+        <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
+          Deux expériences conçues sur-mesure pour répondre précisément à vos attentes.
         </p>
       </div>
 
-      {/* Les Deux Grands Choix */}
+      {/* Double-Bezel Bento Grid façon Apple Store / Product Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* CARTE 1 : VERSION SIMPLIFIÉE */}
         <div 
           onClick={onSelectSimplified}
-          className="bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/90 border-2 border-slate-200/90 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
+          className="p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl"
         >
-          {/* Liseré subtil supérieur */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 opacity-80"></div>
+          <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-7 sm:p-8 flex flex-col justify-between h-full space-y-6">
+            <div>
+              <div className="flex items-center justify-between gap-3 mb-6">
+                <span className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
+                  <Smile className="w-6 h-6" />
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20 flex items-center gap-1.5">
+                  <Zap className="w-3 h-3 text-amber-600" />
+                  Essentiel & Visuel
+                </span>
+              </div>
 
-          <div>
-            <div className="flex items-center justify-between gap-3 mb-5">
-              <span className="w-13 h-13 rounded-2xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-300/60 dark:border-amber-700/60 flex items-center justify-center font-black text-xl shadow-xs group-hover:scale-110 transition-transform">
-                <Smile className="w-7 h-7 text-amber-600 dark:text-amber-400" />
-              </span>
-              <span className="text-[11px] font-black uppercase tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100/80 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-700 px-3 py-1 rounded-full flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-amber-600" />
-                Facile & Pédagogique
-              </span>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors tracking-tight">
+                Version Simplifiée
+              </h2>
+              
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Réponses directes et chiffrées à vos 2 questions du quotidien, sans jargon administratif :
+              </p>
+
+              <div className="mt-5 space-y-2.5 bg-black/[0.02] dark:bg-white/[0.03] p-4 rounded-2xl border border-black/[0.03] dark:border-white/[0.04] text-xs">
+                <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
+                  <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
+                    💰
+                  </span>
+                  <span>Quand et de combien mon salaire augmente tout seul ?</span>
+                </div>
+                <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
+                  <span className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
+                    ⭐
+                  </span>
+                  <span>Comment monter de grade sans repasser d'examen ?</span>
+                </div>
+                <div className="flex items-center gap-2 font-medium text-slate-500 dark:text-slate-400 pt-1 text-[11px]">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <span>Avec le Décodeur RH intégré en français simple</span>
+                </div>
+              </div>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
-              Version Simplifiée
-            </h2>
-            
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Idéale pour aller droit au but sans jargon statutaire ni longs pavés de texte :
-            </p>
-
-            <div className="mt-5 space-y-2.5 bg-amber-50/50 dark:bg-amber-950/30 p-4 rounded-2xl border border-amber-200/70 dark:border-amber-800/60 text-xs">
-              <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
-                <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
-                  💰
+            {/* Nested CTA Capsule */}
+            <div className="pt-5 border-t border-black/[0.05] dark:border-white/[0.06]">
+              <button
+                type="button"
+                className="w-full py-3 px-5 rounded-full font-semibold text-xs sm:text-sm bg-[#1d1d1f] hover:bg-black dark:bg-white dark:hover:bg-[#f5f5f7] text-white dark:text-black transition-all flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-[0.98]"
+              >
+                <span>Découvrir la Version Simplifiée</span>
+                <span className="w-6 h-6 rounded-full bg-white/20 dark:bg-black/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </span>
-                <span>Quand et de combien mon salaire augmente tout seul ?</span>
-              </div>
-              <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
-                <span className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
-                  ⭐
-                </span>
-                <span>Comment monter de grade sans repasser d'examen ?</span>
-              </div>
-              <div className="flex items-center gap-2.5 font-bold text-slate-600 dark:text-slate-400 pt-1 text-[11px]">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                <span>Avec le décodeur RH pour traduire le vocabulaire en un clic</span>
-              </div>
+              </button>
             </div>
-          </div>
-
-          <div className="mt-7 pt-5 border-t border-slate-100 dark:border-slate-800">
-            <button
-              type="button"
-              className="w-full py-3.5 px-5 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:from-amber-500 hover:to-orange-500 text-white shadow-md shadow-amber-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span>Choisir la Version Simplifiée</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
           </div>
         </div>
 
         {/* CARTE 2 : VERSION COMPLÈTE */}
         <div 
           onClick={onSelectComplete}
-          className="bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/90 border-2 border-slate-200/90 dark:border-slate-800 hover:border-orange-500 dark:hover:border-orange-500 rounded-3xl p-6 sm:p-8 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl flex flex-col justify-between group relative overflow-hidden"
+          className="p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl"
         >
-          {/* Liseré subtil supérieur */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 opacity-80"></div>
+          <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-7 sm:p-8 flex flex-col justify-between h-full space-y-6">
+            <div>
+              <div className="flex items-center justify-between gap-3 mb-6">
+                <span className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
+                  <Layers className="w-6 h-6" />
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full bg-orange-500/10 text-orange-800 dark:text-orange-300 border border-orange-500/20">
+                  Parcours Expert
+                </span>
+              </div>
 
-          <div>
-            <div className="flex items-center justify-between gap-3 mb-5">
-              <span className="w-13 h-13 rounded-2xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-300/60 dark:border-orange-700/60 flex items-center justify-center font-black text-xl shadow-xs group-hover:scale-110 transition-transform">
-                <Layers className="w-7 h-7 text-orange-600 dark:text-orange-400" />
-              </span>
-              <span className="text-[11px] font-black uppercase tracking-wider text-orange-950 dark:text-orange-200 bg-orange-100/80 dark:bg-orange-950/80 border border-orange-300 dark:border-orange-700 px-3 py-1 rounded-full">
-                Parcours Expert
-              </span>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors tracking-tight">
+                Version Complète
+              </h2>
+              
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Le parcours exhaustif pour les gestionnaires et agents souhaitant tout anticiper sur 15 ans :
+              </p>
+
+              <ul className="mt-5 space-y-2.5 bg-black/[0.02] dark:bg-white/[0.03] p-4 rounded-2xl border border-black/[0.03] dark:border-white/[0.04] text-xs text-slate-600 dark:text-slate-300">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></span>
+                  <span><strong>Frise chronologique prospective</strong> avec projection échelon par échelon</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></span>
+                  <span><strong>Comparateur d'impacts (« What-If »)</strong> et simulation de congés / mobilités</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></span>
+                  <span><strong>Checklist des perspectives</strong> (au choix vs examen pro vs concours)</span>
+                </li>
+              </ul>
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-orange-800 dark:group-hover:text-orange-300 transition-colors">
-              Version Complète
-            </h2>
-            
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Le processus détaillé pour les experts RH et agents souhaitant tout explorer :
-            </p>
-
-            <ul className="mt-5 space-y-2.5 bg-orange-50/40 dark:bg-orange-950/30 p-4 rounded-2xl border border-orange-200/70 dark:border-orange-800/60 text-xs text-slate-700 dark:text-slate-300">
-              <li className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                <span><strong>Frise chronologique prospective sur 15 ans</strong> échelon par échelon</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                <span><strong>Checklist des perspectives</strong> (au choix vs examen vs concours)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                <span><strong>Comparateur What-If</strong> et simulation d'événements de vie</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="mt-7 pt-5 border-t border-slate-100 dark:border-slate-800">
-            <button
-              type="button"
-              className="w-full py-3.5 px-5 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span>Choisir la Version Complète</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            {/* Nested CTA Capsule */}
+            <div className="pt-5 border-t border-black/[0.05] dark:border-white/[0.06]">
+              <button
+                type="button"
+                className="w-full py-3 px-5 rounded-full font-semibold text-xs sm:text-sm bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-[0.98]"
+              >
+                <span>Accéder à la Version Complète</span>
+                <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
       </div>
 
-      {/* Bouton secondaire pour modifier les données */}
-      <div className="text-center pt-2">
+      {/* Bouton secondaire Apple-style */}
+      <div className="text-center pt-3">
         <button
           type="button"
           onClick={onBackToSaisie}
-          className="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/90 dark:hover:bg-slate-700 px-4 py-2 rounded-xl transition-all inline-flex items-center gap-1.5 cursor-pointer border border-slate-300/80 dark:border-slate-700 shadow-2xs"
+          className="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.12] px-4 py-2 rounded-full transition-all inline-flex items-center gap-2 cursor-pointer active:scale-[0.98]"
         >
-          <FileEdit className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-          <span>Modifier mes informations de profil</span>
+          <FileEdit className="w-3.5 h-3.5" />
+          <span>Modifier les informations de profil</span>
         </button>
       </div>
 
