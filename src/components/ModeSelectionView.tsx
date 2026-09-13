@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import type { ProfilAgent, ResultatSimulation } from "../types/career";
 import { findCadreAndGrade } from "../services/simulationEngine";
-import { Zap, Layers, ArrowRight, FileEdit, CheckCircle2, Sparkles } from "lucide-react";
+import { Zap, Layers, ArrowRight, FileEdit, CheckCircle2, Sparkles, Smile } from "lucide-react";
 
 interface ModeSelectionViewProps {
   profil: ProfilAgent;
@@ -18,7 +18,6 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
   onSelectComplete,
   onBackToSaisie,
 }) => {
-  // S'assurer que la page s'affiche directement tout en haut
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, []);
@@ -35,12 +34,12 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn py-2 sm:py-6">
       
-      {/* En-tête de validation de simulation affiché en haut */}
+      {/* En-tête de validation de simulation */}
       <div className="text-center space-y-3.5">
         <div className="inline-flex items-center gap-2.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border-2 border-emerald-300 dark:border-emerald-700 px-4 py-2 rounded-full text-xs sm:text-sm font-bold shadow-xs">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <span>
-            Données enregistrées pour <strong>{profil.prenom}</strong> • {cadreLibelle} ({statutLibelle})
+            Données prêtes pour <strong>{profil.prenom}</strong> • {cadreLibelle} ({statutLibelle})
           </span>
         </div>
 
@@ -49,11 +48,11 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Choisissez le mode d exploration le plus adapté à votre besoin du moment. Vous pourrez basculer de l un à l autre à tout instant.
+          Choisissez le mode d'exploration le plus adapté à votre besoin du moment. Vous pourrez basculer de l'un à l'autre à tout instant.
         </p>
       </div>
 
-      {/* Les Deux Grands Boutons / Cartes de Choix */}
+      {/* Les Deux Grands Choix */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* CARTE 1 : VERSION SIMPLIFIÉE */}
@@ -67,10 +66,11 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
           <div>
             <div className="flex items-center justify-between gap-3 mb-5">
               <span className="w-13 h-13 rounded-2xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-300/60 dark:border-amber-700/60 flex items-center justify-center font-black text-xl shadow-xs group-hover:scale-110 transition-transform">
-                <Zap className="w-7 h-7 text-amber-600 dark:text-amber-400 fill-amber-500/30" />
+                <Smile className="w-7 h-7 text-amber-600 dark:text-amber-400" />
               </span>
-              <span className="text-[11px] font-black uppercase tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100/80 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-700 px-3 py-1 rounded-full">
-                Accès direct & Rapide
+              <span className="text-[11px] font-black uppercase tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100/80 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-700 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-amber-600" />
+                Facile & Pédagogique
               </span>
             </div>
 
@@ -79,21 +79,25 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
             </h2>
             
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Obtenez une réponse directe, synthétique et chiffrée à vos deux questions essentielles sans surcharge d information :
+              Idéale pour aller droit au but sans jargon statutaire ni longs pavés de texte :
             </p>
 
             <div className="mt-5 space-y-2.5 bg-amber-50/50 dark:bg-amber-950/30 p-4 rounded-2xl border border-amber-200/70 dark:border-amber-800/60 text-xs">
               <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
-                <span className="w-6 h-6 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
-                  1
+                <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
+                  💰
                 </span>
-                <span>Quand vais-je avoir un échelon supplémentaire ?</span>
+                <span>Quand et de combien mon salaire augmente tout seul ?</span>
               </div>
               <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
-                <span className="w-6 h-6 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
-                  2
+                <span className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
+                  ⭐
                 </span>
-                <span>Quand vais-je avoir un avancement ? promotion ?</span>
+                <span>Comment monter de grade sans repasser d'examen ?</span>
+              </div>
+              <div className="flex items-center gap-2.5 font-bold text-slate-600 dark:text-slate-400 pt-1 text-[11px]">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span>Avec le décodeur RH pour traduire le vocabulaire en un clic</span>
               </div>
             </div>
           </div>
@@ -123,7 +127,7 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
                 <Layers className="w-7 h-7 text-orange-600 dark:text-orange-400" />
               </span>
               <span className="text-[11px] font-black uppercase tracking-wider text-orange-950 dark:text-orange-200 bg-orange-100/80 dark:bg-orange-950/80 border border-orange-300 dark:border-orange-700 px-3 py-1 rounded-full">
-                Parcours exhaustif
+                Parcours Expert
               </span>
             </div>
 
@@ -132,21 +136,21 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
             </h2>
             
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Le processus complet avec la frise chronologique prospective sur 15 ans, vos perspectives et le comparateur :
+              Le processus détaillé pour les experts RH et agents souhaitant tout explorer :
             </p>
 
             <ul className="mt-5 space-y-2.5 bg-orange-50/40 dark:bg-orange-950/30 p-4 rounded-2xl border border-orange-200/70 dark:border-orange-800/60 text-xs text-slate-700 dark:text-slate-300">
               <li className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                <span><strong>Frise chronologique interactive</strong> avec calculs indiciaires échelon par échelon</span>
+                <span><strong>Frise chronologique prospective sur 15 ans</strong> échelon par échelon</span>
               </li>
               <li className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                <span><strong>Checklist des perspectives</strong> (au choix vs examen pro vs promotion interne)</span>
+                <span><strong>Checklist des perspectives</strong> (au choix vs examen vs concours)</span>
               </li>
               <li className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                <span><strong>Comparateur d impacts (« What-If »)</strong> et simulation d événements de vie</span>
+                <span><strong>Comparateur What-If</strong> et simulation d'événements de vie</span>
               </li>
             </ul>
           </div>

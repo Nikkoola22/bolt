@@ -1,20 +1,28 @@
 import React, { useState } from "react";
 import type { ProfilAgent, ResultatSimulation } from "../types/career";
-import { formatDateFrench, diffMonths, formatDurationInYearsAndMonths, findCadreAndGrade } from "../services/simulationEngine";
+import { 
+  formatDateFrench, 
+  diffMonths, 
+  formatDurationInYearsAndMonths, 
+  findCadreAndGrade 
+} from "../services/simulationEngine";
 import { 
   Clock, 
-  TrendingUp, 
   Award, 
   CheckCircle2, 
-  AlertCircle, 
-  AlertTriangle, 
-  ArrowRight, 
   Calendar, 
   DollarSign, 
   Sparkles, 
   ShieldCheck, 
   Layers,
-  FileEdit
+  FileEdit,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+  Star,
+  Check,
+  Briefcase
 } from "lucide-react";
 
 interface SimplifiedCareerGuideProps {
@@ -32,25 +40,27 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   onEditProfile,
   onOpenAddEvent: _onOpenAddEvent,
 }) => {
-  // Question active : "echelon" (Échelons supplémentaires) ou "promotion" (Avancement / Promotion au choix)
+  // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen)
   const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion">("echelon");
 
-  const handleSelectQuestion = (question: "echelon" | "promotion") => {
-    setActiveQuestion(question);
-    setTimeout(() => {
-      const targetId = question === "echelon" ? "block-premier-palier" : "block-avancement-choix";
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }, 70);
-  };
+  // Accordéons d'explications avancées (fermés par défaut pour éviter la surcharge de texte)
+  const [showLegalEchelon, setShowLegalEchelon] = useState(false);
+  const [showLegalPromo, setShowLegalPromo] = useState(false);
+  const [showDecoder, setShowDecoder] = useState(false);
 
   const { cadre, grade } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
   const isContractuel = profil.statut.startsWith("contractuel");
   const todayStr = new Date().toISOString().split("T")[0];
 
-  // 1. Calcul de l'évolution sur les 2 prochains échelons
+  // Calcul du niveau dans le grade (ex: Échelon 4 / 12)
+  const totalEchelons = grade.echelons.length;
+  const currentEchelonDef = grade.echelons.find(e => e.numero === profil.echelonActuel);
+  const dureeEchelonMois = (currentEchelonDef?.dureeAnnees || 2) * 12;
+  const moisPassesDansEchelon = Math.max(0, diffMonths(profil.dateEffetEchelonActuel, todayStr));
+  const percentEchelonProgress = Math.min(100, Math.max(10, Math.round((moisPassesDansEchelon / dureeEchelonMois) * 100)));
+  const percentGradeProgress = Math.round((profil.echelonActuel / totalEchelons) * 100);
+
+  // 1. Calcul des 2 prochains échelons
   const echelonsFuturs = resultatSimulation.jalons.filter((j) => j.typeJalon === "avancement_echelon");
   const premierEchelon = echelonsFuturs[0] || null;
   const deuxiemeEchelon = echelonsFuturs[1] || null;
@@ -58,18 +68,17 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   // Calculs 1er échelon
   const moisRestantsPremier = premierEchelon ? Math.max(0, diffMonths(todayStr, premierEchelon.date)) : 0;
   const delaiPremierTexte = formatDurationInYearsAndMonths(moisRestantsPremier);
+  const gainBrutPremier = Math.round(premierEchelon?.gainFinancierBrutMensuel || 0);
+  const gainNetEstimePremier = Math.round(gainBrutPremier * 0.81); // Estimation nette indicative (~81%)
 
   // Calculs 2ème échelon
   const moisRestantsDeuxieme = deuxiemeEchelon ? Math.max(0, diffMonths(todayStr, deuxiemeEchelon.date)) : 0;
   const delaiDeuxiemeTexte = formatDurationInYearsAndMonths(moisRestantsDeuxieme);
-  const moisEntreEchelons = (premierEchelon && deuxiemeEchelon) ? Math.max(0, diffMonths(premierEchelon.date, deuxiemeEchelon.date)) : 0;
-  const delaiEntreEchelonsTexte = formatDurationInYearsAndMonths(moisEntreEchelons);
-
-  // Gains cumulés 2ème échelon par rapport à la situation actuelle
   const gainIndiciaireDeuxiemeCumule = deuxiemeEchelon ? (deuxiemeEchelon.indiceMajore - resultatSimulation.jalonActuel.indiceMajore) : 0;
-  const gainFinancierDeuxiemeCumule = deuxiemeEchelon ? (deuxiemeEchelon.traitementBrutMensuel - resultatSimulation.jalonActuel.traitementBrutMensuel) : 0;
+  const gainBrutDeuxiemeCumule = deuxiemeEchelon ? Math.round(deuxiemeEchelon.traitementBrutMensuel - resultatSimulation.jalonActuel.traitementBrutMensuel) : 0;
+  const gainNetEstimeDeuxiemeCumule = Math.round(gainBrutDeuxiemeCumule * 0.81);
 
-  // 2. Recherche prioritaire de la promouvabilité au choix (sans examen professionnel obligatoire)
+  // 2. Recherche prioritaire de la promouvabilité au choix (sans examen)
   const promouvabiliteAuChoixGrade = resultatSimulation.jalons.find(
     (j) => j.typeJalon === "promouvabilite_grade" &&
            (j.id.endsWith("-au_choix") || j.id.includes("au_choix") || j.titre.toLowerCase().includes("au choix") || j.sousTitre?.toLowerCase().includes("au choix"))
@@ -86,519 +95,667 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
            !j.conditionsRemplies.some(c => c.libelle.toLowerCase().includes("examen"))
   );
 
-  // Promouvabilité affichée (priorité absolue au choix)
   const prochainePromouvabilite = promouvabiliteAuChoixGrade || promouvabiliteAuChoixInterne || promouvabiliteSansExamen || resultatSimulation.premierePromouvabiliteGrade || resultatSimulation.premierePromouvabiliteInterne;
 
-  // Jalon d'examen pro alternatif s'il existe (pour information)
+  // Jalon examen pro alternatif s'il existe
   const jalonExamenPro = resultatSimulation.jalons.find(
     (j) => (j.typeJalon === "promouvabilite_grade" || j.typeJalon === "promouvabilite_interne") &&
            (j.id.includes("examen_professionnel") || j.titre.toLowerCase().includes("examen pro") || j.conditionsManquantes.some(c => c.libelle.toLowerCase().includes("examen")))
   );
 
-  // Temps restant pour la promotion au choix
   const moisRestantsPromo = prochainePromouvabilite ? Math.max(0, diffMonths(todayStr, prochainePromouvabilite.date)) : 0;
   const delaiPromoTexte = formatDurationInYearsAndMonths(moisRestantsPromo);
 
+  // Décodeur des termes statutaires fréquents
+  const glossaireJargon = [
+    {
+      terme: "Échelon",
+      definition: "Une marche d'escalier que vous montez automatiquement avec le temps. Chaque marche augmente votre salaire de base.",
+      badge: "Automatique"
+    },
+    {
+      terme: "Indice Majoré (IM)",
+      definition: "Le nombre de points qui multiplie la valeur du point d'indice (~4,92 €) pour calculer votre salaire brut mensuel.",
+      badge: "Fiche de paie"
+    },
+    {
+      terme: "Avancement au Choix",
+      definition: "Changer de grade sans examen ni concours. La mairie vous sélectionne sur un tableau annuel selon votre ancienneté et la qualité de votre travail.",
+      badge: "Sans examen"
+    },
+    {
+      terme: "Tableau d'avancement & LDG",
+      definition: "La liste officielle des collègues promus chaque année au 1er janvier selon les critères d'évaluation de la mairie de Gennevilliers.",
+      badge: "Annuel"
+    }
+  ];
+
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn pb-10">
       
-      {/* Bandeau d en-tête avec rappel du profil de l agent */}
-      <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/80 text-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white font-black text-lg shadow-md shrink-0 ring-2 ring-white/10">
-            {profil.prenom.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-extrabold text-lg text-white">
-                Version Simplifiée • {profil.prenom}
-              </span>
-              <span className="text-[11px] bg-orange-500/20 text-orange-200 border border-orange-400/30 px-2 py-0.5 rounded-full font-bold">
-                {isContractuel ? "Agent Contractuel" : "Fonctionnaire Titulaire"}
-              </span>
+      {/* 1. CARTE PROFIL JOUEUR / NIVEAU DE CARRIÈRE */}
+      <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-7 shadow-lg border border-slate-800 relative overflow-hidden">
+        {/* Glow d'arrière plan */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+          
+          {/* Avatar & Identité */}
+          <div className="flex items-start sm:items-center gap-4">
+            <div className="relative shrink-0">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center text-white font-black text-2xl shadow-md ring-4 ring-white/10">
+                {profil.prenom.charAt(0).toUpperCase()}
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-black ring-2 ring-slate-900 shadow">
+                ✓
+              </div>
             </div>
-            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-              <span className="bg-purple-500/25 text-purple-200 border border-purple-400/40 px-2.5 py-0.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-2xs">
-                <Award className="w-3.5 h-3.5 text-purple-300" />
-                <span>{grade.nom}</span>
-              </span>
-              <span className="bg-orange-500/20 text-orange-200 border border-orange-400/30 px-2.5 py-0.5 rounded-lg text-xs font-semibold shadow-2xs">
-                Cadre : <strong className="text-white font-bold">{cadre.nom}</strong>
-              </span>
-              <span className="bg-emerald-500/25 text-emerald-200 border border-emerald-400/40 px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 shadow-2xs">
-                <TrendingUp className="w-3.5 h-3.5 text-emerald-300" />
-                <span>{profil.echelonActuel}e échelon (IM {resultatSimulation.jalonActuel.indiceMajore})</span>
-              </span>
+
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  Bonjour {profil.prenom} !
+                </h1>
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-400/30">
+                  {isContractuel ? "Agent Contractuel" : "Fonctionnaire Titulaire"}
+                </span>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-300 mt-1 flex items-center gap-1.5 flex-wrap">
+                <span className="font-semibold text-white">{grade.nom}</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-400">{cadre.nom}</span>
+              </p>
+
+              {/* Jauge de niveau dans le grade */}
+              <div className="mt-3 flex items-center gap-3">
+                <div className="flex-1 max-w-xs bg-slate-800 rounded-full h-2.5 overflow-hidden ring-1 ring-slate-700/60">
+                  <div 
+                    className="bg-gradient-to-r from-orange-500 to-emerald-400 h-full rounded-full transition-all duration-500"
+                    style={{ width: `${percentGradeProgress}%` }}
+                  ></div>
+                </div>
+                <span className="text-[11px] font-bold text-slate-300">
+                  Échelon {profil.echelonActuel}/{totalEchelons} ({percentGradeProgress}%)
+                </span>
+              </div>
             </div>
           </div>
+
+          {/* Boutons d'action rapides */}
+          <div className="flex items-center gap-2.5 self-start md:self-center shrink-0 w-full sm:w-auto">
+            <button
+              onClick={onEditProfile}
+              className="flex-1 sm:flex-initial text-xs font-bold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700 px-3.5 py-2.5 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <FileEdit className="w-3.5 h-3.5 text-orange-400 shrink-0" />
+              <span>Modifier</span>
+            </button>
+
+            <button
+              onClick={onSwitchToComplete}
+              className="flex-1 sm:flex-initial text-xs font-black bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-orange-500/25"
+            >
+              <Layers className="w-3.5 h-3.5 shrink-0" />
+              <span>Mode Expert (Complet)</span>
+            </button>
+          </div>
+
         </div>
 
-        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
-          <button
-            onClick={onEditProfile}
-            className="text-xs font-bold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700 px-3 py-2.5 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
-          >
-            <FileEdit className="w-3.5 h-3.5 text-orange-400 shrink-0" />
-            <span className="truncate">Modifier saisie</span>
-          </button>
+        {/* 3 Bulles de situation actuelle en langage direct */}
+        <div className="grid grid-cols-3 gap-2.5 mt-5 pt-4 border-t border-slate-800/80 text-center sm:text-left">
+          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/50">
+            <span className="text-[10px] text-slate-400 font-medium block">Niveau actuel</span>
+            <span className="text-xs sm:text-sm font-black text-white mt-0.5 block truncate">
+              Échelon {profil.echelonActuel}
+            </span>
+          </div>
 
-          <button
-            onClick={onSwitchToComplete}
-            className="text-xs font-black bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-3 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-orange-500/25"
-          >
-            <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">Version Complète</span>
-          </button>
+          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/50">
+            <span className="text-[10px] text-slate-400 font-medium block">Points de salaire</span>
+            <span className="text-xs sm:text-sm font-black text-emerald-300 mt-0.5 block truncate">
+              {resultatSimulation.jalonActuel.indiceMajore} pts (IM)
+            </span>
+          </div>
+
+          <div className="bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/50">
+            <span className="text-[10px] text-slate-400 font-medium block">Salaire de base brut</span>
+            <span className="text-xs sm:text-sm font-black text-amber-300 mt-0.5 block truncate">
+              ~{Math.round(resultatSimulation.jalonActuel.traitementBrutMensuel)} € / mois
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* BLOC DES DEUX BOUTONS DE QUESTIONS ESSENTIELLES */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800 p-5 sm:p-7 space-y-6">
-        <div>
-          <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
-            Que souhaitez-vous savoir en priorité ?
+      {/* 2. LE CHOIX DES 2 QUESTIONS (GRANDES CARTES VISUELLES SANS JARGON) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-orange-500" />
+            <span>Vos deux questions clés en un coup d'œil</span>
           </h2>
+          <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">
+            Cliquez sur un bouton pour voir la réponse
+          </span>
         </div>
 
-        {/* Les 2 grands boutons de sélection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
-          {/* Bouton 1 : Échelons supplémentaires (Évolution sur 2 échelons) */}
+          {/* CARTE QUESTION 1 : ÉCHELON (HAUSSE AUTOMATIQUE) */}
           <button
             type="button"
-            onClick={() => handleSelectQuestion("echelon")}
-            className={`p-5 sm:p-6 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
+            onClick={() => setActiveQuestion("echelon")}
+            className={`p-5 sm:p-6 rounded-3xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden group ${
               activeQuestion === "echelon"
-                ? "bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/30 border-emerald-600 dark:border-emerald-500 shadow-md ring-4 ring-emerald-500/15 scale-[1.01]"
-                : "bg-white dark:bg-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-700 border-slate-200/90 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-600"
+                ? "bg-white dark:bg-slate-900 border-emerald-500 dark:border-emerald-400 shadow-lg ring-4 ring-emerald-500/10 scale-[1.01]"
+                : "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700"
             }`}
           >
             <div className="flex items-start justify-between gap-3">
-              <span className={`p-2.5 rounded-xl border ${
-                activeQuestion === "echelon"
-                  ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                  : "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/60"
-              }`}>
-                <Clock className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center font-black text-xl border border-emerald-200 dark:border-emerald-800 group-hover:scale-110 transition-transform">
+                <Zap className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <span className="text-[11px] font-black px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                100% Automatique
               </span>
-              {activeQuestion === "echelon" && (
-                <span className="text-[11px] font-black uppercase tracking-wider text-emerald-900 dark:text-emerald-200 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 px-2.5 py-0.5 rounded-full">
-                  Actif
-                </span>
-              )}
             </div>
 
             <div className="mt-4">
-              <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-snug group-hover:text-emerald-800 dark:group-hover:text-emerald-300 transition-colors">
-                Quand vais-je avoir un échelon supplémentaire ?
+              <h3 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                Quand est-ce que mon salaire augmente tout seul ?
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-                {premierEchelon 
-                  ? (deuxiemeEchelon 
-                      ? `Évolution détaillée sur vos 2 prochains échelons (Échelon ${premierEchelon.echelonNumero} puis ${deuxiemeEchelon.echelonNumero}) avec gains cumulés.` 
-                      : `Prochain palier indiciaire : Échelon ${premierEchelon.echelonNumero} (dernier échelon du grade).`)
-                  : "Dernier échelon sommital du grade déjà atteint."}
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Votre prochain changement d'échelon garanti par le temps passé.
               </p>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2 flex-wrap">
+            {/* Aperçu clé immédiat */}
+            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
               {premierEchelon ? (
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-950/90 border border-emerald-400 dark:border-emerald-600 px-3 py-1 rounded-xl shadow-2xs">
-                    <Calendar className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
-                    <span>Prise d'échelon : {formatDateFrench(premierEchelon.date)}</span>
-                  </span>
-                  {deuxiemeEchelon && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-xl">
-                      2e : {formatDateFrench(deuxiemeEchelon.date)}
-                    </span>
-                  )}
-                </div>
-              ) : (
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                  Dernier échelon atteint
+                <span className="font-extrabold text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {formatDateFrench(premierEchelon.date)} ({delaiPremierTexte})
                 </span>
+              ) : (
+                <span className="font-bold text-slate-500">Dernier échelon atteint</span>
               )}
-              <ArrowRight className="w-4 h-4 text-emerald-700 dark:text-emerald-400 transition-transform group-hover:translate-x-1 shrink-0" />
+              <span className="font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                +{gainBrutPremier} € brut
+              </span>
             </div>
           </button>
 
-          {/* Bouton 2 : Avancement / Promotion (Voie Au Choix) */}
+          {/* CARTE QUESTION 2 : GRADE SANS EXAMEN (AU CHOIX) */}
           <button
             type="button"
-            onClick={() => handleSelectQuestion("promotion")}
-            className={`p-5 sm:p-6 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden ${
+            onClick={() => setActiveQuestion("promotion")}
+            className={`p-5 sm:p-6 rounded-3xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden group ${
               activeQuestion === "promotion"
-                ? "bg-gradient-to-br from-purple-50/90 via-white to-violet-50/40 dark:from-purple-950/40 dark:via-slate-900 dark:to-violet-950/30 border-purple-600 dark:border-purple-500 shadow-md ring-4 ring-purple-500/15 scale-[1.01]"
-                : "bg-white dark:bg-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-700 border-slate-200/90 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-600"
+                ? "bg-white dark:bg-slate-900 border-purple-500 dark:border-purple-400 shadow-lg ring-4 ring-purple-500/10 scale-[1.01]"
+                : "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-700"
             }`}
           >
             <div className="flex items-start justify-between gap-3">
-              <span className={`p-2.5 rounded-xl border ${
-                activeQuestion === "promotion"
-                  ? "bg-purple-600 text-white border-purple-600 shadow-xs"
-                  : "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/60"
-              }`}>
-                <TrendingUp className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center font-black text-xl border border-purple-200 dark:border-purple-800 group-hover:scale-110 transition-transform">
+                <Star className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <span className="text-[11px] font-black px-3 py-1 rounded-full bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-200 border border-purple-300 dark:border-purple-700">
+                Sans concours ni examen
               </span>
-              {activeQuestion === "promotion" && (
-                <span className="text-[11px] font-black uppercase tracking-wider text-purple-900 dark:text-purple-200 bg-purple-100 dark:bg-purple-950/80 border border-purple-300 dark:border-purple-700 px-2.5 py-0.5 rounded-full">
-                  Actif
-                </span>
-              )}
             </div>
 
             <div className="mt-4">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-snug group-hover:text-purple-800 dark:group-hover:text-purple-300 transition-colors">
-                  Quand vais-je avoir un avancement ? promotion ?
+              <h3 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                Comment monter de grade sans repasser d'examen ?
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                La promotion « au choix » grâce à votre ancienneté et votre investissement.
+              </p>
+            </div>
+
+            {/* Aperçu clé immédiat */}
+            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+              {prochainePromouvabilite ? (
+                <span className="font-extrabold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" />
+                  Dès le {formatDateFrench(prochainePromouvabilite.date)}
+                </span>
+              ) : (
+                <span className="font-bold text-slate-500">Grade sommital</span>
+              )}
+              <span className="font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 px-2.5 py-1 rounded-lg border border-purple-200 dark:border-purple-800">
+                Voir les conditions
+              </span>
+            </div>
+          </button>
+
+        </div>
+      </div>
+
+      {/* 3. DÉTAIL DE LA QUESTION ACTIVE (PRÉSENTATION VISUELLE PÉDAGOGIQUE) */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 dark:border-slate-800">
+        
+        {/* CAS 1 : HAUSSE DE SALAIRE AUTOMATIQUE (ÉCHELON) */}
+        {activeQuestion === "echelon" && (
+          <div className="space-y-6">
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div>
+                <span className="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  Progression automatique
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                  Vos deux prochaines augmentations garanties
                 </h3>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-                {isContractuel
-                  ? "Conditions d'accès au statut pérenne de titulaire (Concours Interne ou intégration directe C1)."
-                  : "Avancement au choix (tableau d'avancement annuel au mérite et à l'ancienneté, sans examen professionnel)."}
-              </p>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl self-start sm:self-center">
+                <Check className="w-4 h-4 text-emerald-500" />
+                <span>Aucune démarche nécessaire</span>
+              </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2 flex-wrap">
-              {prochainePromouvabilite ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-black text-purple-950 dark:text-purple-100 bg-purple-100 dark:bg-purple-950/90 border border-purple-400 dark:border-purple-600 px-3 py-1 rounded-xl shadow-2xs">
-                  <Calendar className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
-                  <span>Éligible au choix dès le : {formatDateFrench(prochainePromouvabilite.date)}</span>
-                </span>
-              ) : (
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                  Grade sommital
-                </span>
-              )}
-              <ArrowRight className="w-4 h-4 text-purple-700 dark:text-purple-400 transition-transform group-hover:translate-x-1 shrink-0" />
-            </div>
-          </button>
-        </div>
-
-        {/* CONTENU DE LA RÉPONSE SÉLECTIONNÉE */}
-        <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
-          
-          {/* RÉPONSE 1 : ÉVOLUTION DES DEUX PROCHAINS ÉCHELONS */}
-          {activeQuestion === "echelon" && (
-            <div className="space-y-6 animate-fadeIn">
-              {premierEchelon ? (
-                <div className="space-y-6">
+            {premierEchelon ? (
+              <div className="space-y-6">
+                
+                {/* LES 2 MARCHES D'ESCALIER CÔTE À CÔTE */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   
-                  {/* LES DEUX CARTES DÉTAILLÉES CÔTE À CÔTE */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
-                    {/* CARTE 1 : 1ER PROCHAIN ÉCHELON */}
-                    <div 
-                      id="block-premier-palier"
-                      className="bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/30 border-2 border-emerald-400/90 dark:border-emerald-700/80 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs scroll-mt-24"
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div>
-                          <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 px-3 py-0.5 rounded-full">
-                            1er Palier • {isContractuel ? "Réévaluation indicative" : "Avancement garanti"}
-                          </span>
-                          <h4 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white mt-1.5">
-                            Passage à l Échelon {premierEchelon.echelonNumero}
-                          </h4>
-                          <p className="text-xs text-slate-600 dark:text-slate-400">
-                            {premierEchelon.sousTitre}
-                          </p>
-                        </div>
-
-                        <div className="self-start sm:self-center shrink-0">
-                          <div className="animate-blink-date inline-flex items-center gap-2 text-sm sm:text-base font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100/90 dark:bg-emerald-950 border-2 border-emerald-500 dark:border-emerald-400 px-4 py-2 sm:px-5 sm:py-2.5 rounded-2xl shadow-md ring-2 ring-emerald-500/20">
-                            <span className="relative flex h-2.5 w-2.5 shrink-0">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
-                            </span>
-                            <Calendar className="w-4 h-4 text-emerald-700 dark:text-emerald-300 shrink-0" />
-                            <span>Prise d'échelon : {formatDateFrench(premierEchelon.date)}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 3 métriques chiffrées */}
-                      <div className="grid grid-cols-3 gap-2.5">
-                        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                            Délai
-                          </div>
-                          <div className="text-base sm:text-lg font-black text-emerald-950 dark:text-emerald-200 mt-0.5">
-                            {delaiPremierTexte}
-                          </div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                            À ce jour
-                          </div>
-                        </div>
-
-                        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                            <Award className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                            Indice
-                          </div>
-                          <div className="text-base sm:text-lg font-black text-indigo-950 dark:text-indigo-200 mt-0.5">
-                            IM {premierEchelon.indiceMajore}
-                          </div>
-                          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
-                            +{premierEchelon.gainIndiciaire} pts (IB {premierEchelon.indiceBrut})
-                          </div>
-                        </div>
-
-                        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                            <DollarSign className="w-3 h-3 text-teal-600 dark:text-teal-400" />
-                            Gain Brut
-                          </div>
-                          <div className="text-base sm:text-lg font-black text-teal-950 dark:text-teal-200 mt-0.5">
-                            ~+{Math.round(premierEchelon.gainFinancierBrutMensuel || 0)} €
-                          </div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                            ~{Math.round(premierEchelon.traitementBrutMensuel)} € brut
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-white/80 dark:bg-slate-800 p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                        <strong>Règle statutaire :</strong> {isContractuel
-                          ? "Réévaluation triennale obligatoire (art. 1-2 décret 88-145) fixée à 36 mois après la dernière revalorisation."
-                          : "Avancement d échelon continu à cadence unique PPCR, validé automatiquement par arrêté DRH."}
-                      </div>
+                  {/* MARCHE 1 : 1ER PROCHAIN ÉCHELON */}
+                  <div className="bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 dark:from-emerald-950/30 dark:to-teal-950/20 border-2 border-emerald-500 dark:border-emerald-500 rounded-3xl p-6 space-y-5 relative">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-black px-3 py-1 rounded-full bg-emerald-600 text-white shadow-xs">
+                        1er Palier • Prochaine étape
+                      </span>
+                      <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                        Dans {delaiPremierTexte}
+                      </span>
                     </div>
 
-                    {/* CARTE 2 : 2ÈME PROCHAIN ÉCHELON */}
-                    {deuxiemeEchelon ? (
-                      <div className="bg-gradient-to-br from-indigo-50/90 via-white to-blue-50/40 dark:from-indigo-950/40 dark:via-slate-900 dark:to-blue-950/30 border-2 border-indigo-400/90 dark:border-indigo-700/80 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xs">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div>
-                            <span className="text-[11px] font-black uppercase tracking-wider text-indigo-900 dark:text-indigo-200 bg-indigo-100 dark:bg-indigo-950/80 border border-indigo-300 dark:border-indigo-700 px-3 py-0.5 rounded-full">
-                              2e Palier • Évolution prévisionnelle
-                            </span>
-                            <h4 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white mt-1.5">
-                              Passage à l Échelon {deuxiemeEchelon.echelonNumero}
-                            </h4>
-                            <p className="text-xs text-slate-600 dark:text-slate-400">
-                              {deuxiemeEchelon.sousTitre}
-                            </p>
-                          </div>
-
-                          <div className="self-start sm:self-center shrink-0">
-                            <div className="inline-flex items-center gap-2 text-sm sm:text-base font-black text-indigo-950 dark:text-indigo-100 bg-indigo-100/90 dark:bg-indigo-950 border-2 border-indigo-500 dark:border-indigo-400 px-4 py-2 sm:px-5 sm:py-2.5 rounded-2xl shadow-md ring-2 ring-indigo-500/20">
-                              <Calendar className="w-4 h-4 text-indigo-700 dark:text-indigo-300 shrink-0" />
-                              <span>Prise d'échelon : {formatDateFrench(deuxiemeEchelon.date)}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 3 métriques chiffrées cumulées */}
-                        <div className="grid grid-cols-3 gap-2.5">
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
-                            <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              <Clock className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                              Échéance
-                            </div>
-                            <div className="text-base sm:text-lg font-black text-indigo-950 dark:text-indigo-200 mt-0.5">
-                              {delaiDeuxiemeTexte}
-                            </div>
-                            <div className="text-[10px] text-indigo-700 dark:text-indigo-400 font-semibold">
-                              +{delaiEntreEchelonsTexte} après 1er
-                            </div>
-                          </div>
-
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
-                            <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              <Award className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                              Indice Cible
-                            </div>
-                            <div className="text-base sm:text-lg font-black text-indigo-950 dark:text-indigo-200 mt-0.5">
-                              IM {deuxiemeEchelon.indiceMajore}
-                            </div>
-                            <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">
-                              +{gainIndiciaireDeuxiemeCumule} pts cumulés
-                            </div>
-                          </div>
-
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded-xl border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs">
-                            <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              <DollarSign className="w-3 h-3 text-teal-600 dark:text-teal-400" />
-                              Gain Cumulé
-                            </div>
-                            <div className="text-base sm:text-lg font-black text-teal-950 dark:text-teal-200 mt-0.5">
-                              ~+{Math.round(gainFinancierDeuxiemeCumule)} €
-                            </div>
-                            <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                              ~{Math.round(deuxiemeEchelon.traitementBrutMensuel)} € brut
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white/80 dark:bg-slate-800 p-3.5 rounded-xl border border-indigo-200 dark:border-indigo-800/60 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                          <strong>Rythme de progression :</strong> Ce 2e échelon sera franchi après {delaiEntreEchelonsTexte} passés dans l échelon {premierEchelon.echelonNumero}, garantissant un gain global cumulé de +{gainIndiciaireDeuxiemeCumule} points d Indice Majoré.
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center space-y-2">
-                        <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold">
-                          ✓
-                        </div>
-                        <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm">Échelon sommital atteint au 1er palier</h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm">
-                          L échelon {premierEchelon.echelonNumero} constitue le sommet indiciaire de ce grade. Toute évolution ultérieure relèvera d un avancement de grade ou d une promotion interne.
-                        </p>
-                      </div>
-                    )}
-
-                  </div>
-
-                  {/* Synthèse statutaire */}
-                  <div className="bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-4 sm:p-5 flex items-start gap-3 text-xs text-slate-700 dark:text-slate-300">
-                    <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-emerald-950 dark:text-emerald-200">Garantie statutaire d avancement continu (CGFP) :</span>
-                      <p className="mt-0.5 leading-relaxed">
-                        Contrairement aux promotions de grade, le déroulement des échelons à cadence unique s opère de plein droit tout au long de votre carrière sous réserve de votre maintien en position d activité normale.
+                      <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                        Échelon {premierEchelon.echelonNumero}
+                      </div>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        Prend effet au <strong className="text-slate-800 dark:text-slate-200">{formatDateFrench(premierEchelon.date)}</strong>
                       </p>
                     </div>
-                  </div>
 
-                </div>
-              ) : (
-                <div id="block-premier-palier" className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400 scroll-mt-24">
-                  Vous avez atteint l échelon sommital de votre grade. Votre évolution indiciaire ultérieure passe par un avancement de grade.
-                </div>
-              )}
-            </div>
-          )}
+                    {/* Barre de progression dans l'échelon actuel */}
+                    <div className="space-y-1.5 bg-emerald-50/50 dark:bg-emerald-950/30 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-800/40">
+                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                        <span>Temps accompli vers l'échelon {premierEchelon.echelonNumero}</span>
+                        <span className="text-emerald-700 dark:text-emerald-300 font-black">{percentEchelonProgress}%</span>
+                      </div>
+                      <div className="w-full bg-slate-200/80 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                        <div 
+                          className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${percentEchelonProgress}%` }}
+                        ></div>
+                      </div>
+                    </div>
 
-          {/* RÉPONSE 2 : AVANCEMENT / PROMOTION AU CHOIX (SANS EXAMEN PROFESSIONNEL) */}
-          {activeQuestion === "promotion" && (
-            <div className="space-y-6 animate-fadeIn">
-              {prochainePromouvabilite ? (
-                <div 
-                  id="block-avancement-choix"
-                  className="bg-gradient-to-br from-purple-50/80 via-white to-violet-50/40 dark:from-purple-950/40 dark:via-slate-900 dark:to-violet-950/30 border border-purple-300 dark:border-purple-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs scroll-mt-24"
-                >
-                  
-                  {/* En-tête de la promouvabilité au choix */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-black uppercase tracking-wider text-purple-900 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 border border-purple-300 dark:border-purple-700 px-3 py-1 rounded-full">
-                          {isContractuel 
-                            ? "Voie d accès au statut de Titulaire"
-                            : "Avancement au choix (sans examen professionnel)"}
+                    {/* Bloc Chiffres Clés Paie */}
+                    <div className="grid grid-cols-2 gap-3 bg-white dark:bg-slate-800/80 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800/60 shadow-2xs">
+                      <div>
+                        <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          <DollarSign className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          Gain sur votre paie
                         </span>
-                        {!isContractuel && (
-                          <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 px-2.5 py-0.5 rounded-full">
-                            Inscription directe au Tableau LDG
-                          </span>
-                        )}
+                        <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
+                          +{gainBrutPremier} € <span className="text-xs font-bold text-slate-500">brut/mois</span>
+                        </div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          soit environ <strong>~+{gainNetEstimePremier} € net</strong>
+                        </div>
                       </div>
 
-                      <h4 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-2">
+                      <div>
+                        <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          <Award className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                          Nouveaux points
+                        </span>
+                        <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                          {premierEchelon.indiceMajore} pts
+                        </div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          +{premierEchelon.indiceMajore - resultatSimulation.jalonActuel.indiceMajore} pts d'indice
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Que devez-vous faire ? */}
+                    <div className="bg-emerald-100/60 dark:bg-emerald-950/50 p-3.5 rounded-2xl border border-emerald-200/80 dark:border-emerald-800/60 flex items-center gap-3">
+                      <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0 shadow-xs">
+                        ✓
+                      </span>
+                      <div className="text-xs text-slate-800 dark:text-slate-200">
+                        <strong className="font-bold text-emerald-950 dark:text-emerald-200">Ce que vous devez faire : </strong>
+                        Rien du tout ! Le passage d'échelon se fait à date fixe, validé automatiquement par un arrêté de la mairie.
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* MARCHE 2 : 2ÈME ÉCHELON */}
+                  {deuxiemeEchelon ? (
+                    <div className="bg-gradient-to-br from-indigo-500/5 via-transparent to-blue-500/5 dark:from-indigo-950/30 dark:to-blue-950/20 border-2 border-indigo-300 dark:border-indigo-800 rounded-3xl p-6 space-y-5 relative">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-black px-3 py-1 rounded-full bg-indigo-600 text-white shadow-xs">
+                          2e Palier • Perspective
+                        </span>
+                        <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                          Dans {delaiDeuxiemeTexte}
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                          Échelon {deuxiemeEchelon.echelonNumero}
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          Prend effet au <strong className="text-slate-800 dark:text-slate-200">{formatDateFrench(deuxiemeEchelon.date)}</strong>
+                        </p>
+                      </div>
+
+                      {/* Bloc Chiffres Clés Paie Cumulés */}
+                      <div className="grid grid-cols-2 gap-3 bg-white dark:bg-slate-800/80 p-4 rounded-2xl border border-indigo-200 dark:border-indigo-800/60 shadow-2xs">
+                        <div>
+                          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                            <DollarSign className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                            Gain total cumulé
+                          </span>
+                          <div className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-0.5">
+                            +{gainBrutDeuxiemeCumule} € <span className="text-xs font-bold text-slate-500">brut/mois</span>
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            soit environ <strong>~+{gainNetEstimeDeuxiemeCumule} € net</strong>
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                            <Award className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                            Indice atteint
+                          </span>
+                          <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                            {deuxiemeEchelon.indiceMajore} pts
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            +{gainIndiciaireDeuxiemeCumule} pts cumulés
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Info rythme */}
+                      <div className="bg-indigo-50/70 dark:bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-200/80 dark:border-indigo-800/60 flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                        <div className="text-xs text-slate-700 dark:text-slate-300">
+                          Ce palier est franchi automatiquement après le temps réglementaire passé dans l'échelon précédent.
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-slate-50 dark:bg-slate-800/50 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2">
+                      <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 text-lg font-bold">
+                        🏆
+                      </div>
+                      <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm">Sommet du grade atteint !</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">
+                        L'échelon {premierEchelon.echelonNumero} est le dernier de votre grille. Votre prochaine évolution de salaire passera par un changement de grade.
+                      </p>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* ACCORDÉON OPTIONNEL POUR LES TEXTES DE LOI */}
+                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setShowLegalEchelon(!showLegalEchelon)}
+                    className="w-full p-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-left flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      <span>📚 Pour les curieux : que dit la règle officielle ? (Textes statutaires)</span>
+                    </span>
+                    {showLegalEchelon ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+
+                  {showLegalEchelon && (
+                    <div className="p-4 bg-white dark:bg-slate-900 text-xs text-slate-600 dark:text-slate-400 space-y-2 border-t border-slate-200 dark:border-slate-800 leading-relaxed">
+                      <p>
+                        <strong>Code Général de la Fonction Publique (CGFP) :</strong> L'avancement d'échelon est un droit accordé de manière continue à cadence unique PPCR (Parcours Professionnels, Carrières et Rémunérations). Il ne dépend plus de la notation mais uniquement de l'ancienneté.
+                      </p>
+                      <p className="text-[11px] text-slate-500">
+                        {isContractuel 
+                          ? "Pour les agents contractuels : réévaluation triennale obligatoire (décret 88-145 art. 1-2)."
+                          : "Arrêté individuel pris par le Maire de Gennevilliers et notifié à chaque franchissement d'échelon."}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            ) : (
+              <div className="text-center py-8 space-y-2">
+                <span className="text-4xl">🌟</span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Vous êtes au sommet indiciaire de votre grade</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Consultez la deuxième question pour découvrir comment changer de grade !
+                </p>
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* CAS 2 : MONTER DE GRADE SANS EXAMEN (AU CHOIX) */}
+        {activeQuestion === "promotion" && (
+          <div className="space-y-6">
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div>
+                <span className="text-xs font-black uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                  Évolution de grade
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                  Changer de grade au mérite et à l'ancienneté
+                </h3>
+              </div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/80 px-3 py-1.5 rounded-xl self-start sm:self-center border border-purple-200 dark:border-purple-800">
+                <Star className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <span>Sans examen professionnel obligatoire</span>
+              </div>
+            </div>
+
+            {prochainePromouvabilite ? (
+              <div className="space-y-6">
+                
+                {/* CARTE D'IMPACT MAJEUR */}
+                <div className="bg-gradient-to-br from-purple-500/5 via-transparent to-violet-500/5 dark:from-purple-950/30 dark:to-violet-950/20 border-2 border-purple-500 dark:border-purple-500 rounded-3xl p-6 sm:p-7 space-y-6">
+                  
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
+                        Prochain niveau de métier visé :
+                      </span>
+                      <h4 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                         {prochainePromouvabilite.titre}
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                         {prochainePromouvabilite.sousTitre}
                       </p>
                     </div>
 
-                    <div className="self-start sm:self-center shrink-0 flex flex-col sm:items-end gap-2">
-                      <div className="animate-blink-date inline-flex items-center gap-2.5 text-base sm:text-lg font-black text-purple-950 dark:text-purple-100 bg-purple-100/90 dark:bg-purple-950 border-2 border-purple-500 dark:border-purple-400 px-5 py-2.5 sm:px-6 sm:py-3 rounded-2xl shadow-md ring-4 ring-purple-500/20">
-                        <span className="relative flex h-3 w-3 shrink-0">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-600"></span>
-                        </span>
-                        <Calendar className="w-5 h-5 text-purple-700 dark:text-purple-300 shrink-0" />
-                        <span>Éligible au choix dès le {formatDateFrench(prochainePromouvabilite.date)}</span>
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border-2 border-purple-300 dark:border-purple-700 shadow-md flex items-center gap-3.5 self-start md:self-center shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold shadow-xs shrink-0">
+                        <Calendar className="w-5 h-5" />
                       </div>
-                      <span className="text-xs sm:text-sm text-purple-950 dark:text-purple-200 font-extrabold bg-purple-100 dark:bg-purple-950/90 px-3.5 py-1 rounded-xl border border-purple-300 dark:border-purple-700 inline-flex items-center gap-1.5 shadow-2xs">
-                        <Clock className="w-3.5 h-3.5 text-purple-700 dark:text-purple-400" />
-                        <span>Échéance : dans {delaiPromoTexte}</span>
-                      </span>
+                      <div>
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">
+                          Date d'éligibilité
+                        </span>
+                        <span className="text-sm sm:text-base font-black text-purple-700 dark:text-purple-300">
+                          {formatDateFrench(prochainePromouvabilite.date)}
+                        </span>
+                        <span className="text-[11px] text-slate-500 block">
+                          (dans {delaiPromoTexte})
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* NOTE D INFORMATION SUR L EXAMEN PRO S IL EXISTE */}
-                  {jalonExamenPro && jalonExamenPro.id !== prochainePromouvabilite.id && (
-                    <div className="bg-amber-50/80 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-amber-950 dark:text-amber-200">
-                      <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                      <div className="leading-relaxed">
-                        <strong className="font-bold">Information complémentaire (accès anticipé) :</strong> Une modalité par <em>examen professionnel</em> existe également dès le <strong>{formatDateFrench(jalonExamenPro.date)}</strong> si vous souhaitez anticiper cette échéance. Cependant, la voie <strong>au choix</strong> détaillée ci-dessus ne requiert aucun examen et s appuie uniquement sur votre ancienneté et votre valeur professionnelle.
-                      </div>
-                    </div>
-                  )}
+                  {/* CHECKLIST DES CONDITIONS EN MODE QUÊTE DU JEU */}
+                  <div className="space-y-3">
+                    <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
+                      📋 Votre check-list pour être sélectionné(e) :
+                    </span>
 
-                  {/* Jauge des conditions statutaires requises AU CHOIX */}
-                  <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-purple-200 dark:border-purple-800/80 shadow-2xs space-y-3">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">
-                        État de vos conditions statutaires pour la voie au choix :
-                      </span>
-                      <span className="font-extrabold text-purple-950 dark:text-purple-200">
-                        {prochainePromouvabilite.conditionsRemplies.length} / {prochainePromouvabilite.conditionsRemplies.length + prochainePromouvabilite.conditionsManquantes.length} conditions validées
-                      </span>
-                    </div>
-
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {prochainePromouvabilite.conditionsRemplies.map((c, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50/70 dark:bg-emerald-950/50 p-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60">
+                        <div key={idx} className="flex items-center gap-2.5 bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                          <span className="font-medium">{c.libelle} (Validé)</span>
+                          <span className="font-semibold text-emerald-950 dark:text-emerald-200">{c.libelle} (Validé !)</span>
                         </div>
                       ))}
 
                       {prochainePromouvabilite.conditionsManquantes.map((c, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-xs text-amber-900 dark:text-amber-300 bg-amber-50/70 dark:bg-amber-950/50 p-2.5 rounded-lg border border-amber-200/80 dark:border-amber-800/60">
-                          {c.statut === "bloquante" ? (
-                            <AlertTriangle className="w-4 h-4 text-rose-500 dark:text-rose-400 shrink-0" />
-                          ) : (
-                            <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                          )}
-                          <span className="font-medium">{c.libelle}</span>
+                        <div key={idx} className="flex items-center gap-2.5 bg-amber-50 dark:bg-amber-950/40 p-3 rounded-xl border border-amber-200 dark:border-amber-800/60 text-xs">
+                          <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                          <span className="font-semibold text-amber-950 dark:text-amber-200">{c.libelle}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Règles juridiques LDG & Pouvoir discrétionnaire */}
-                  <div className="bg-white/80 dark:bg-slate-900/80 p-4 sm:p-5 rounded-xl border border-purple-200 dark:border-purple-800/80 text-xs space-y-2">
-                    <div className="font-extrabold text-purple-950 dark:text-purple-200 flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                      Fonctionnement de l avancement au choix (CGFP & LDG) :
+                  {/* 3 CONSEILS SIMPLES POUR AGIR */}
+                  <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-purple-200 dark:border-purple-800/80 space-y-3">
+                    <h5 className="text-xs font-black uppercase tracking-wider text-purple-900 dark:text-purple-300 flex items-center gap-2">
+                      <Briefcase className="w-4 h-4" />
+                      <span>Ce que vous devez faire pour maximiser vos chances :</span>
+                    </h5>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-700 dark:text-slate-300">
+                      <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <span className="font-bold text-purple-700 dark:text-purple-400 block mb-1">1. L'entretien annuel</span>
+                        Parlez de votre souhait d'avancement à votre chef de service lors de votre entretien professionnel.
+                      </div>
+                      <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <span className="font-bold text-purple-700 dark:text-purple-400 block mb-1">2. Vos formations</span>
+                        Suivez vos formations CNFPT obligatoires et valorisez vos nouvelles compétences.
+                      </div>
+                      <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <span className="font-bold text-purple-700 dark:text-purple-400 block mb-1">3. La liste de fin d'année</span>
+                        Chaque fin d'année, la mairie examine les dossiers et publie le tableau d'avancement pour le 1er janvier.
+                      </div>
                     </div>
-                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                      L avancement au choix s effectue par inscription sur le <strong>tableau annuel d avancement</strong> établi par le Maire de Gennevilliers au vu des critères des <strong>Lignes Directrices de Gestion (LDG)</strong> (valeur professionnelle lors de l entretien annuel, investissement, formations CNFPT). Remplir les conditions ouvre votre <em>promouvabilité</em> juridique.
-                    </p>
                   </div>
 
-                  {/* Pièces clés */}
-                  {prochainePromouvabilite.justificatifsRequis.length > 0 && (
-                    <div className="text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 p-4 rounded-xl border border-purple-200/80 dark:border-purple-800/80">
-                      <span className="font-bold text-slate-900 dark:text-white">Démarches & pièces à valoriser :</span>
-                      <ul className="mt-1.5 space-y-1 text-[11px] text-slate-600 dark:text-slate-400">
-                        {prochainePromouvabilite.justificatifsRequis.map((p, idx) => (
-                          <li key={idx} className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
-                            <span>{p}</span>
-                          </li>
-                        ))}
-                      </ul>
+                  {/* ACCÉLÉRATEUR EXAMEN PRO (OPTIONNEL) */}
+                  {jalonExamenPro && jalonExamenPro.id !== prochainePromouvabilite.id && (
+                    <div className="bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/60 rounded-2xl p-4 flex items-center justify-between gap-3 text-xs">
+                      <div className="flex items-center gap-2.5">
+                        <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                        <div>
+                          <strong className="text-slate-900 dark:text-white">Option « Accélérateur » : </strong>
+                          Un examen professionnel existe dès le {formatDateFrench(jalonExamenPro.date)} si vous souhaitez tenter de monter encore plus vite.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* ACCORDÉON OPTIONNEL POUR LES TEXTES DE LOI (AU CHOIX / LDG) */}
+                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setShowLegalPromo(!showLegalPromo)}
+                    className="w-full p-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-left flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-purple-600" />
+                      <span>📚 Pour les curieux : comment fonctionne juridiquement la promotion au choix ?</span>
+                    </span>
+                    {showLegalPromo ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+
+                  {showLegalPromo && (
+                    <div className="p-4 bg-white dark:bg-slate-900 text-xs text-slate-600 dark:text-slate-400 space-y-2 border-t border-slate-200 dark:border-slate-800 leading-relaxed">
+                      <p>
+                        <strong>Lignes Directrices de Gestion (LDG) :</strong> L'avancement de grade au choix s'effectue par inscription sur un <em>tableau annuel d'avancement</em> établi par l'autorité territoriale au vu de la valeur professionnelle et des critères fixés dans les LDG de la collectivité de Gennevilliers.
+                      </p>
+                      <p className="text-[11px] text-slate-500">
+                        Remplir les conditions statutaires ouvre votre <em>promouvabilité</em>, la décision finale d'avancement restant une prérogative de la collectivité.
+                      </p>
                     </div>
                   )}
                 </div>
-              ) : (
-                <div id="block-avancement-choix" className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400 scroll-mt-24">
-                  Aucune perspective d avancement direct identifiée pour ce grade. Vous êtes au sommet de votre cadre d emplois.
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+
+              </div>
+            ) : (
+              <div className="text-center py-8 space-y-2">
+                <span className="text-4xl">👑</span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Vous êtes au grade sommital de votre cadre d'emplois</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Pour aller plus loin, une promotion interne vers la catégorie supérieure peut être envisagée !
+                </p>
+              </div>
+            )}
+
+          </div>
+        )}
+
       </div>
 
+      {/* 4. LE DÉCODEUR STATUTAIRE INTERACTIF (EN FRANÇAIS FACILE) */}
+      <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 dark:from-amber-950/20 dark:to-orange-950/10 border-2 border-amber-300/80 dark:border-amber-800/60 rounded-3xl p-5 sm:p-6 space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black shadow-xs">
+              <HelpCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
+                Le Décodeur RH : Le statut en français facile
+              </h4>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Vous hésitez sur le sens d'un terme administratif ? Cliquez pour afficher les explications claires.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowDecoder(!showDecoder)}
+            className="text-xs font-bold text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 hover:bg-amber-200 px-3 py-1.5 rounded-xl border border-amber-300 dark:border-amber-700 transition-colors cursor-pointer shrink-0"
+          >
+            {showDecoder ? "Masquer" : "Afficher le décodeur"}
+          </button>
+        </div>
+
+        {showDecoder && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 animate-fadeIn">
+            {glossaireJargon.map((item, idx) => (
+              <div key={idx} className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-amber-200 dark:border-amber-900/50 shadow-2xs space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-extrabold text-xs text-slate-900 dark:text-white">
+                    {item.terme}
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                    {item.badge}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {item.definition}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
     </div>
   );
