@@ -41,11 +41,15 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   onEditProfile,
   onOpenAddEvent: _onOpenAddEvent,
 }) => {
-  // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen)
-  const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion">("echelon");
+  // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen) ou null (masqué par défaut)
+  const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion" | null>(null);
 
-  // Fonction de sélection avec défilement fluide vers le bloc cible
+  // Fonction de sélection avec défilement fluide vers le bloc cible (ou bascule)
   const handleSelectQuestion = (question: "echelon" | "promotion") => {
+    if (activeQuestion === question) {
+      setActiveQuestion(null);
+      return;
+    }
     setActiveQuestion(question);
     setTimeout(() => {
       const targetId = question === "echelon" ? "block-progression-automatique" : "block-prochain-metier";
@@ -53,7 +57,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-    }, 60);
+    }, 100);
   };
 
   // Accordéons d'explications avancées (fermés par défaut pour éviter la surcharge de texte)
@@ -256,7 +260,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             </h2>
           </div>
           <span className="text-[11px] text-slate-400 hidden sm:inline">
-            Touchez une carte pour faire défiler la réponse
+            Touchez une question pour afficher la réponse détaillée
           </span>
         </div>
 
@@ -368,9 +372,20 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
         </div>
       </div>
 
-      {/* 3. DÉTAILS DE LA QUESTION ACTIVE EN DOUBLE-BEZEL */}
-      <div className="p-1.5 sm:p-2 rounded-[2.2rem] bg-black/[0.04] dark:bg-white/[0.05] ring-1 ring-black/[0.06] dark:ring-white/[0.08]">
-        <div className="rounded-[1.8rem] bg-white dark:bg-[#111114] p-6 sm:p-8 space-y-6">
+      {/* 3. DÉTAILS DE LA QUESTION ACTIVE EN DOUBLE-BEZEL (Affiché uniquement au clic) */}
+      {activeQuestion !== null && (
+        <div className="p-1.5 sm:p-2 rounded-[2.2rem] bg-black/[0.04] dark:bg-white/[0.05] ring-1 ring-black/[0.06] dark:ring-white/[0.08] animate-fadeIn">
+          <div className="rounded-[1.8rem] bg-white dark:bg-[#111114] p-6 sm:p-8 space-y-6 relative">
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveQuestion(null)}
+                className="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white px-3 py-1.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] transition-all flex items-center gap-1 cursor-pointer"
+              >
+                <span>Masquer la réponse</span>
+                <ChevronUp className="w-3.5 h-3.5" />
+              </button>
+            </div>
           
           {/* CAS 1 : PROGRESSION AUTOMATIQUE (ÉCHELON) */}
           {activeQuestion === "echelon" && (
@@ -743,6 +758,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
         </div>
       </div>
+      )}
 
       {/* 4. LE DÉCODEUR STATUTAIRE INTERACTIF (EN FRANÇAIS FACILE) */}
       <div className="p-1.5 sm:p-2 rounded-[2.2rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06]">
