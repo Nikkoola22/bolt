@@ -15,7 +15,8 @@ import {
   Scale, 
   Sparkles,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Calendar
 } from "lucide-react";
 
 interface MilestoneDetailModalProps {
@@ -41,9 +42,22 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
         <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/80 p-4 sm:p-5 text-white flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs bg-orange-500/20 text-orange-300 border border-orange-400/30 px-2 py-0.5 rounded-full font-medium">
-                Jalon au {formatDateFrench(jalon.date)}
-              </span>
+              {jalon.typeJalon === "avancement_echelon" ? (
+                <span className="text-xs sm:text-sm bg-emerald-500/30 text-emerald-100 border border-emerald-400/50 px-3 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <Calendar className="w-3.5 h-3.5 text-emerald-300" />
+                  Prise d'échelon : {formatDateFrench(jalon.date)}
+                </span>
+              ) : jalon.typeJalon === "promouvabilite_grade" ? (
+                <span className="text-xs sm:text-sm bg-purple-500/30 text-purple-100 border border-purple-400/50 px-3 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <Calendar className="w-3.5 h-3.5 text-purple-300" />
+                  Éligible au choix dès le {formatDateFrench(jalon.date)}
+                </span>
+              ) : (
+                <span className="text-xs sm:text-sm bg-orange-500/25 text-orange-200 border border-orange-400/40 px-3 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <Clock className="w-3.5 h-3.5 text-orange-300" />
+                  Jalon au {formatDateFrench(jalon.date)}
+                </span>
+              )}
               {jalon.statutValidation === "garanti" && (
                 <span className="text-xs bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium">
                   <CheckCircle2 className="w-3 h-3" /> De plein droit (PPCR)

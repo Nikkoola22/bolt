@@ -250,6 +250,70 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
               titleHover = "group-hover:text-slate-800 dark:group-hover:text-slate-200";
             }
 
+            // Style de la pastille date selon le type de jalon (agrandi et visibilisé)
+            const isExamenPro = jalon.id.includes("examen_professionnel") || jalon.titre.toLowerCase().includes("examen pro") || jalon.conditionsManquantes.some(c => c.libelle.toLowerCase().includes("examen"));
+
+            let dateBadgeContent: React.ReactNode;
+            if (jalon.typeJalon === "avancement_echelon") {
+              dateBadgeContent = (
+                <span className="animate-blink-date text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100/90 dark:bg-emerald-950 border-2 border-emerald-400 dark:border-emerald-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-emerald-500/20 transition-all">
+                  <span className="relative flex h-2.5 w-2.5 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
+                  </span>
+                  <Calendar className="w-4 h-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
+                  <span className="tracking-tight">Prise d'échelon : {formatDateFrench(jalon.date)}</span>
+                </span>
+              );
+            } else if (isExamenPro) {
+              dateBadgeContent = (
+                <span className="animate-blink-date text-xs sm:text-sm font-black text-amber-950 dark:text-amber-100 bg-amber-100/90 dark:bg-amber-950 border-2 border-amber-400 dark:border-amber-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-amber-500/20 transition-all">
+                  <span className="relative flex h-2.5 w-2.5 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-600"></span>
+                  </span>
+                  <Calendar className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0" />
+                  <span className="tracking-tight">Examen pro : {formatDateFrench(jalon.date)}</span>
+                </span>
+              );
+            } else if (jalon.typeJalon === "promouvabilite_grade") {
+              dateBadgeContent = (
+                <span className="animate-blink-date text-xs sm:text-sm font-black text-purple-950 dark:text-purple-100 bg-purple-100/90 dark:bg-purple-950 border-2 border-purple-400 dark:border-purple-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-purple-500/20 transition-all">
+                  <span className="relative flex h-2.5 w-2.5 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-600"></span>
+                  </span>
+                  <Calendar className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
+                  <span className="tracking-tight">Éligible au choix : {formatDateFrench(jalon.date)}</span>
+                </span>
+              );
+            } else if (jalon.typeJalon === "promouvabilite_interne") {
+              dateBadgeContent = (
+                <span className="animate-blink-date text-xs sm:text-sm font-black text-fuchsia-950 dark:text-fuchsia-100 bg-fuchsia-100/90 dark:bg-fuchsia-950 border-2 border-fuchsia-400 dark:border-fuchsia-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-fuchsia-500/20 transition-all">
+                  <span className="relative flex h-2.5 w-2.5 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-fuchsia-600"></span>
+                  </span>
+                  <Calendar className="w-4 h-4 text-fuchsia-700 dark:text-fuchsia-400 shrink-0" />
+                  <span className="tracking-tight">Éligible choix interne : {formatDateFrench(jalon.date)}</span>
+                </span>
+              );
+            } else if (jalon.typeJalon === "situation_actuelle") {
+              dateBadgeContent = (
+                <span className="text-xs sm:text-sm font-black text-orange-950 dark:text-orange-100 bg-orange-100/90 dark:bg-orange-950 border-2 border-orange-400 dark:border-orange-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs transition-all">
+                  <Clock className="w-4 h-4 text-orange-700 dark:text-orange-400 shrink-0" />
+                  <span className="tracking-tight">Situation au {formatDateFrench(jalon.date)}</span>
+                </span>
+              );
+            } else {
+              dateBadgeContent = (
+                <span className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs transition-all">
+                  <Calendar className="w-4 h-4 text-slate-600 dark:text-slate-400 shrink-0" />
+                  <span className="tracking-tight">{formatDateFrench(jalon.date)}</span>
+                </span>
+              );
+            }
+
             return (
               <div key={jalon.id} className="relative group">
                 {/* Pastille sur la ligne avec positionnement parfait */}
@@ -269,14 +333,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                       <span className={`text-[11px] px-2.5 py-0.5 rounded-full border ${badgeBg}`}>
                         {typeLabel}
                       </span>
-                      <span className="animate-blink-date text-xs font-black text-orange-950 dark:text-orange-200 bg-orange-50 dark:bg-orange-950/80 border border-orange-200/90 dark:border-orange-800 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-2xs transition-all">
-                        <span className="relative flex h-2 w-2 shrink-0">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span>
-                        </span>
-                        <Clock className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400 shrink-0" />
-                        <span className="tracking-tight">{formatDateFrench(jalon.date)}</span>
-                      </span>
+                      {dateBadgeContent}
                     </div>
 
                     {/* Statut de garantie ou conditions */}

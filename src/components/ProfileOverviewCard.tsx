@@ -1,7 +1,7 @@
 import React from "react";
 import type { ProfilAgent, JalonTimeline } from "../types/career";
 import { findCadreAndGrade, formatDurationInYearsAndMonths, formatDateFrench, diffMonths } from "../services/simulationEngine";
-import { Briefcase, Award, Clock, DollarSign, Edit3, ArrowRight, User, Sparkles, Building2, AlertTriangle } from "lucide-react";
+import { Briefcase, Award, Clock, DollarSign, Edit3, ArrowRight, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
 
 interface ProfileOverviewCardProps {
   profil: ProfilAgent;
@@ -297,8 +297,15 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 <div className={`text-[10px] ${isContractuel ? "text-amber-900 dark:text-amber-300" : "text-emerald-900 dark:text-emerald-300"} uppercase font-black tracking-wider truncate`}>
                   {isContractuel ? "Réévaluation indicative (Avenant)" : "Prochain échelon garanti"}
                 </div>
-                <div className={`text-xs font-black ${isContractuel ? "text-amber-950 dark:text-amber-100" : "text-emerald-950 dark:text-emerald-100"}`}>
-                  {formatDateFrench(prochainEchelonJalon.date)}
+                <div className="mt-1 mb-1">
+                  <span className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-black px-3 py-1 rounded-xl shadow-2xs border ${
+                    isContractuel
+                      ? "text-amber-950 dark:text-amber-100 bg-white dark:bg-slate-900 border-amber-400 dark:border-amber-700"
+                      : "text-emerald-950 dark:text-emerald-100 bg-white dark:bg-slate-900 border-emerald-400 dark:border-emerald-700"
+                  }`}>
+                    <Calendar className={`w-3.5 h-3.5 ${isContractuel ? "text-amber-700 dark:text-amber-400" : "text-emerald-700 dark:text-emerald-400"}`} />
+                    <span>{isContractuel ? `Réévaluation : ${formatDateFrench(prochainEchelonJalon.date)}` : `Prise d'échelon : ${formatDateFrench(prochainEchelonJalon.date)}`}</span>
+                  </span>
                 </div>
                 <div className={`text-[11px] ${isContractuel ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"} font-bold truncate`}>
                   +{prochainEchelonJalon.gainIndiciaire} pts (~+{Math.round(prochainEchelonJalon.gainFinancierBrutMensuel || 0)} € brut/mois)
