@@ -645,110 +645,96 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 </div>
               </div>
 
-              <div className="space-y-4 text-sm">
-                {/* Ligne 1 : Échelon actuel & Reliquat d'ancienneté */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* 1. Date effet échelon actuel (Thème Émeraude) */}
-                  <DateFieldWithYear
-                    label={`À quelle date es-tu passé(e) à l'échelon ${formData.echelonActuel} ?`}
-                    value={formData.dateEffetEchelonActuel}
-                    onChange={(val) => setFormData({ ...formData, dateEffetEchelonActuel: val })}
-                    minYear={1990}
-                    maxYear={2026}
-                    hint="Date indiquée sur ton dernier arrêté d'avancement d'échelon"
-                    required
-                    cardMode
-                    themeColor="emerald"
-                    icon={<TrendingUp className="w-4 h-4" />}
-                    badgeLabel={`Éch. ${formData.echelonActuel}`}
-                  />
-
-                  {/* 2. Ancienneté conservée (Thème Ambre) */}
-                  <div className="border-2 border-amber-300 dark:border-amber-700/60 hover:border-amber-500 dark:hover:border-amber-400 bg-gradient-to-b from-amber-50/90 via-white to-amber-50/40 dark:from-amber-950/40 dark:via-slate-900 dark:to-amber-950/20 rounded-xl p-3 sm:p-3.5 shadow-2xs hover:shadow-xs transition-all duration-200 flex flex-col justify-between group">
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-6 h-6 rounded-md bg-amber-500 text-white flex items-center justify-center shadow-2xs shrink-0">
-                            <Clock className="w-3.5 h-3.5" />
-                          </div>
-                          <label className="block font-black text-amber-950 dark:text-amber-200 text-xs tracking-wide uppercase truncate" title="Reliquat d'ancienneté (mois)">
-                            As-tu un reliquat d'ancienneté ?
-                          </label>
-                        </div>
-                        <span className="text-[11px] font-black px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-950 dark:text-amber-200 border border-amber-300 dark:border-amber-700 shadow-2xs shrink-0">
-                          Reliquat
-                        </span>
-                      </div>
-
+              {/* Les 4 blocs dates répartis 2 par ligne */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                {/* 1. Date effet échelon actuel (Thème Émeraude) + Reliquat */}
+                <DateFieldWithYear
+                  label={`À quelle date es-tu passé(e) à l'échelon ${formData.echelonActuel} ?`}
+                  value={formData.dateEffetEchelonActuel}
+                  onChange={(val) => setFormData({ ...formData, dateEffetEchelonActuel: val })}
+                  minYear={1990}
+                  maxYear={2026}
+                  hint="Date indiquée sur ton dernier arrêté d'avancement d'échelon"
+                  required
+                  cardMode
+                  themeColor="emerald"
+                  icon={<TrendingUp className="w-4 h-4" />}
+                  badgeLabel={`Éch. ${formData.echelonActuel}`}
+                >
+                  {/* Ancienneté conservée (Thème Ambre intégré) */}
+                  <div className="bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-lg p-3">
+                    <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          min={0}
-                          max={48}
-                          value={formData.ancienneteConserveeMois || 0}
-                          onChange={(e) => setFormData({ ...formData, ancienneteConserveeMois: Math.max(0, parseInt(e.target.value) || 0) })}
-                          className="w-24 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold text-sm rounded-lg px-2.5 py-1.5 border border-amber-300 dark:border-amber-700/80 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 shadow-2xs transition-all"
-                        />
-                        <span className="text-xs font-bold text-amber-950 dark:text-amber-200">mois</span>
+                        <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                        <label className="font-bold text-amber-900 dark:text-amber-300 text-xs">
+                          As-tu un reliquat d'ancienneté ?
+                        </label>
                       </div>
                     </div>
 
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <input
+                        type="number"
+                        min={0}
+                        max={48}
+                        value={formData.ancienneteConserveeMois || 0}
+                        onChange={(e) => setFormData({ ...formData, ancienneteConserveeMois: Math.max(0, parseInt(e.target.value) || 0) })}
+                        className="w-20 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-sm rounded-md px-2 py-1 border border-amber-300 dark:border-amber-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                      />
+                      <span className="text-xs font-semibold text-amber-800 dark:text-amber-400">mois</span>
+                    </div>
+                    
+                    <p className="text-[10px] text-amber-700/80 dark:text-amber-500/80 leading-tight">
                       C'est le nombre de mois conservés indiqué sur ton dernier arrêté. Laisse 0 si tu n'en as pas.
                     </p>
                   </div>
-                </div>
+                </DateFieldWithYear>
 
-                {/* Ligne 2 : Trois dates piliers statutaires */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* 3. Nomination dans le grade (Thème Violet) */}
-                  <DateFieldWithYear
-                    label="Depuis quand es-tu dans ce grade ?"
-                    subLabel={currentGrade.nom}
-                    value={formData.dateNominationGradeActuel}
-                    onChange={(val) => setFormData({ ...formData, dateNominationGradeActuel: val })}
-                    minYear={1975}
-                    maxYear={2026}
-                    hint="La date à laquelle tu as été nommé(e) dans ton grade actuel"
-                    required
-                    cardMode
-                    themeColor="purple"
-                    icon={<Award className="w-3.5 h-3.5" />}
-                    badgeLabel="Grade"
-                  />
+                {/* 2. Nomination dans le grade (Thème Violet) */}
+                <DateFieldWithYear
+                  label={`Depuis quand es-tu dans le grade de ${currentGrade.nom.split(' (')[0]} ?`}
+                  value={formData.dateNominationGradeActuel}
+                  onChange={(val) => setFormData({ ...formData, dateNominationGradeActuel: val })}
+                  minYear={1975}
+                  maxYear={2026}
+                  hint="La date à laquelle tu as été nommé(e) dans ton grade actuel"
+                  required
+                  cardMode
+                  themeColor="purple"
+                  icon={<Award className="w-3.5 h-3.5" />}
+                  badgeLabel="Grade"
+                />
 
-                  {/* 4. Ancienneté dans le cadre d'emplois (Thème Orange CFDT) */}
-                  <DateFieldWithYear
-                    label="Depuis quand es-tu dans ce cadre d'emplois ?"
-                    subLabel={currentCadre.nom}
-                    value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
-                    onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
-                    minYear={1965}
-                    maxYear={2026}
-                    hint={`Ta première nomination dans la catégorie ${currentCadre.categorie}`}
-                    required
-                    cardMode
-                    themeColor="orange"
-                    icon={<Briefcase className="w-3.5 h-3.5" />}
-                    badgeLabel={`Cat. ${currentCadre.categorie}`}
-                  />
+                {/* 3. Ancienneté dans le cadre d'emplois (Thème Orange CFDT) */}
+                <DateFieldWithYear
+                  label={`Depuis quand es-tu dans le cadre d'emplois : ${currentCadre.nom} ?`}
+                  value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
+                  onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
+                  minYear={1965}
+                  maxYear={2026}
+                  hint={`Ta première nomination dans la catégorie ${currentCadre.categorie}`}
+                  required
+                  cardMode
+                  themeColor="orange"
+                  icon={<Briefcase className="w-3.5 h-3.5" />}
+                  badgeLabel={`Cat. ${currentCadre.categorie}`}
+                />
 
-                  {/* 5. Entrée Fonction Publique (Thème Indigo) */}
-                  <DateFieldWithYear
-                    label="Quand es-tu entré(e) dans la Fonction Publique ?"
-                    value={formData.dateEntreeFonctionPublique}
-                    onChange={(val) => setFormData({ ...formData, dateEntreeFonctionPublique: val })}
-                    minYear={1965}
-                    maxYear={2026}
-                    highlightYear={1998}
-                    hint="La date de tes tous premiers pas dans la fonction publique, tous statuts confondus"
-                    required
-                    cardMode
-                    themeColor="indigo"
-                    icon={<ShieldCheck className="w-3.5 h-3.5" />}
-                    badgeLabel="FP"
-                  />
-                </div>
+                {/* 4. Entrée Fonction Publique (Thème Indigo) */}
+                <DateFieldWithYear
+                  label="Quand es-tu entré(e) dans la Fonction Publique ?"
+                  value={formData.dateEntreeFonctionPublique}
+                  onChange={(val) => setFormData({ ...formData, dateEntreeFonctionPublique: val })}
+                  minYear={1965}
+                  maxYear={2026}
+                  highlightYear={1998}
+                  hint="La date de tes tous premiers pas dans la fonction publique, tous statuts confondus"
+                  required
+                  cardMode
+                  themeColor="indigo"
+                  icon={<ShieldCheck className="w-3.5 h-3.5" />}
+                  badgeLabel="FP"
+                />
               </div>
 
               {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE + Bouton de soumission */}

@@ -16,6 +16,7 @@ export interface DateFieldWithYearProps {
   icon?: React.ReactNode;
   themeColor?: DateFieldTheme;
   cardMode?: boolean;
+  children?: React.ReactNode;
 }
 
 const THEME_STYLES: Record<DateFieldTheme, {
@@ -114,6 +115,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
   icon,
   themeColor = "emerald",
   cardMode = false,
+  children,
 }) => {
   const currentYear = value && value.includes("-") ? value.split("-")[0] : String(highlightYear);
 
@@ -203,6 +205,11 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
         {hint && (
           <div className="mt-2 pt-1.5 border-t border-slate-200/70 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 font-medium leading-tight">
             {hint}
+          </div>
+        )}
+        {children && (
+          <div className="mt-3">
+            {children}
           </div>
         )}
       </div>

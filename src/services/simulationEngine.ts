@@ -405,17 +405,56 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
     }
   }
 
-  // 3. Projection des avancements d échelons futurs / Réévaluations triennales indicatives
+  // 3. Projection des avancements d'échelons futurs / Réévaluations triennales indicatives
+  let currentSimGrade = grade;
+  let currentSimCadre = cadre;
   let runEchelonNum = profil.echelonActuel;
   let runDateEffet = profil.dateEffetEchelonActuel;
   let remainingConservedMonths = profil.ancienneteConserveeMois || 0;
   let appliedDispoDelay = false;
 
+  // Intégration du changement de grille si réussite concours (Titulaire)
+  const concoursEvent = profil.evenementsSimules.find(e => e.type === "reussite_concours");
+  if (concoursEvent && !isContractuel) {
+    const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
+    let foundCible = false;
+    for (const c of CADRES_EMPLOIS) {
+      if (c.grades[0].categorie === cibleCat && c.grades[0].filiere === grade.filiere) {
+        currentSimCadre = c;
+        currentSimGrade = c.grades[0];
+        foundCible = true;
+        break;
+      }
+    }
+    if (!foundCible) {
+      for (const c of CADRES_EMPLOIS) {
+        if (c.grades[0].categorie === cibleCat) {
+          currentSimCadre = c;
+          currentSimGrade = c.grades[0];
+          break;
+        }
+      }
+    }
+    
+    // Reclassement indiciaire à indice égal ou immédiatement supérieur
+    const baseIM = grade.echelons.find(e => e.numero === profil.echelonActuel)?.indiceMajore || 366;
+    let targetEch = currentSimGrade.echelons[0];
+    for (const ech of currentSimGrade.echelons) {
+      if (ech.indiceMajore >= baseIM) {
+        targetEch = ech;
+        break;
+      }
+    }
+    runEchelonNum = targetEch.numero;
+    runDateEffet = concoursEvent.dateDebut;
+    remainingConservedMonths = 0; // Remis à zéro lors du reclassement
+  }
+
   let prochainEchelonJalon: JalonTimeline | null = null;
 
-  while (runEchelonNum < grade.echelons.length) {
-    const currentEchObj = grade.echelons.find(e => e.numero === runEchelonNum)!;
-    const nextEchObj = grade.echelons.find(e => e.numero === runEchelonNum + 1);
+  while (runEchelonNum < currentSimGrade.echelons.length) {
+    const currentEchObj = currentSimGrade.echelons.find(e => e.numero === runEchelonNum)!;
+    const nextEchObj = currentSimGrade.echelons.find(e => e.numero === runEchelonNum + 1);
     if (!nextEchObj) break;
 
     const isStepAfterTitularisation = !!(dateTitularisation && runDateEffet >= dateTitularisation);
@@ -458,7 +497,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         : isStepAfterTitularisation
         ? `IM ${nextEchObj.indiceMajore} (+ ${gainIM} pts) - ${Math.round(gainFinancier)} € brut/mois (Avancement garanti post-titularisation)`
         : `IM ${nextEchObj.indiceMajore} (+ ${gainIM} pts) - ${Math.round(gainFinancier)} € brut/mois`,
-      gradeNom: grade.nom,
+      gradeNom: currentSimGrade.nom,
       echelonNumero: nextEchObj.numero,
       indiceBrut: nextEchObj.indiceBrut,
       indiceMajore: nextEchObj.indiceMajore,
@@ -524,7 +563,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       ],
       referenceReglementaire: isEffectiveContractuel
         ? `Décret n° 88-145 du 15 février 1988 (art. 1-2) relatif aux agents contractuels de la FPT`
-        : `Statut particulier du cadre d emplois (${cadre.nom}) - Cadence unique PPCR`
+        : `Statut particulier du cadre d'emplois (${currentSimCadre.nom}) - Cadence unique PPCR`
     };
 
     jalons.push(echJalon);
@@ -541,44 +580,48 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
   let premierePromouvabiliteGrade: JalonTimeline | null = null;
   let premierePromouvabiliteInterne: JalonTimeline | null = null;
 
-  // Statutaire : L avancement de grade (art. L522-23 CGFP) et les examens professionnels sont réservés aux fonctionnaires titulaires.
-  // Pour un agent contractuel, aucun jalon d avancement de grade n est injecté SAUF s il a simulé une réussite au concours et sa titularisation.
+  // Statutaire : L'avancement de grade (art. L522-23 CGFP) et les examens professionnels sont réservés aux fonctionnaires titulaires.
+  // Pour un agent contractuel, aucun jalon d'avancement de grade n'est injecté SAUF s'il a simulé une réussite au concours et sa titularisation.
   if (!isContractuel || dateTitularisation) {
-    for (const perspective of grade.perspectives) {
+    for (const perspective of currentSimGrade.perspectives) {
       for (const condition of perspective.conditions) {
         let dateEchelonAtteint = profil.dateEffetEchelonActuel;
-      if (condition.echelonMinimum > profil.echelonActuel) {
-        // Trouver la date du jalon d échelon correspondant
-        const matchingEchJalon = jalons.find(j => j.typeJalon === "avancement_echelon" && j.echelonNumero === condition.echelonMinimum);
-        if (matchingEchJalon) {
-          dateEchelonAtteint = matchingEchJalon.date;
-        } else {
-          dateEchelonAtteint = addMonthsToDate(nowStr, (condition.echelonMinimum - profil.echelonActuel) * 24);
+        if (concoursEvent && !isContractuel) {
+          dateEchelonAtteint = concoursEvent.dateDebut;
         }
-      }
 
-      // Date avec ancienneté requise dans l échelon
-      const dateConditionEchelon = addMonthsToDate(dateEchelonAtteint, Math.round(condition.ancienneteEchelonAnnees * 12));
+        if (condition.echelonMinimum > profil.echelonActuel) {
+          // Trouver la date du jalon d'échelon correspondant
+          const matchingEchJalon = jalons.find(j => j.typeJalon === "avancement_echelon" && j.echelonNumero === condition.echelonMinimum);
+          if (matchingEchJalon) {
+            dateEchelonAtteint = matchingEchJalon.date;
+          } else {
+            dateEchelonAtteint = addMonthsToDate(nowStr, (condition.echelonMinimum - profil.echelonActuel) * 24);
+          }
+        }
 
-      // Date avec ancienneté dans le grade
-      const baseNominationGradeDate = (isContractuel && dateNominationStagiaire)
-        ? dateNominationStagiaire
-        : profil.dateNominationGradeActuel;
+        // Date avec ancienneté requise dans l'échelon
+        const dateConditionEchelon = addMonthsToDate(dateEchelonAtteint, Math.round(condition.ancienneteEchelonAnnees * 12));
 
-      let dateConditionGrade = baseNominationGradeDate;
-      if (condition.ancienneteGradeAnnees && condition.ancienneteGradeAnnees > 0) {
-        dateConditionGrade = addMonthsToDate(baseNominationGradeDate, Math.round(condition.ancienneteGradeAnnees * 12) + dispoPenaltyMonths);
-      }
+        // Date avec ancienneté dans le grade
+        const baseNominationGradeDate = (isContractuel && dateNominationStagiaire)
+          ? dateNominationStagiaire
+          : (concoursEvent && !isContractuel) ? concoursEvent.dateDebut : profil.dateNominationGradeActuel;
 
-      // Date avec ancienneté dans le cadre / catégorie
-      const baseEntreeCadreDate = (isContractuel && dateNominationStagiaire)
-        ? dateNominationStagiaire
-        : (profil.dateEntreeCadreEmploi || profil.dateNominationGradeActuel);
+        let dateConditionGrade = baseNominationGradeDate;
+        if (condition.ancienneteGradeAnnees && condition.ancienneteGradeAnnees > 0) {
+          dateConditionGrade = addMonthsToDate(baseNominationGradeDate, Math.round(condition.ancienneteGradeAnnees * 12) + dispoPenaltyMonths);
+        }
 
-      let dateConditionCadre = baseEntreeCadreDate;
-      if (condition.ancienneteCadreAnnees && condition.ancienneteCadreAnnees > 0) {
-        dateConditionCadre = addMonthsToDate(baseEntreeCadreDate, Math.round(condition.ancienneteCadreAnnees * 12) + dispoPenaltyMonths);
-      }
+        // Date avec ancienneté dans le cadre / catégorie
+        const baseEntreeCadreDate = (isContractuel && dateNominationStagiaire)
+          ? dateNominationStagiaire
+          : (concoursEvent && !isContractuel) ? concoursEvent.dateDebut : (profil.dateEntreeCadreEmploi || profil.dateNominationGradeActuel);
+
+        let dateConditionCadre = baseEntreeCadreDate;
+        if (condition.ancienneteCadreAnnees && condition.ancienneteCadreAnnees > 0) {
+          dateConditionCadre = addMonthsToDate(baseEntreeCadreDate, Math.round(condition.ancienneteCadreAnnees * 12) + dispoPenaltyMonths);
+        }
 
       // Date avec services publics
       let dateConditionServicesPublics = profil.dateEntreeFonctionPublique;
