@@ -170,7 +170,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
           { numero: 4, dureeAnnees: 2, indiceBrut: 430, indiceMajore: 385 },
           { numero: 5, dureeAnnees: 2, indiceBrut: 448, indiceMajore: 398 },
           { numero: 6, dureeAnnees: 2, indiceBrut: 460, indiceMajore: 408 },
-          { numero: 7, dureeAnnees: 2, indiceBrut: 478, indiceMajore: 420 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420 },
           { numero: 8, dureeAnnees: 3, indiceBrut: 499, indiceMajore: 435 },
           { numero: 9, dureeAnnees: 3, indiceBrut: 525, indiceMajore: 455 },
           { numero: 10, dureeAnnees: 0, indiceBrut: 558, indiceMajore: 478, description: "Sommet C3 (IM 478)" }
@@ -734,7 +734,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
           { numero: 4, dureeAnnees: 2, indiceBrut: 430, indiceMajore: 385 },
           { numero: 5, dureeAnnees: 2, indiceBrut: 448, indiceMajore: 398 },
           { numero: 6, dureeAnnees: 2, indiceBrut: 460, indiceMajore: 408 },
-          { numero: 7, dureeAnnees: 2, indiceBrut: 478, indiceMajore: 420 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420 },
           { numero: 8, dureeAnnees: 3, indiceBrut: 499, indiceMajore: 435 },
           { numero: 9, dureeAnnees: 3, indiceBrut: 525, indiceMajore: 455 },
           { numero: 10, dureeAnnees: 0, indiceBrut: 558, indiceMajore: 478, description: "Sommet C3 (IM 478)" }
@@ -1300,7 +1300,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
           { numero: 4, dureeAnnees: 2, indiceBrut: 430, indiceMajore: 385 },
           { numero: 5, dureeAnnees: 2, indiceBrut: 448, indiceMajore: 398 },
           { numero: 6, dureeAnnees: 2, indiceBrut: 460, indiceMajore: 408 },
-          { numero: 7, dureeAnnees: 2, indiceBrut: 478, indiceMajore: 420 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420 },
           { numero: 8, dureeAnnees: 3, indiceBrut: 499, indiceMajore: 435 },
           { numero: 9, dureeAnnees: 3, indiceBrut: 525, indiceMajore: 455 },
           { numero: 10, dureeAnnees: 0, indiceBrut: 558, indiceMajore: 478, description: "Sommet ATSEM (IM 478)" }
@@ -1351,7 +1351,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
           { numero: 4, dureeAnnees: 1.5, indiceBrut: 415, indiceMajore: 377 },
           { numero: 5, dureeAnnees: 2, indiceBrut: 431, indiceMajore: 386 },
           { numero: 6, dureeAnnees: 2, indiceBrut: 452, indiceMajore: 401, description: "Accès classe supérieure après 1 an" },
-          { numero: 7, dureeAnnees: 2, indiceBrut: 478, indiceMajore: 420 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420 },
           { numero: 8, dureeAnnees: 2.5, indiceBrut: 500, indiceMajore: 436 },
           { numero: 9, dureeAnnees: 3, indiceBrut: 528, indiceMajore: 457 },
           { numero: 10, dureeAnnees: 3, indiceBrut: 563, indiceMajore: 482 },
@@ -1836,7 +1836,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
           { numero: 4, dureeAnnees: 2, indiceBrut: 430, indiceMajore: 385 },
           { numero: 5, dureeAnnees: 2, indiceBrut: 448, indiceMajore: 398 },
           { numero: 6, dureeAnnees: 2, indiceBrut: 460, indiceMajore: 408 },
-          { numero: 7, dureeAnnees: 2, indiceBrut: 478, indiceMajore: 420 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420 },
           { numero: 8, dureeAnnees: 3, indiceBrut: 499, indiceMajore: 435 },
           { numero: 9, dureeAnnees: 3, indiceBrut: 525, indiceMajore: 455 },
           { numero: 10, dureeAnnees: 0, indiceBrut: 558, indiceMajore: 478, description: "Sommet C3 (IM 478)" }

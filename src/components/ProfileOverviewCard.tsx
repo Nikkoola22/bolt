@@ -1,7 +1,7 @@
 import React from "react";
 import type { ProfilAgent, JalonTimeline } from "../types/career";
 import { findCadreAndGrade, formatDurationInYearsAndMonths, formatDateFrench, diffMonths } from "../services/simulationEngine";
-import { Briefcase, Award, Clock, DollarSign, Edit3, ArrowRight, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
+import { Briefcase, Award, Clock, DollarSign, Edit3, ArrowRight, ArrowLeft, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
 
 interface ProfileOverviewCardProps {
   profil: ProfilAgent;
@@ -103,11 +103,11 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
           <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
             <button
               onClick={onEditProfile}
-              className="text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer backdrop-blur-xs shadow-xs hover:shadow-sm"
-              title="Modifier ma situation statutaire"
+              className="text-xs font-semibold bg-red-500 hover:bg-red-600 text-white px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-xs hover:shadow-sm border border-red-400"
+              title="Retour au menu"
             >
-              <Edit3 className="w-3.5 h-3.5 text-orange-300" />
-              <span>Modifier ma situation</span>
+              <ArrowLeft className="w-3.5 h-3.5 text-white" />
+              <span>Retour au menu</span>
             </button>
           </div>
         </div>

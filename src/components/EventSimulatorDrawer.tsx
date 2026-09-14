@@ -491,7 +491,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
             onClick={onClose}
             className="text-xs font-semibold bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer"
           >
-            Fermer le simulateur
+            Lancer la simulation
           </button>
         </div>
 

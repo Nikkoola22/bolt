@@ -15,7 +15,7 @@ import {
   Sparkles, 
   ShieldCheck, 
   Layers, 
-  FileEdit, 
+  ArrowLeft, 
   HelpCircle, 
   ChevronDown, 
   ChevronUp, 
@@ -204,10 +204,10 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             <div className="flex items-center gap-2.5 self-start md:self-center shrink-0 w-full sm:w-auto">
               <button
                 onClick={onEditProfile}
-                className="flex-1 sm:flex-initial text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-black dark:hover:text-white bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200/80 dark:hover:bg-white/[0.12] px-4 py-2.5 rounded-full transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]"
+                className="flex-1 sm:flex-initial text-xs font-semibold bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-full transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98] shadow-sm border border-red-400"
               >
-                <FileEdit className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                <span>Modifier</span>
+                <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
+                <span>Retour au menu</span>
               </button>
 
               <button

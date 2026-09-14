@@ -650,12 +650,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* 1. Date effet échelon actuel (Thème Émeraude) */}
                   <DateFieldWithYear
-                    label="Date effet échelon actuel"
+                    label={`À quelle date es-tu passé(e) à l'échelon ${formData.echelonActuel} ?`}
                     value={formData.dateEffetEchelonActuel}
                     onChange={(val) => setFormData({ ...formData, dateEffetEchelonActuel: val })}
                     minYear={1990}
                     maxYear={2026}
-                    hint="Prise d'effet de l'échelon détenu"
+                    hint="Date indiquée sur ton dernier arrêté d'avancement d'échelon"
                     required
                     cardMode
                     themeColor="emerald"
@@ -671,8 +671,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                           <div className="w-6 h-6 rounded-md bg-amber-500 text-white flex items-center justify-center shadow-2xs shrink-0">
                             <Clock className="w-3.5 h-3.5" />
                           </div>
-                          <label className="block font-black text-amber-950 dark:text-amber-200 text-xs tracking-wide uppercase truncate" title="Ancienneté conservée (mois)">
-                            Ancienneté conservée
+                          <label className="block font-black text-amber-950 dark:text-amber-200 text-xs tracking-wide uppercase truncate" title="Reliquat d'ancienneté (mois)">
+                            As-tu un reliquat d'ancienneté ?
                           </label>
                         </div>
                         <span className="text-[11px] font-black px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-950 dark:text-amber-200 border border-amber-300 dark:border-amber-700 shadow-2xs shrink-0">
@@ -694,7 +694,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                     </div>
 
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                      Mois d'ancienneté reportés figurant sur votre dernier arrêté.
+                      C'est le nombre de mois conservés indiqué sur ton dernier arrêté. Laisse 0 si tu n'en as pas.
                     </p>
                   </div>
                 </div>
@@ -703,13 +703,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* 3. Nomination dans le grade (Thème Violet) */}
                   <DateFieldWithYear
-                    label="Nomination dans le grade actuel"
+                    label="Depuis quand es-tu dans ce grade ?"
                     subLabel={currentGrade.nom}
                     value={formData.dateNominationGradeActuel}
                     onChange={(val) => setFormData({ ...formData, dateNominationGradeActuel: val })}
                     minYear={1975}
                     maxYear={2026}
-                    hint="Départ de l'ancienneté de grade"
+                    hint="La date à laquelle tu as été nommé(e) dans ton grade actuel"
                     required
                     cardMode
                     themeColor="purple"
@@ -719,13 +719,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
 
                   {/* 4. Ancienneté dans le cadre d'emplois (Thème Orange CFDT) */}
                   <DateFieldWithYear
-                    label="Ancienneté dans le cadre d'emplois"
+                    label="Depuis quand es-tu dans ce cadre d'emplois ?"
                     subLabel={currentCadre.nom}
                     value={formData.dateEntreeCadreEmploi || formData.dateNominationGradeActuel}
                     onChange={(val) => setFormData({ ...formData, dateEntreeCadreEmploi: val })}
                     minYear={1965}
                     maxYear={2026}
-                    hint={`Entrée en catégorie ${currentCadre.categorie} (ex: 2024)`}
+                    hint={`Ta première nomination dans la catégorie ${currentCadre.categorie}`}
                     required
                     cardMode
                     themeColor="orange"
@@ -735,13 +735,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
 
                   {/* 5. Entrée Fonction Publique (Thème Indigo) */}
                   <DateFieldWithYear
-                    label="Entrée Fonction Publique"
+                    label="Quand es-tu entré(e) dans la Fonction Publique ?"
                     value={formData.dateEntreeFonctionPublique}
                     onChange={(val) => setFormData({ ...formData, dateEntreeFonctionPublique: val })}
                     minYear={1965}
                     maxYear={2026}
                     highlightYear={1998}
-                    hint="Tous services publics confondus"
+                    hint="La date de tes tous premiers pas dans la fonction publique, tous statuts confondus"
                     required
                     cardMode
                     themeColor="indigo"
