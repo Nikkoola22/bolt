@@ -645,13 +645,22 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       const conditionsRemplies: EvaluationCondition[] = [];
       const conditionsManquantes: EvaluationCondition[] = [];
 
-      // Échelon minimum
-      const echRempli = profil.echelonActuel >= condition.echelonMinimum;
+      // Échelon minimum & ancienneté dans l'échelon
+      const moisEchRequis = (condition.ancienneteEchelonAnnees || 0) * 12;
+      const moisDansEchelon = profil.echelonActuel === condition.echelonMinimum
+        ? diffMonths(profil.dateEffetEchelonActuel, nowStr)
+        : (profil.echelonActuel > condition.echelonMinimum ? moisEchRequis : 0);
+      const echRempli = profil.echelonActuel >= condition.echelonMinimum && moisDansEchelon >= moisEchRequis;
+
       const evalEch: EvaluationCondition = {
-        libelle: `Atteindre le ${condition.echelonMinimum}e échelon de ${grade.nom}`,
+        libelle: condition.ancienneteEchelonAnnees && condition.ancienneteEchelonAnnees > 0
+          ? `Au moins ${condition.ancienneteEchelonAnnees} an(s) d'ancienneté au ${condition.echelonMinimum}e échelon de ${grade.nom}`
+          : `Atteindre le ${condition.echelonMinimum}e échelon de ${grade.nom}`,
         statut: echRempli ? "remplie" : "en_cours",
         valeurActuelle: `${profil.echelonActuel}e échelon`,
-        valeurRequise: `${condition.echelonMinimum}e échelon`,
+        valeurRequise: condition.ancienneteEchelonAnnees && condition.ancienneteEchelonAnnees > 0
+          ? `${condition.echelonMinimum}e échelon (${condition.ancienneteEchelonAnnees} an)`
+          : `${condition.echelonMinimum}e échelon`,
         progressionPourcent: Math.min(100, Math.round((profil.echelonActuel / condition.echelonMinimum) * 100)),
         detailsExplicatifs: echRempli ? "Condition d échelon validée." : `Il vous reste encore ${condition.echelonMinimum - profil.echelonActuel} échelon(s) à franchir.`,
         piecesAFournir: ["Dernier arrêté d avancement d échelon"],
@@ -659,13 +668,13 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       };
       if (echRempli) conditionsRemplies.push(evalEch); else conditionsManquantes.push(evalEch);
 
-      // Ancienneté dans le grade
+      // Ancienneté dans le grade (Services effectifs dans le grade)
       if (condition.ancienneteGradeAnnees && condition.ancienneteGradeAnnees > 0) {
         const moisRequis = condition.ancienneteGradeAnnees * 12;
         const moisActuels = diffMonths(profil.dateNominationGradeActuel, nowStr);
         const gradeRempli = moisActuels >= moisRequis;
         const evalGrade: EvaluationCondition = {
-          libelle: `Ancienneté de ${condition.ancienneteGradeAnnees} ans dans le grade actuel`,
+          libelle: `Au moins ${condition.ancienneteGradeAnnees} ans de services effectifs dans le grade actuel`,
           statut: gradeRempli ? "remplie" : "en_cours",
           valeurActuelle: formatDurationInYearsAndMonths(moisActuels),
           valeurRequise: formatDurationInYearsAndMonths(moisRequis),
@@ -678,13 +687,13 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         if (gradeRempli) conditionsRemplies.push(evalGrade); else conditionsManquantes.push(evalGrade);
       }
 
-      // Ancienneté dans le cadre / catégorie
+      // Ancienneté dans le cadre / catégorie (Services effectifs dans le cadre)
       if (condition.ancienneteCadreAnnees && condition.ancienneteCadreAnnees > 0) {
         const moisRequis = condition.ancienneteCadreAnnees * 12;
         const moisActuels = diffMonths(baseEntreeCadreDate, nowStr);
         const cadreRempli = moisActuels >= moisRequis;
         const evalCadre: EvaluationCondition = {
-          libelle: `Ancienneté de ${condition.ancienneteCadreAnnees} ans dans le cadre d emplois / catégorie ${cadre.categorie}`,
+          libelle: `Au moins ${condition.ancienneteCadreAnnees} ans de services effectifs dans le cadre / catégorie ${cadre.categorie}`,
           statut: cadreRempli ? "remplie" : "en_cours",
           valeurActuelle: formatDurationInYearsAndMonths(moisActuels),
           valeurRequise: formatDurationInYearsAndMonths(moisRequis),
@@ -695,6 +704,25 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
           actesAdministratifs: []
         };
         if (cadreRempli) conditionsRemplies.push(evalCadre); else conditionsManquantes.push(evalCadre);
+      }
+
+      // Ancienneté de services effectifs (Services publics)
+      if (condition.ancienneteServicesPublicsAnnees && condition.ancienneteServicesPublicsAnnees > 0) {
+        const moisRequis = condition.ancienneteServicesPublicsAnnees * 12;
+        const moisActuels = Math.max(0, diffMonths(profil.dateEntreeFonctionPublique, nowStr) - dispoPenaltyMonths);
+        const servPubRempli = moisActuels >= moisRequis;
+        const evalServPub: EvaluationCondition = {
+          libelle: `Au moins ${condition.ancienneteServicesPublicsAnnees} ans de services effectifs`,
+          statut: servPubRempli ? "remplie" : "en_cours",
+          valeurActuelle: formatDurationInYearsAndMonths(moisActuels),
+          valeurRequise: formatDurationInYearsAndMonths(moisRequis),
+          progressionPourcent: Math.min(100, Math.round((moisActuels / moisRequis) * 100)),
+          tempsRestantTexte: servPubRempli ? "Validée" : `Manque ${formatDurationInYearsAndMonths(moisRequis - moisActuels)}`,
+          detailsExplicatifs: `Au moins ${condition.ancienneteServicesPublicsAnnees} ans de services effectifs accomplis dans la fonction publique depuis le ${formatDateFrench(profil.dateEntreeFonctionPublique)}.`,
+          piecesAFournir: ["État justificatif des services effectifs", "Contrats ou arrêtés antérieurs"],
+          actesAdministratifs: []
+        };
+        if (servPubRempli) conditionsRemplies.push(evalServPub); else conditionsManquantes.push(evalServPub);
       }
 
       // Examen professionnel
@@ -730,6 +758,12 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
 
       const isPostConcoursPromo = isContractuel && !!dateTitularisation;
 
+      const cleanVoie = (condition.descriptionVoie || "")
+        .replace(/\s*\((?:au moins|dès|accès|ancienneté|1 an|\+ \d|\d ans|tableau d avancement)[^)]*\)/gi, "")
+        .replace(/^Voie Au Choix$/i, "Au choix")
+        .replace(/^Voie Examen Professionnel$/i, "Examen professionnel")
+        .trim() || (condition.typeVoie === "au_choix" ? "Au choix" : "Examen professionnel");
+
       const promouvableJalon: JalonTimeline = {
         id: `persp-${perspective.gradeCibleId}-${condition.typeVoie}`,
         date: dateEligibiliteTheorique,
@@ -737,8 +771,8 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         mois: parseDate(dateEligibiliteTheorique).getMonth() + 1,
         typeJalon: typeJalon,
         titre: isPostConcoursPromo
-          ? `Avancement post-titularisation : ${perspective.nomGradeCible} (${condition.descriptionVoie})`
-          : `Promouvabilité : ${perspective.nomGradeCible} (${condition.descriptionVoie})`,
+          ? `Avancement post-titularisation : ${perspective.nomGradeCible} (${cleanVoie})`
+          : `Promouvabilité : ${perspective.nomGradeCible} (${cleanVoie})`,
         sousTitre: isPostConcoursPromo
           ? `Perspective débloquée suite au concours (Voie ${condition.typeVoie === "au_choix" ? "au choix" : "examen pro"})`
           : perspective.typePerspective === "avancement_grade" ? "Avancement de Grade théorique" : "Promotion Interne (Changement de catégorie)",
@@ -804,7 +838,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         : `Vous atteindrez le ${formatDateFrench(dateEligibiliteConcours)} les ${anneesRequisesConcours} ans de services publics effectifs exigés pour vous présenter au Concours Interne. La réussite vous ouvrira la titularisation statutaire.`,
       conditionsRemplies: dejaEligibleConcours ? [
         {
-          libelle: `Ancienneté de ${anneesRequisesConcours} ans de services publics effectifs`,
+          libelle: `Au moins ${anneesRequisesConcours} ans de services effectifs`,
           statut: "remplie",
           valeurActuelle: formatDurationInYearsAndMonths(moisServicesPublics),
           valeurRequise: formatDurationInYearsAndMonths(moisRequisConcours),
@@ -817,7 +851,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       conditionsManquantes: [
         ...(!dejaEligibleConcours ? [
           {
-            libelle: `Ancienneté de ${anneesRequisesConcours} ans de services publics effectifs`,
+            libelle: `Au moins ${anneesRequisesConcours} ans de services effectifs`,
             statut: "en_cours" as const,
             valeurActuelle: formatDurationInYearsAndMonths(moisServicesPublics),
             valeurRequise: formatDurationInYearsAndMonths(moisRequisConcours),

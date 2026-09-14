@@ -1,6 +1,147 @@
 @import "tailwindcss";
 
 @theme {
+  /* =========================================================================
+     Palette Officielle Personnalisée
+     =========================================================================
+     1. Ocean Deep    : #0267c1 (rgb: 2, 103, 193)
+     2. Twitter Blue  : #0075c4 (rgb: 0, 117, 196)
+     3. Golden Orange : #efa00b (rgb: 239, 160, 11)
+     4. Spicy Orange  : #d65108 (rgb: 214, 81, 8)
+     5. Dark Walnut   : #591f0a (rgb: 89, 31, 10)
+  */
+
+  /* Direct Color Tokens */
+  --color-ocean-deep: #0267c1;
+  --color-twitter-blue: #0075c4;
+  --color-golden-orange: #efa00b;
+  --color-spicy-orange: #d65108;
+  --color-dark-walnut: #591f0a;
+
+  /* Ocean Deep (#0267c1) Scale */
+  --color-ocean-deep-50: #f0f7fe;
+  --color-ocean-deep-100: #ddeefc;
+  --color-ocean-deep-200: #c1e1fa;
+  --color-ocean-deep-300: #97ccf7;
+  --color-ocean-deep-400: #64b0f1;
+  --color-ocean-deep-500: #0267c1;
+  --color-ocean-deep-600: #0154a1;
+  --color-ocean-deep-700: #024383;
+  --color-ocean-deep-800: #053a6d;
+  --color-ocean-deep-900: #0a315b;
+  --color-ocean-deep-950: #061f3c;
+
+  /* Twitter Blue (#0075c4) Scale */
+  --color-twitter-blue-50: #eef8fe;
+  --color-twitter-blue-100: #d8effd;
+  --color-twitter-blue-200: #b9e2fb;
+  --color-twitter-blue-300: #88cff8;
+  --color-twitter-blue-400: #50b6f3;
+  --color-twitter-blue-500: #0075c4;
+  --color-twitter-blue-600: #0160a3;
+  --color-twitter-blue-700: #034e85;
+  --color-twitter-blue-800: #07426f;
+  --color-twitter-blue-900: #0b385c;
+  --color-twitter-blue-950: #07243e;
+
+  /* Golden Orange (#efa00b) Scale */
+  --color-golden-orange-50: #fefbf2;
+  --color-golden-orange-100: #fdf5df;
+  --color-golden-orange-200: #fbe8be;
+  --color-golden-orange-300: #f8d591;
+  --color-golden-orange-400: #f3bc59;
+  --color-golden-orange-500: #efa00b;
+  --color-golden-orange-600: #d48206;
+  --color-golden-orange-700: #a96007;
+  --color-golden-orange-800: #884b0d;
+  --color-golden-orange-900: #703e0e;
+  --color-golden-orange-950: #401f04;
+
+  /* Spicy Orange (#d65108) Scale */
+  --color-spicy-orange-50: #fef5ee;
+  --color-spicy-orange-100: #fde8d7;
+  --color-spicy-orange-200: #f9ceaf;
+  --color-spicy-orange-300: #f5ac7d;
+  --color-spicy-orange-400: #ee7f47;
+  --color-spicy-orange-500: #d65108;
+  --color-spicy-orange-600: #c13e05;
+  --color-spicy-orange-700: #9e2d07;
+  --color-spicy-orange-800: #7f250c;
+  --color-spicy-orange-900: #68200d;
+  --color-spicy-orange-950: #3b0e04;
+
+  /* Dark Walnut (#591f0a) Scale */
+  --color-dark-walnut-50: #fcf4f1;
+  --color-dark-walnut-100: #f7e6e0;
+  --color-dark-walnut-200: #f0cdc1;
+  --color-dark-walnut-300: #e3aa97;
+  --color-dark-walnut-400: #cf7c63;
+  --color-dark-walnut-500: #a94b30;
+  --color-dark-walnut-600: #8c351f;
+  --color-dark-walnut-700: #702816;
+  --color-dark-walnut-800: #591f0a;
+  --color-dark-walnut-900: #491a0c;
+  --color-dark-walnut-950: #2a0b04;
+
+  /* Sémantique de compatibilité pour les composants existants */
+  --color-tangerine: #d65108;
+  --color-tangerine-light: #fef5ee;
+  --color-tangerine-dark: #9e2d07;
+
+  --color-apricot: #efa00b;
+  --color-apricot-light: #fefbf2;
+  --color-apricot-dark: #a96007;
+
+  --color-lime-cream: #0075c4;
+  --color-lime-cream-light: #eef8fe;
+  --color-lime-cream-dark: #034e85;
+
+  --color-muted-teal: #0267c1;
+  --color-muted-teal-light: #f0f7fe;
+  --color-muted-teal-dark: #024383;
+
+  --color-ebony: #2a0b04;
+  --color-ebony-light: #591f0a;
+  --color-ebony-dark: #1f0702;
+  --color-ebony-darker: #130401;
+
+  /* Mappage unifié des palettes standards Tailwind */
+  --color-orange-50: #fef5ee;
+  --color-orange-100: #fde8d7;
+  --color-orange-200: #f9ceaf;
+  --color-orange-300: #f5ac7d;
+  --color-orange-400: #ee7f47;
+  --color-orange-500: #d65108;
+  --color-orange-600: #c13e05;
+  --color-orange-700: #9e2d07;
+  --color-orange-800: #7f250c;
+  --color-orange-900: #68200d;
+  --color-orange-950: #3b0e04;
+
+  --color-amber-50: #fefbf2;
+  --color-amber-100: #fdf5df;
+  --color-amber-200: #fbe8be;
+  --color-amber-300: #f8d591;
+  --color-amber-400: #f3bc59;
+  --color-amber-500: #efa00b;
+  --color-amber-600: #d48206;
+  --color-amber-700: #a96007;
+  --color-amber-800: #884b0d;
+  --color-amber-900: #703e0e;
+  --color-amber-950: #401f04;
+
+  --color-blue-50: #f0f7fe;
+  --color-blue-100: #ddeefc;
+  --color-blue-200: #c1e1fa;
+  --color-blue-300: #97ccf7;
+  --color-blue-400: #64b0f1;
+  --color-blue-500: #0267c1;
+  --color-blue-600: #0154a1;
+  --color-blue-700: #024383;
+  --color-blue-800: #053a6d;
+  --color-blue-900: #0a315b;
+  --color-blue-950: #061f3c;
+
   --color-slate-750: #243044;
   --color-slate-850: #151f32;
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Geist", "Segoe UI", Roboto, sans-serif;
@@ -109,3 +250,22 @@
 .animate-shimmer {
   animation: shimmer 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
+
+/* Coloration légère des fonds de menus déroulants (<select>) */
+select {
+  background-color: #F8FAFD;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+select:hover {
+  background-color: #F1F6FB;
+}
+
+:is(.dark) select {
+  background-color: #1a1f2c;
+}
+
+:is(.dark) select:hover {
+  background-color: #222838;
+}
+

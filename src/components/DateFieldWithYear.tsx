@@ -170,13 +170,13 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1.5">
+          <div className="flex items-center gap-2 mt-2">
             {/* Sélecteur compact d'année */}
-            <div className="w-[58px] shrink-0">
+            <div className="w-[88px] sm:w-[94px] shrink-0">
               <select
                 value={currentYear}
                 onChange={(e) => handleYearChange(e.target.value)}
-                className={`w-full bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 font-bold rounded-lg px-1 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 ${styles.focusRing} transition-all cursor-pointer shadow-2xs text-center`}
+                className={`w-full bg-amber-50/80 dark:bg-amber-950/30 hover:bg-amber-100/70 dark:hover:bg-amber-900/40 border border-amber-300/80 dark:border-amber-700/60 font-bold rounded-lg px-2.5 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 ${styles.focusRing} transition-all cursor-pointer shadow-2xs text-center`}
                 title={`Choisir l'année pour : ${label}`}
               >
                 {yearsList.map((y) => (
@@ -188,14 +188,14 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
             </div>
 
             {/* Datepicker HTML standard compact et lisible */}
-            <div className="w-[136px] sm:w-[142px] shrink-0">
+            <div className="w-[142px] sm:w-[150px] shrink-0">
               <input
                 type="date"
                 min={`${minYear}-01-01`}
                 max={`${maxYear}-12-31`}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className={`w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-slate-100 font-bold text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 ${styles.focusRing} transition-all shadow-2xs`}
+                className={`w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-bold text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 ${styles.focusRing} transition-all shadow-2xs`}
                 required={required}
               />
             </div>
@@ -241,13 +241,13 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2 mt-1.5">
         {/* Sélecteur compact d'année (ex: 1998) */}
-        <div className="w-[58px] shrink-0">
+        <div className="w-[88px] sm:w-[94px] shrink-0">
           <select
             value={currentYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="w-full bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 font-bold rounded-lg px-1 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs text-center"
+            className="w-full bg-amber-50/80 dark:bg-amber-950/30 hover:bg-amber-100/70 dark:hover:bg-amber-900/40 border border-amber-300/80 dark:border-amber-700/60 font-bold rounded-lg px-2.5 py-1.5 text-slate-900 dark:text-slate-100 text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer shadow-2xs text-center"
             title={`Choisir l'année pour : ${label}`}
           >
             {yearsList.map((y) => (
@@ -259,14 +259,14 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
         </div>
 
         {/* Datepicker HTML standard compact */}
-        <div className="w-[136px] sm:w-[142px] shrink-0">
+        <div className="w-[142px] sm:w-[150px] shrink-0">
           <input
             type="date"
             min={`${minYear}-01-01`}
             max={`${maxYear}-12-31`}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full bg-slate-50/90 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-slate-100 font-semibold text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
+            className="w-full bg-slate-50/90 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold text-xs focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-2xs"
             required={required}
           />
         </div>

@@ -185,22 +185,22 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
                         const isExamenPro = jalon.id.includes("examen_professionnel") || jalon.titre.toLowerCase().includes("examen pro") || jalon.conditionsManquantes.some(c => c.libelle.toLowerCase().includes("examen"));
                         if (isExamenPro) {
                           return (
-                            <span className="animate-blink-date text-xs sm:text-sm font-black text-amber-950 dark:text-amber-100 bg-amber-100/90 dark:bg-amber-950 border-2 border-amber-400 dark:border-amber-600 px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-amber-500/20">
-                              <Calendar className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0" />
+                            <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-apricot border-2 border-apricot-dark px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-apricot/30">
+                              <Calendar className="w-4 h-4 text-ebony shrink-0" />
                               <span>Examen pro : {formatDateFrench(jalon.date)}</span>
                             </span>
                           );
                         } else if (jalon.typeJalon === "promouvabilite_grade") {
                           return (
-                            <span className="animate-blink-date text-xs sm:text-sm font-black text-purple-950 dark:text-purple-100 bg-purple-100/90 dark:bg-purple-950 border-2 border-purple-400 dark:border-purple-600 px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-purple-500/20">
-                              <Calendar className="w-4 h-4 text-purple-700 dark:text-purple-400 shrink-0" />
+                            <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-tangerine border-2 border-tangerine-dark px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-tangerine/30">
+                              <Calendar className="w-4 h-4 text-ebony shrink-0" />
                               <span>Éligible au choix : {formatDateFrench(jalon.date)}</span>
                             </span>
                           );
                         } else {
                           return (
-                            <span className="animate-blink-date text-xs sm:text-sm font-black text-slate-900 dark:text-slate-100 bg-white/95 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs">
-                              <Clock className="w-4 h-4 text-slate-600 dark:text-slate-400 shrink-0" />
+                            <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-lime-cream border-2 border-muted-teal px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-muted-teal/30">
+                              <Clock className="w-4 h-4 text-ebony shrink-0" />
                               <span>Éligible dès le {formatDateFrench(jalon.date)}</span>
                             </span>
                           );

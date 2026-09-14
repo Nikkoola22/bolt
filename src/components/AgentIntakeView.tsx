@@ -148,8 +148,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-orange-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative max-w-4xl">
-            <div className="inline-flex items-center gap-2 bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 px-3.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+            <div className="inline-flex items-center gap-2 bg-tangerine/15 text-ebony dark:text-tangerine border border-tangerine/30 px-3.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-tangerine" />
               Espace de Saisie Personnalisée
             </div>
             
@@ -167,13 +167,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             <div className="rounded-2xl p-4 sm:p-5 bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
               
               <div className="flex items-start sm:items-center gap-3.5">
-                <div className="w-10 h-10 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shrink-0">
+                <div className="w-10 h-10 rounded-full bg-apricot/30 text-ebony dark:text-apricot flex items-center justify-center font-bold shrink-0">
                   <Zap className="w-5 h-5" />
                 </div>
 
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20">
+                    <span className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px] px-2.5 py-0.5 rounded-full bg-apricot/30 text-ebony dark:text-apricot border border-tangerine/30">
                       Conseil pratique
                     </span>
                     <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -183,17 +183,15 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
 
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed flex items-center flex-wrap gap-2">
                     <span>Munissez-vous de votre</span>
-                    <span className="relative group/arrete inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-amber-950 dark:text-amber-100 bg-gradient-to-r from-amber-100 via-orange-50 to-amber-100 dark:from-amber-950/70 dark:via-orange-950/50 dark:to-amber-950/70 border border-amber-300/90 dark:border-amber-500/50 shadow-sm shadow-amber-500/25 hover:shadow-md hover:shadow-amber-500/35 hover:scale-105 active:scale-95 transition-all duration-300 ring-2 ring-amber-400/30 dark:ring-amber-400/30 overflow-hidden cursor-default">
-                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 dark:via-white/25 to-transparent animate-shimmer pointer-events-none"></span>
-                      <span className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                    <span className="relative group/arrete inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-ebony bg-apricot border-2 border-apricot-dark shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden cursor-default">
+                      <span className="w-5 h-5 rounded-full bg-ebony text-apricot flex items-center justify-center shrink-0 shadow-2xs">
                         <FileText className="w-3 h-3" />
                       </span>
-                      <span>dernier arrêté</span>
+                      <span>dernier arrêté d'avancement d'échelon et/ou d'avancement de grade</span>
                     </span>
                     <span>et de votre</span>
-                    <span className="relative group/paie inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-emerald-950 dark:text-emerald-100 bg-gradient-to-r from-emerald-100 via-teal-50 to-emerald-100 dark:from-emerald-950/70 dark:via-teal-950/50 dark:to-emerald-950/70 border border-emerald-300/90 dark:border-emerald-500/50 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/35 hover:scale-105 active:scale-95 transition-all duration-300 ring-2 ring-emerald-400/30 dark:ring-emerald-400/30 overflow-hidden cursor-default">
-                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 dark:via-white/25 to-transparent animate-shimmer pointer-events-none"></span>
-                      <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                    <span className="relative group/paie inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-ebony bg-lime-cream border-2 border-muted-teal shadow-sm hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden cursor-default">
+                      <span className="w-5 h-5 rounded-full bg-muted-teal text-ebony flex items-center justify-center shrink-0 shadow-2xs">
                         <FileText className="w-3 h-3" />
                       </span>
                       <span>bulletin de paie</span>
@@ -224,12 +222,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               }}
               className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer shrink-0 ${
                 unlockedStep >= 1
-                  ? "bg-orange-500/10 text-orange-700 dark:text-orange-300 border border-orange-500/30 shadow-2xs"
+                  ? "bg-tangerine/20 text-ebony dark:text-tangerine border border-tangerine/40 shadow-2xs"
                   : "bg-black/[0.03] dark:bg-white/[0.05] text-slate-400"
               }`}
             >
               <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
-                unlockedStep > 1 ? "bg-emerald-500 text-white" : "bg-orange-500 text-white"
+                unlockedStep > 1 ? "bg-muted-teal text-ebony" : "bg-tangerine text-ebony"
               }`}>
                 {unlockedStep > 1 ? "✓" : "1"}
               </span>
@@ -250,12 +248,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               }}
               className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 ${
                 unlockedStep >= 2
-                  ? "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 cursor-pointer shadow-2xs"
+                  ? "bg-apricot/30 text-ebony dark:text-apricot border border-apricot/50 cursor-pointer shadow-2xs"
                   : "bg-black/[0.02] dark:bg-white/[0.03] text-slate-400 opacity-50 cursor-not-allowed"
               }`}
             >
               <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
-                unlockedStep > 2 ? "bg-emerald-500 text-white" : unlockedStep === 2 ? "bg-indigo-600 text-white" : "bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                unlockedStep > 2 ? "bg-muted-teal text-ebony" : unlockedStep === 2 ? "bg-apricot text-ebony" : "bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
               }`}>
                 {unlockedStep > 2 ? "✓" : "2"}
               </span>
@@ -276,12 +274,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               }}
               className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 ${
                 unlockedStep >= 3
-                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 cursor-pointer shadow-2xs"
+                  ? "bg-lime-cream/40 text-ebony dark:text-lime-cream border border-lime-cream/60 cursor-pointer shadow-2xs"
                   : "bg-black/[0.02] dark:bg-white/[0.03] text-slate-400 opacity-50 cursor-not-allowed"
               }`}
             >
               <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
-                unlockedStep === 3 ? "bg-emerald-600 text-white" : "bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                unlockedStep === 3 ? "bg-lime-cream text-ebony" : "bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
               }`}>
                 3
               </span>
@@ -293,12 +291,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
           <div id="section-1" className="space-y-6 scroll-mt-24">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-black/[0.05] dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 rounded-xl bg-orange-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
+                <span className="w-8 h-8 rounded-xl bg-tangerine text-ebony font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                   1
                 </span>
                 <div>
                   <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
-                    <User className="w-5 h-5 text-orange-600" />
+                    <User className="w-5 h-5 text-tangerine-dark dark:text-tangerine" />
                     Votre Identité & Statut Administratif
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
@@ -359,7 +357,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 <select
                   value={formData.statut}
                   onChange={(e) => handleStatutChange(e.target.value as StatutAgent)}
-                  className="w-full bg-slate-50/70 dark:bg-[#18181c] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm focus:bg-white dark:focus:bg-[#18181c] focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs cursor-pointer"
+                  className="w-full bg-amber-50/60 hover:bg-amber-50/90 dark:bg-amber-950/30 border border-amber-300/80 dark:border-amber-700/60 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm focus:bg-white dark:focus:bg-[#18181c] focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-2xs cursor-pointer"
                 >
                   <option value="titulaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fonctionnaire Titulaire</option>
                   <option value="stagiaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fonctionnaire Stagiaire (en cours de stage)</option>
@@ -408,12 +406,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             <div id="section-2" className="space-y-6 scroll-mt-24 animate-fadeIn pt-6 border-t border-black/[0.05] dark:border-white/[0.06]">
               <div className="pb-4 border-b border-black/[0.05] dark:border-white/[0.06]">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
+                  <span className="w-8 h-8 rounded-xl bg-apricot text-ebony font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                     2
                   </span>
                   <div>
                     <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
-                      <Briefcase className="w-5 h-5 text-indigo-600" />
+                      <Briefcase className="w-5 h-5 text-apricot-dark dark:text-apricot" />
                       Votre Cadre d'emplois, Grade & Position Indiciaire
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
@@ -445,7 +443,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                       <select
                         value={formData.cadreEmploiId}
                         onChange={(e) => handleCadreChange(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-3.5 py-3 border-2 border-orange-200 dark:border-orange-700/60 hover:border-orange-400 dark:hover:border-orange-500 focus:border-orange-600 focus:ring-2 focus:ring-orange-500/20 shadow-2xs transition-all cursor-pointer"
+                        className="w-full bg-orange-50/70 hover:bg-orange-50/40 dark:bg-orange-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-3.5 py-3 border-2 border-orange-200 dark:border-orange-700/60 hover:border-orange-400 dark:hover:border-orange-500 focus:bg-white dark:focus:bg-slate-900 focus:border-orange-600 focus:ring-2 focus:ring-orange-500/20 shadow-2xs transition-all cursor-pointer"
                       >
                         {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
                           const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
@@ -470,13 +468,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                       <span>{currentCadre.grades.length} grades statutaires</span>
                     </span>
                     <span className="font-mono text-[11px] text-slate-500">
-                      {currentCadre.filiere}
+                      ID : {currentCadre.id}
                     </span>
                   </div>
                 </div>
 
-                {/* 2. Grade actuel (Thème Violet) */}
-                <div className="bg-gradient-to-b from-purple-50/90 via-white to-violet-50/40 dark:from-purple-950/40 dark:via-slate-900 dark:to-violet-950/20 border-2 border-purple-300 dark:border-purple-700/60 hover:border-purple-500 dark:hover:border-purple-400 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+                {/* 2. Grade actuel (Thème Violet/Indigo) */}
+                <div className="bg-gradient-to-b from-purple-50/90 via-white to-purple-50/40 dark:from-purple-950/40 dark:via-slate-900 dark:to-purple-950/30 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2.5">
                       <div className="flex items-center gap-2">
@@ -496,7 +494,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                       <select
                         value={formData.gradeId}
                         onChange={(e) => handleGradeChange(e.target.value)}
-                        className="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-3.5 py-3 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 focus:border-purple-600 focus:ring-2 focus:ring-purple-500/20 shadow-2xs transition-all cursor-pointer"
+                        className="w-full bg-purple-50/70 hover:bg-purple-50/40 dark:bg-purple-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-3.5 py-3 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-600 focus:ring-2 focus:ring-purple-500/20 shadow-2xs transition-all cursor-pointer"
                       >
                         {currentCadre.grades.map((g) => (
                           <option key={g.id} value={g.id} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
@@ -539,7 +537,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                         <select
                           value={formData.echelonActuel}
                           onChange={(e) => setFormData({ ...formData, echelonActuel: Number(e.target.value) })}
-                          className="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-2.5 py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
+                          className="w-full bg-emerald-50/70 hover:bg-emerald-50/40 dark:bg-emerald-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-2.5 py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
                         >
                           {currentGrade.echelons.map((ech) => (
                             <option key={ech.numero} value={ech.numero} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
@@ -553,7 +551,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                         <select
                           value={formData.quotiteActuelle}
                           onChange={(e) => setFormData({ ...formData, quotiteActuelle: Number(e.target.value) })}
-                          className="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-2.5 py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
+                          className="w-full bg-emerald-50/70 hover:bg-emerald-50/40 dark:bg-emerald-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-2.5 py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
                         >
                           <option value={100} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps plein 100%</option>
                           <option value={90} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel 90%</option>
@@ -630,12 +628,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             <div id="section-3" className="space-y-6 scroll-mt-24 animate-fadeIn pt-6 border-t border-black/[0.05] dark:border-white/[0.06]">
               <div className="pb-4 border-b border-black/[0.05] dark:border-white/[0.06]">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
+                  <span className="w-8 h-8 rounded-xl bg-lime-cream text-ebony font-black flex items-center justify-center text-sm shadow-xs shrink-0">
                     3
                   </span>
                   <div>
                     <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
-                      <Calendar className="w-5 h-5 text-emerald-600" />
+                      <Calendar className="w-5 h-5 text-muted-teal dark:text-lime-cream" />
                       Vos Dates d'Ancienneté
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
@@ -744,10 +742,10 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 <div className="flex justify-end pt-2">
                   <button
                     type="submit"
-                    className="group w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-sm font-extrabold px-8 py-3.5 rounded-full shadow-md shadow-orange-500/25 hover:shadow-lg transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-[0.98]"
+                    className="group w-full sm:w-auto bg-gradient-to-r from-tangerine via-apricot to-tangerine hover:brightness-105 text-ebony text-sm font-extrabold px-8 py-3.5 rounded-full shadow-md shadow-tangerine/30 hover:shadow-lg transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-[0.98]"
                   >
                     <span>Lancer la simulation</span>
-                    <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-1">
+                    <span className="w-6 h-6 rounded-full bg-ebony/15 text-ebony flex items-center justify-center transition-transform group-hover:translate-x-1">
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </button>

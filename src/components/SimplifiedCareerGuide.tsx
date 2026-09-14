@@ -30,7 +30,7 @@ interface SimplifiedCareerGuideProps {
   profil: ProfilAgent;
   resultatSimulation: ResultatSimulation;
   onSwitchToComplete: () => void;
-  onEditProfile: () => void;
+  onBackToMenu: () => void;
   onOpenAddEvent?: (type?: string) => void;
 }
 
@@ -38,7 +38,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   profil,
   resultatSimulation,
   onSwitchToComplete,
-  onEditProfile,
+  onBackToMenu,
   onOpenAddEvent: _onOpenAddEvent,
 }) => {
   // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen) ou null (masqué par défaut)
@@ -153,18 +153,18 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
       {/* 1. CARTE PROFIL DOUBLE-BEZEL (STYLE APPLE WALLET / ID) */}
       <div className="p-1.5 sm:p-2 rounded-[2.2rem] bg-black/[0.04] dark:bg-white/[0.05] ring-1 ring-black/[0.06] dark:ring-white/[0.08] shadow-sm">
         <div className="rounded-[1.8rem] bg-white dark:bg-[#111114] p-5 sm:p-7 relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]">
-          {/* Lueur d'ambiance Apple douce */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-orange-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+          {/* Lueur d'ambiance douce */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-tangerine/15 via-apricot/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             
             {/* Avatar & Identité */}
             <div className="flex items-start sm:items-center gap-4">
               <div className="relative shrink-0">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-[#ff6b00] to-[#ff9e00] flex items-center justify-center text-white font-extrabold text-2xl shadow-sm tracking-tight">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-tangerine to-apricot flex items-center justify-center text-ebony font-extrabold text-2xl shadow-sm tracking-tight">
                   {profil.prenom.charAt(0).toUpperCase()}
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-black ring-2 ring-white dark:ring-[#111114]">
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-muted-teal text-ebony flex items-center justify-center text-[10px] font-black ring-2 ring-white dark:ring-[#111114]">
                   ✓
                 </div>
               </div>
@@ -174,7 +174,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   <h1 className="text-xl sm:text-2xl font-black text-[#1d1d1f] dark:text-[#f5f5f7] tracking-tight">
                     Bonjour {profil.prenom}
                   </h1>
-                  <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+                  <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-tangerine/15 text-ebony dark:text-tangerine border border-tangerine/30">
                     {isContractuel ? "Contractuel" : "Titulaire"}
                   </span>
                 </div>
@@ -189,7 +189,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                 <div className="mt-3 flex items-center gap-3">
                   <div className="flex-1 max-w-xs bg-slate-100 dark:bg-white/[0.08] rounded-full h-2 overflow-hidden">
                     <div 
-                      className="bg-gradient-to-r from-orange-500 to-amber-400 h-full rounded-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      className="bg-gradient-to-r from-tangerine via-apricot to-lime-cream h-full rounded-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
                       style={{ width: `${percentGradeProgress}%` }}
                     ></div>
                   </div>
@@ -203,8 +203,9 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             {/* Boutons d'actions gélules (Pills) */}
             <div className="flex items-center gap-2.5 self-start md:self-center shrink-0 w-full sm:w-auto">
               <button
-                onClick={onEditProfile}
-                className="flex-1 sm:flex-initial text-xs font-semibold bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-full transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98] shadow-sm border border-red-400"
+                onClick={onBackToMenu}
+                className="flex-1 sm:flex-initial text-xs font-bold bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-full transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98] shadow-sm border border-red-400"
+                title="Retour au menu (les 3 cartes)"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
                 <span>Retour au menu</span>
@@ -235,14 +236,14 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
             <div className="bg-slate-50/70 dark:bg-white/[0.03] rounded-2xl p-3 border border-black/[0.04] dark:border-white/[0.04]">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Points de salaire</span>
-              <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 mt-0.5 block truncate">
+              <span className="text-sm sm:text-base font-black text-muted-teal-dark dark:text-lime-cream mt-0.5 block truncate">
                 {resultatSimulation.jalonActuel.indiceMajore} pts
               </span>
             </div>
 
             <div className="bg-slate-50/70 dark:bg-white/[0.03] rounded-2xl p-3 border border-black/[0.04] dark:border-white/[0.04]">
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Base brute mensuelle</span>
-              <span className="text-sm sm:text-base font-black text-amber-600 dark:text-amber-400 mt-0.5 block truncate">
+              <span className="text-sm sm:text-base font-black text-ebony dark:text-apricot mt-0.5 block truncate">
                 ~{Math.round(resultatSimulation.jalonActuel.traitementBrutMensuel)} €
               </span>
             </div>
@@ -254,7 +255,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
       <div className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+            <span className="w-2 h-2 rounded-full bg-tangerine"></span>
             <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white tracking-tight">
               Vos deux questions essentielles
             </h2>
@@ -271,23 +272,23 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             onClick={() => handleSelectQuestion("echelon")}
             className={`p-1.5 rounded-[2rem] transition-all duration-300 cursor-pointer group ${
               activeQuestion === "echelon"
-                ? "bg-emerald-500/20 ring-2 ring-emerald-500 shadow-md scale-[1.01]"
+                ? "bg-lime-cream/30 ring-2 ring-muted-teal shadow-md scale-[1.01]"
                 : "bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
             }`}
           >
             <div className="rounded-[1.65rem] bg-white dark:bg-[#111114] p-6 flex flex-col justify-between h-full space-y-5">
               <div>
                 <div className="flex items-center justify-between gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                  <div className="w-11 h-11 rounded-2xl bg-muted-teal/20 text-ebony dark:text-lime-cream flex items-center justify-center font-bold">
                     <Zap className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-lime-cream text-ebony border border-muted-teal/40 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-teal animate-pulse"></span>
                     100% Automatique
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-4 group-hover:text-muted-teal-dark dark:group-hover:text-lime-cream transition-colors leading-snug">
                   Quand est-ce que mon salaire augmente tout seul ?
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
@@ -298,8 +299,8 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               {/* Aperçu clé & Nested Button-in-Button */}
               <div className="pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-xs">
                 {premierEchelon ? (
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5" />
+                  <span className="font-bold text-ebony dark:text-lime-cream flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-muted-teal-dark dark:text-lime-cream" />
                     {formatDateFrench(premierEchelon.date)} ({delaiPremierTexte})
                   </span>
                 ) : (
@@ -307,7 +308,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                 )}
 
                 <div className="flex items-center gap-2">
-                  <span className="font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full text-xs">
+                  <span className="font-black text-ebony bg-lime-cream border border-muted-teal/40 px-2.5 py-1 rounded-full text-xs shadow-2xs">
                     +{gainBrutPremier} € brut
                   </span>
                   <span className="w-6 h-6 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
@@ -323,23 +324,23 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
             onClick={() => handleSelectQuestion("promotion")}
             className={`p-1.5 rounded-[2rem] transition-all duration-300 cursor-pointer group ${
               activeQuestion === "promotion"
-                ? "bg-purple-500/20 ring-2 ring-purple-500 shadow-md scale-[1.01]"
+                ? "bg-apricot/30 ring-2 ring-tangerine shadow-md scale-[1.01]"
                 : "bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08]"
             }`}
           >
             <div className="rounded-[1.65rem] bg-white dark:bg-[#111114] p-6 flex flex-col justify-between h-full space-y-5">
               <div>
                 <div className="flex items-center justify-between gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+                  <div className="w-11 h-11 rounded-2xl bg-tangerine/20 text-ebony dark:text-tangerine flex items-center justify-center font-bold">
                     <Star className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20">
+                  <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-apricot text-ebony border border-tangerine/40">
                     Sans examen
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug">
-                  Comment monter de grade sans repasser d'examen ?
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-4 group-hover:text-tangerine-dark dark:group-hover:text-apricot transition-colors leading-snug">
+                  Comment monter de grade ou de catégorie sans repasser d'examen ?
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                   L'avancement au choix pour valoriser votre ancienneté et votre engagement.
@@ -349,8 +350,8 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               {/* Aperçu clé & Nested Button-in-Button */}
               <div className="pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-xs">
                 {prochainePromouvabilite ? (
-                  <span className="font-bold text-purple-700 dark:text-purple-400 flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5" />
+                  <span className="font-bold text-ebony dark:text-apricot flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-tangerine" />
                     Dès le {formatDateFrench(prochainePromouvabilite.date)}
                   </span>
                 ) : (
@@ -358,7 +359,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                 )}
 
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-purple-700 dark:text-purple-300 bg-purple-500/10 px-2.5 py-1 rounded-full text-xs">
+                  <span className="font-bold text-ebony bg-apricot border border-tangerine/40 px-2.5 py-1 rounded-full text-xs shadow-2xs">
                     Conditions
                   </span>
                   <span className="w-6 h-6 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition-transform">
@@ -393,15 +394,15 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-black/[0.05] dark:border-white/[0.06]">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-teal-dark dark:text-lime-cream">
                     Progression automatique
                   </span>
                   <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
                     Vos deux prochaines augmentations garanties
                   </h3>
                 </div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-black/[0.04] dark:bg-white/[0.06] px-3.5 py-1.5 rounded-full self-start sm:self-center">
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-ebony dark:text-lime-cream bg-lime-cream/30 border border-muted-teal/30 px-3.5 py-1.5 rounded-full self-start sm:self-center">
+                  <Check className="w-3.5 h-3.5 text-muted-teal-dark dark:text-lime-cream" />
                   <span>Aucun dossier à monter</span>
                 </div>
               </div>
@@ -413,12 +414,12 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     
                     {/* MARCHE 1 */}
-                    <div className="rounded-3xl p-6 bg-gradient-to-b from-emerald-500/[0.04] to-transparent border border-emerald-500/30 space-y-5 relative">
+                    <div className="rounded-3xl p-6 bg-gradient-to-b from-lime-cream/20 to-transparent border border-muted-teal/40 space-y-5 relative">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-600 text-white shadow-xs">
+                        <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-lime-cream text-ebony border border-muted-teal/40 shadow-xs">
                           1er Palier • Prochaine étape
                         </span>
-                        <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                        <span className="text-xs font-bold text-ebony dark:text-lime-cream">
                           Dans {delaiPremierTexte}
                         </span>
                       </div>
@@ -436,11 +437,11 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       <div className="space-y-1.5 bg-black/[0.02] dark:bg-white/[0.03] p-3 rounded-2xl border border-black/[0.03] dark:border-white/[0.04]">
                         <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
                           <span>Temps accompli vers l'échelon {premierEchelon.echelonNumero}</span>
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">{percentEchelonProgress}%</span>
+                          <span className="text-muted-teal-dark dark:text-lime-cream font-bold">{percentEchelonProgress}%</span>
                         </div>
                         <div className="w-full bg-slate-200/70 dark:bg-white/10 rounded-full h-2 overflow-hidden">
                           <div 
-                            className="bg-emerald-500 h-full rounded-full transition-all duration-700"
+                            className="bg-muted-teal h-full rounded-full transition-all duration-700"
                             style={{ width: `${percentEchelonProgress}%` }}
                           ></div>
                         </div>
@@ -450,10 +451,10 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       <div className="grid grid-cols-2 gap-3 bg-white dark:bg-[#18181c] p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
                         <div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                            <DollarSign className="w-3 h-3 text-emerald-500" />
+                            <DollarSign className="w-3 h-3 text-muted-teal" />
                             Gain Mensuel
                           </span>
-                          <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5 tracking-tight">
+                          <div className="text-xl sm:text-2xl font-black text-ebony dark:text-lime-cream mt-0.5 tracking-tight">
                             +{gainBrutPremier} € <span className="text-[11px] font-medium text-slate-400">brut</span>
                           </div>
                           <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -463,7 +464,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                         <div>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                            <Award className="w-3 h-3 text-indigo-500" />
+                            <Award className="w-3 h-3 text-ebony/60 dark:text-lime-cream/60" />
                             Points d'indice
                           </span>
                           <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5 tracking-tight">
@@ -476,12 +477,12 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       </div>
 
                       {/* Ce que vous devez faire */}
-                      <div className="bg-emerald-500/10 p-3.5 rounded-2xl border border-emerald-500/20 flex items-center gap-3">
-                        <span className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                      <div className="bg-lime-cream/30 p-3.5 rounded-2xl border border-muted-teal/40 flex items-center gap-3">
+                        <span className="w-7 h-7 rounded-full bg-muted-teal text-ebony flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
                           ✓
                         </span>
                         <div className="text-xs text-slate-700 dark:text-slate-300">
-                          <strong className="text-emerald-900 dark:text-emerald-200">Ce que vous devez faire : </strong>
+                          <strong className="text-ebony dark:text-lime-cream">Ce que vous devez faire : </strong>
                           Rien ! L'avancement est garanti par votre statut et validé automatiquement par arrêté DRH.
                         </div>
                       </div>
@@ -489,12 +490,12 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                     {/* MARCHE 2 */}
                     {deuxiemeEchelon ? (
-                      <div className="rounded-3xl p-6 bg-gradient-to-b from-indigo-500/[0.04] to-transparent border border-indigo-500/30 space-y-5 relative">
+                      <div className="rounded-3xl p-6 bg-gradient-to-b from-muted-teal/15 to-transparent border border-muted-teal/30 space-y-5 relative">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-indigo-600 text-white shadow-xs">
+                          <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-muted-teal text-ebony border border-muted-teal-dark/30 shadow-xs">
                             2e Palier • Perspective
                           </span>
-                          <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">
+                          <span className="text-xs font-bold text-ebony dark:text-lime-cream">
                             Dans {delaiDeuxiemeTexte}
                           </span>
                         </div>
@@ -512,10 +513,10 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                         <div className="grid grid-cols-2 gap-3 bg-white dark:bg-[#18181c] p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
                           <div>
                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                              <DollarSign className="w-3 h-3 text-indigo-500" />
+                              <DollarSign className="w-3 h-3 text-muted-teal" />
                               Gain Cumulé
                             </span>
-                            <div className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-0.5 tracking-tight">
+                            <div className="text-xl sm:text-2xl font-black text-ebony dark:text-lime-cream mt-0.5 tracking-tight">
                               +{gainBrutDeuxiemeCumule} € <span className="text-[11px] font-medium text-slate-400">brut</span>
                             </div>
                             <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -525,7 +526,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                           <div>
                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                              <Award className="w-3 h-3 text-indigo-500" />
+                              <Award className="w-3 h-3 text-ebony/60 dark:text-lime-cream/60" />
                               Indice Atteint
                             </span>
                             <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5 tracking-tight">
@@ -537,8 +538,8 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                           </div>
                         </div>
 
-                        <div className="bg-indigo-500/10 p-3.5 rounded-2xl border border-indigo-500/20 flex items-center gap-3">
-                          <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                        <div className="bg-muted-teal/15 p-3.5 rounded-2xl border border-muted-teal/30 flex items-center gap-3">
+                          <Clock className="w-5 h-5 text-ebony dark:text-lime-cream shrink-0" />
                           <div className="text-xs text-slate-700 dark:text-slate-300">
                             Franchi automatiquement après la durée statutaire requise dans l'échelon {premierEchelon.echelonNumero}.
                           </div>
@@ -604,15 +605,15 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-black/[0.05] dark:border-white/[0.06]">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400">
-                    Évolution de grade
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-tangerine-dark dark:text-apricot">
+                    Évolution de grade ou de catégorie
                   </span>
                   <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mt-0.5">
-                    Changer de grade au mérite et à l'ancienneté
+                    Changer de grade ou de catégorie au mérite et à l'ancienneté
                   </h3>
                 </div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-500/10 px-3.5 py-1.5 rounded-full self-start sm:self-center border border-purple-500/20">
-                  <Star className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-ebony dark:text-apricot bg-apricot/30 px-3.5 py-1.5 rounded-full self-start sm:self-center border border-tangerine/40">
+                  <Star className="w-3.5 h-3.5 text-tangerine" />
                   <span>Sans examen obligatoire</span>
                 </div>
               </div>
@@ -623,15 +624,15 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                   {/* CARTE VISÉE & PROMOUVABILITÉ */}
                   <div 
                     id="block-prochain-metier"
-                    className="rounded-3xl p-6 sm:p-7 bg-gradient-to-b from-purple-500/[0.04] to-transparent border border-purple-500/30 space-y-6 scroll-mt-24"
+                    className="rounded-3xl p-6 sm:p-7 bg-gradient-to-b from-apricot/15 to-transparent border border-tangerine/40 space-y-6 scroll-mt-24"
                   >
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
+                          <span className="text-xs font-bold text-ebony dark:text-apricot">
                             Prochain niveau de métier visé :
                           </span>
-                          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-600 text-white shadow-xs">
+                          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-tangerine text-ebony shadow-xs">
                             Promouvabilité
                           </span>
                         </div>
@@ -644,14 +645,14 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       </div>
 
                       <div className="bg-white dark:bg-[#18181c] p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs flex items-center gap-3.5 self-start md:self-center shrink-0">
-                        <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold shadow-xs shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-tangerine text-ebony flex items-center justify-center font-bold shadow-xs shrink-0">
                           <Calendar className="w-5 h-5" />
                         </div>
                         <div>
                           <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">
                             Date d'éligibilité (Promouvabilité)
                           </span>
-                          <span className="text-sm sm:text-base font-black text-purple-700 dark:text-purple-300">
+                          <span className="text-sm sm:text-base font-black text-ebony dark:text-apricot">
                             {formatDateFrench(prochainePromouvabilite.date)}
                           </span>
                           <span className="text-[11px] text-slate-500 block">
@@ -669,16 +670,16 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {prochainePromouvabilite.conditionsRemplies.map((c, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20 text-xs">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                            <span className="font-semibold text-emerald-950 dark:text-emerald-200">{c.libelle} (Validé !)</span>
+                          <div key={idx} className="flex items-center gap-2.5 bg-lime-cream/30 p-3 rounded-2xl border border-muted-teal/40 text-xs">
+                            <CheckCircle2 className="w-4 h-4 text-muted-teal-dark dark:text-lime-cream shrink-0" />
+                            <span className="font-semibold text-ebony dark:text-lime-cream">{c.libelle} (Validé !)</span>
                           </div>
                         ))}
 
                         {prochainePromouvabilite.conditionsManquantes.map((c, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 bg-amber-500/10 p-3 rounded-2xl border border-amber-500/20 text-xs">
-                            <Clock className="w-4 h-4 text-amber-600 shrink-0" />
-                            <span className="font-semibold text-amber-950 dark:text-amber-200">{c.libelle}</span>
+                          <div key={idx} className="flex items-center gap-2.5 bg-apricot/30 p-3 rounded-2xl border border-tangerine/40 text-xs">
+                            <Clock className="w-4 h-4 text-ebony dark:text-apricot shrink-0" />
+                            <span className="font-semibold text-ebony dark:text-apricot">{c.libelle}</span>
                           </div>
                         ))}
                       </div>
@@ -686,22 +687,22 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                     {/* 3 Conseils simples pour agir */}
                     <div className="bg-white dark:bg-[#18181c] p-5 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] space-y-3">
-                      <h5 className="text-xs font-black uppercase tracking-wider text-purple-900 dark:text-purple-300 flex items-center gap-2">
+                      <h5 className="text-xs font-black uppercase tracking-wider text-ebony dark:text-tangerine flex items-center gap-2">
                         <Briefcase className="w-4 h-4" />
                         <span>Ce que vous devez faire pour maximiser vos chances :</span>
                       </h5>
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 dark:text-slate-300">
                         <div className="bg-black/[0.02] dark:bg-white/[0.03] p-3 rounded-xl">
-                          <span className="font-bold text-purple-700 dark:text-purple-400 block mb-1">1. L'entretien annuel</span>
+                          <span className="font-bold text-ebony dark:text-tangerine block mb-1">1. L'entretien annuel</span>
                           Échangez avec votre responsable lors de votre entretien professionnel pour formaliser votre souhait.
                         </div>
                         <div className="bg-black/[0.02] dark:bg-white/[0.03] p-3 rounded-xl">
-                          <span className="font-bold text-purple-700 dark:text-purple-400 block mb-1">2. Vos formations</span>
+                          <span className="font-bold text-ebony dark:text-tangerine block mb-1">2. Vos formations</span>
                           Suivez vos formations CNFPT pour attester de vos compétences.
                         </div>
                         <div className="bg-black/[0.02] dark:bg-white/[0.03] p-3 rounded-xl">
-                          <span className="font-bold text-purple-700 dark:text-purple-400 block mb-1">3. La liste de fin d'année</span>
+                          <span className="font-bold text-ebony dark:text-tangerine block mb-1">3. La liste de fin d'année</span>
                           La mairie arrête le tableau d'avancement chaque fin d'année pour prise d'effet au 1er janvier.
                         </div>
                       </div>
@@ -709,11 +710,11 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
                     {/* Accélérateur Examen Pro */}
                     {jalonExamenPro && jalonExamenPro.id !== prochainePromouvabilite.id && (
-                      <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-4 flex items-center justify-between gap-3 text-xs">
+                      <div className="bg-apricot/20 border border-tangerine/30 rounded-2xl p-4 flex items-center justify-between gap-3 text-xs">
                         <div className="flex items-center gap-2.5">
-                          <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                          <Sparkles className="w-4 h-4 text-tangerine shrink-0" />
                           <div>
-                            <strong className="text-slate-900 dark:text-white">Option « Accélérateur » : </strong>
+                            <strong className="text-ebony dark:text-apricot">Option « Accélérateur » : </strong>
                             Un examen professionnel existe dès le {formatDateFrench(jalonExamenPro.date)} pour devancer cette date.
                           </div>
                         </div>
@@ -729,7 +730,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       className="w-full p-3.5 bg-black/[0.02] hover:bg-black/[0.04] dark:bg-white/[0.02] dark:hover:bg-white/[0.05] text-left flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-300 cursor-pointer transition-colors"
                     >
                       <span className="flex items-center gap-2">
-                        <ShieldCheck className="w-4 h-4 text-purple-600" />
+                        <ShieldCheck className="w-4 h-4 text-tangerine" />
                         <span>📚 Pour les curieux : fonctionnement des Lignes Directrices de Gestion (LDG)</span>
                       </span>
                       {showLegalPromo ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -765,7 +766,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
         <div className="rounded-[1.8rem] bg-white dark:bg-[#111114] p-5 sm:p-6 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+              <div className="w-9 h-9 rounded-full bg-apricot/30 text-ebony dark:text-apricot flex items-center justify-center font-bold">
                 <HelpCircle className="w-5 h-5" />
               </div>
               <div>
@@ -795,7 +796,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                     <span className="font-bold text-xs text-slate-900 dark:text-white">
                       {item.terme}
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-apricot/40 text-ebony dark:text-apricot">
                       {item.badge}
                     </span>
                   </div>

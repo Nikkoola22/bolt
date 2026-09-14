@@ -6,14 +6,14 @@ import { Briefcase, Award, Clock, DollarSign, ArrowRight, ArrowLeft, User, Spark
 interface ProfileOverviewCardProps {
   profil: ProfilAgent;
   prochainEchelonJalon: JalonTimeline | null;
-  onEditProfile: () => void;
+  onBackToMenu: () => void;
   onScrollToNextMilestone?: () => void;
 }
 
 export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
   profil,
   prochainEchelonJalon,
-  onEditProfile,
+  onBackToMenu,
   onScrollToNextMilestone
 }) => {
   const { cadre, grade } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
@@ -42,35 +42,35 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
   const getCategoryBadgeClass = (cat: string) => {
     switch (cat) {
       case "A":
-        return "bg-purple-500/20 text-purple-200 border-purple-400/30";
+        return "bg-tangerine/20 text-ebony dark:text-tangerine border-tangerine/40";
       case "B":
-        return "bg-indigo-500/20 text-indigo-200 border-indigo-400/30";
+        return "bg-muted-teal/20 text-ebony dark:text-lime-cream border-muted-teal/40";
       default:
-        return "bg-orange-500/20 text-orange-200 border-orange-400/30";
+        return "bg-lime-cream/30 text-ebony dark:text-lime-cream border-lime-cream/40";
     }
   };
 
   const getCategoryTagClass = (cat: string) => {
     switch (cat) {
       case "A":
-        return "bg-purple-100 dark:bg-purple-950/70 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-700";
+        return "bg-tangerine/20 text-ebony dark:text-tangerine border border-tangerine/40";
       case "B":
-        return "bg-indigo-100 dark:bg-indigo-950/70 text-indigo-800 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-700";
+        return "bg-muted-teal/20 text-ebony dark:text-lime-cream border border-muted-teal/40";
       default:
-        return "bg-orange-100 dark:bg-orange-950/70 text-orange-950 dark:text-orange-200 border border-orange-300 dark:border-orange-700";
+        return "bg-lime-cream/30 text-ebony dark:text-lime-cream border border-lime-cream/40";
     }
   };
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800 overflow-hidden ring-1 ring-slate-900/5 dark:ring-white/5 transition-all">
       {/* Header card avec look exécutif et badge autorité */}
-      <div className="bg-gradient-to-r from-slate-950 via-stone-900 to-orange-950/70 p-4 sm:p-6 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-ebony-darker via-ebony-dark to-ebony p-4 sm:p-6 text-white relative overflow-hidden">
         {/* Lueur d'ambiance en arrière-plan */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-tangerine/15 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
 
         <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white font-black text-xl shadow-inner ring-2 ring-white/20 shrink-0">
+            <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-br from-tangerine to-apricot flex items-center justify-center text-ebony font-black text-xl shadow-inner ring-2 ring-white/20 shrink-0">
               {profil.prenom ? profil.prenom[0].toUpperCase() : "A"}
             </div>
             <div>
@@ -81,19 +81,19 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${getCategoryBadgeClass(grade.categorie)}`}>
                   Catégorie {grade.categorie}
                 </span>
-                <span className="text-xs bg-orange-500/20 text-orange-200 border border-orange-400/30 px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1">
-                  <Building2 className="w-3 h-3 text-orange-300" />
+                <span className="text-xs bg-apricot/20 text-apricot border border-apricot/30 px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1">
+                  <Building2 className="w-3 h-3 text-apricot" />
                   {profil.collectivite || "Collectivité de Gennevilliers"}
                 </span>
               </div>
               <p className="text-xs text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
                 <span className="flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-orange-400" />
+                  <User className="w-3.5 h-3.5 text-apricot" />
                   <span>{statutLibelle}</span>
                 </span>
                 <span className="text-slate-600">•</span>
-                <span className="text-emerald-300 font-medium flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-400" />
+                <span className="text-lime-cream font-medium flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-apricot" />
                   Situation à jour au 11 sept. 2026
                 </span>
               </p>
@@ -102,9 +102,9 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
 
           <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
             <button
-              onClick={onEditProfile}
-              className="text-xs font-semibold bg-red-500 hover:bg-red-600 text-white px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-xs hover:shadow-sm border border-red-400"
-              title="Retour au menu"
+              onClick={onBackToMenu}
+              className="text-xs font-bold bg-red-500 hover:bg-red-600 text-white px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-xs hover:shadow-sm border border-red-400 active:scale-[0.98]"
+              title="Retour au menu (les 3 cartes)"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-white" />
               <span>Retour au menu</span>
@@ -277,7 +277,7 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-200/80 dark:border-slate-700 p-0.5">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-xs"
+              className="h-full bg-gradient-to-r from-tangerine via-apricot to-lime-cream rounded-full transition-all duration-700 ease-out shadow-xs"
               style={{ width: `${progressionPourcent}%` }}
             ></div>
           </div>
@@ -286,28 +286,28 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
         {prochainEchelonJalon && (
           <div className={`lg:border-l lg:border-slate-200 dark:lg:border-slate-800 lg:pl-5 flex items-center justify-between sm:justify-start gap-3.5 w-full lg:w-auto ${
             isContractuel 
-              ? "bg-amber-50/80 dark:bg-amber-950/40 border-amber-300/80 dark:border-amber-800/60" 
-              : "bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200/70 dark:border-emerald-800/60"
+              ? "bg-apricot/20 dark:bg-apricot/10 border-apricot/50 dark:border-apricot/40" 
+              : "bg-lime-cream/20 dark:bg-lime-cream/10 border-lime-cream/50 dark:border-lime-cream/30"
           } border rounded-xl p-3 shadow-2xs`}>
             <div className="flex items-center gap-3 min-w-0">
-              <div className={`p-2 rounded-lg ${isContractuel ? "bg-amber-600" : "bg-emerald-600"} text-white shrink-0`}>
+              <div className={`p-2 rounded-lg ${isContractuel ? "bg-apricot text-ebony" : "bg-lime-cream text-ebony"} shrink-0 shadow-xs font-bold`}>
                 <Award className="w-5 h-5" />
               </div>
               <div className="min-w-0">
-                <div className={`text-[10px] ${isContractuel ? "text-amber-900 dark:text-amber-300" : "text-emerald-900 dark:text-emerald-300"} uppercase font-black tracking-wider truncate`}>
+                <div className={`text-[10px] ${isContractuel ? "text-ebony dark:text-apricot" : "text-ebony dark:text-lime-cream"} uppercase font-black tracking-wider truncate`}>
                   {isContractuel ? "Réévaluation indicative (Avenant)" : "Prochain échelon garanti"}
                 </div>
                 <div className="mt-1 mb-1">
-                  <span className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-black px-3 py-1 rounded-xl shadow-2xs border ${
+                  <span className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-black px-3.5 py-1.5 rounded-xl shadow-xs border-2 ${
                     isContractuel
-                      ? "text-amber-950 dark:text-amber-100 bg-white dark:bg-slate-900 border-amber-400 dark:border-amber-700"
-                      : "text-emerald-950 dark:text-emerald-100 bg-white dark:bg-slate-900 border-emerald-400 dark:border-emerald-700"
+                      ? "text-ebony bg-apricot border-apricot-dark"
+                      : "text-ebony bg-lime-cream border-muted-teal"
                   }`}>
-                    <Calendar className={`w-3.5 h-3.5 ${isContractuel ? "text-amber-700 dark:text-amber-400" : "text-emerald-700 dark:text-emerald-400"}`} />
+                    <Calendar className="w-4 h-4 text-ebony" />
                     <span>{isContractuel ? `Réévaluation : ${formatDateFrench(prochainEchelonJalon.date)}` : `Prise d'échelon : ${formatDateFrench(prochainEchelonJalon.date)}`}</span>
                   </span>
                 </div>
-                <div className={`text-[11px] ${isContractuel ? "text-amber-800 dark:text-amber-300" : "text-emerald-800 dark:text-emerald-300"} font-bold truncate`}>
+                <div className={`text-[11px] ${isContractuel ? "text-ebony dark:text-apricot font-bold" : "text-ebony dark:text-lime-cream font-bold"} truncate`}>
                   +{prochainEchelonJalon.gainIndiciaire} pts (~+{Math.round(prochainEchelonJalon.gainFinancierBrutMensuel || 0)} € brut/mois)
                 </div>
               </div>
@@ -317,8 +317,8 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
                 onClick={onScrollToNextMilestone}
                 className={`text-xs ${
                   isContractuel 
-                    ? "text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-white bg-white dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-slate-700 border-amber-300/80 dark:border-amber-700/80" 
-                    : "text-emerald-800 dark:text-emerald-300 hover:text-emerald-950 dark:hover:text-white bg-white dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-slate-700 border-emerald-300/80 dark:border-emerald-700/80"
+                    ? "text-ebony hover:text-black dark:text-apricot bg-apricot/30 dark:bg-apricot/20 hover:bg-apricot/50 border-apricot/60" 
+                    : "text-ebony hover:text-black dark:text-lime-cream bg-lime-cream/40 dark:bg-lime-cream/20 hover:bg-lime-cream/60 border-muted-teal/50"
                 } border p-2 rounded-lg transition-all cursor-pointer shadow-2xs shrink-0`}
                 title="Consulter ce jalon sur la frise"
               >

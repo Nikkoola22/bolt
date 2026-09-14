@@ -49,7 +49,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel C1 -> C2 (accès accéléré)",
+                descriptionVoie: "Examen professionnel C1 -> C2",
                 echelonMinimum: 4,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 3,
@@ -59,7 +59,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (ancienneté C1)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 5,
@@ -124,7 +124,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 6e échelon et 5 ans en C2)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -145,7 +145,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Promotion interne B au choix (au moins 8 ans de services effectifs)",
+                descriptionVoie: "Promotion interne B au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteServicesPublicsAnnees: 8,
@@ -187,7 +187,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Promotion interne B au choix (au moins 8 ans de services effectifs)",
+                descriptionVoie: "Promotion interne B au choix",
                 echelonMinimum: 4,
                 ancienneteEchelonAnnees: 0,
                 ancienneteServicesPublicsAnnees: 8,
@@ -241,7 +241,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Voie Examen Professionnel (accès dès l échelon 6)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 3,
@@ -259,7 +259,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Voie Au Choix (Tableau d avancement annuel au mérite / ancienneté)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 8,
                 ancienneteEchelonAnnees: 1,
                 ancienneteCadreAnnees: 5,
@@ -335,7 +335,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel 1re classe (au moins 1 an au 6e échelon et 3 ans en B)",
+                descriptionVoie: "Examen professionnel 1re classe",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 3,
@@ -345,7 +345,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 7e échelon et 5 ans en B)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 7,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -468,7 +468,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel Attaché Principal (dès l échelon 5)",
+                descriptionVoie: "Examen professionnel Attaché Principal",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 3,
@@ -485,7 +485,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 7e échelon et 7 ans en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 7,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 7,
@@ -534,7 +534,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 5e échelon + 6 ans de fonctions d encadrement ou d expertise)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 6,
@@ -613,7 +613,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel C1 -> C2 (accès accéléré)",
+                descriptionVoie: "Examen professionnel C1 -> C2",
                 echelonMinimum: 4,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 3,
@@ -623,7 +623,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (ancienneté C1)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 5,
@@ -688,7 +688,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (1 an d ancienneté au 6e échelon de C2 + 5 ans dans le grade C2)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -802,7 +802,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 5e échelon et 6 ans dans le grade)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 6,
@@ -919,7 +919,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel (accès dès l échelon 6 et 3 ans en B)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 3,
@@ -929,7 +929,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 8e échelon et 5 ans en B)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 8,
                 ancienneteEchelonAnnees: 1,
                 ancienneteCadreAnnees: 5,
@@ -994,7 +994,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel (au moins 1 an au 6e échelon et 3 ans en B)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 3,
@@ -1004,7 +1004,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 7e échelon et 5 ans en B)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 7,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -1119,7 +1119,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 5e échelon et 5 ans de services effectifs en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 5,
@@ -1167,7 +1167,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 5e échelon et 6 ans de fonctions d encadrement supérieur)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 6,
@@ -1246,7 +1246,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an d ancienneté au 6e échelon et 5 ans dans le grade de C2)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -1275,7 +1275,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Promotion interne B au choix (au moins 7 ans de services)",
+                descriptionVoie: "Promotion interne B au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteServicesPublicsAnnees: 7,
@@ -1370,7 +1370,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 6e échelon et 5 ans dans le grade)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -1489,7 +1489,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 6e échelon et 5 ans de services effectifs en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -1565,7 +1565,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 6e échelon et 5 ans en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -1638,7 +1638,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 5e échelon et 9 ans de services effectifs en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 9,
@@ -1725,7 +1725,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 5 ans dans le grade C1)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteGradeAnnees: 5,
@@ -1790,7 +1790,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 6e échelon et 5 ans en C2)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -1811,7 +1811,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Promotion interne B au choix (au moins 8 ans de services effectifs)",
+                descriptionVoie: "Promotion interne B au choix",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteServicesPublicsAnnees: 8,
@@ -1907,7 +1907,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel (accès dès l échelon 6 et 3 ans en B)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 3,
@@ -1917,7 +1917,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 8e échelon et 5 ans en B)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 8,
                 ancienneteEchelonAnnees: 1,
                 ancienneteCadreAnnees: 5,
@@ -2003,7 +2003,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel (au moins 1 an au 6e échelon et 3 ans en B)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 6,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 3,
@@ -2013,7 +2013,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 1 an au 7e échelon et 5 ans en B)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 7,
                 ancienneteEchelonAnnees: 1,
                 ancienneteGradeAnnees: 5,
@@ -2129,7 +2129,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel (dès le 5e échelon et 3 ans en catégorie A)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 3,
@@ -2139,7 +2139,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 7e échelon et 7 ans en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 7,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 7,
@@ -2211,7 +2211,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
             conditions: [
               {
                 typeVoie: "examen_professionnel",
-                descriptionVoie: "Examen professionnel (dès le 5e échelon et 3 ans en catégorie A)",
+                descriptionVoie: "Examen professionnel",
                 echelonMinimum: 5,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 3,
@@ -2221,7 +2221,7 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
               },
               {
                 typeVoie: "au_choix",
-                descriptionVoie: "Au choix (au moins 7e échelon et 7 ans en catégorie A)",
+                descriptionVoie: "Au choix",
                 echelonMinimum: 7,
                 ancienneteEchelonAnnees: 0,
                 ancienneteCadreAnnees: 7,

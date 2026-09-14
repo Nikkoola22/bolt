@@ -16,6 +16,7 @@ import { ProfileEditModal } from "./components/ProfileEditModal";
 import { AgentIntakeView } from "./components/AgentIntakeView";
 import { ModeSelectionView } from "./components/ModeSelectionView";
 import { SimplifiedCareerGuide } from "./components/SimplifiedCareerGuide";
+import { LdgSimulatorView } from "./components/LdgSimulatorView";
 import { useDarkMode } from "./hooks/useDarkMode";
 import confetti from "canvas-confetti";
 import { 
@@ -25,9 +26,9 @@ import {
   Lightbulb, 
   Sparkles, 
   FileText, 
-  ShieldCheck,
+  ShieldCheck, 
   Zap,
-  FileEdit
+  ArrowLeft 
 } from "lucide-react";
 
 export function App() {
@@ -42,7 +43,8 @@ export function App() {
   // - "choix_mode" : Page intermédiaire avec les 2 boutons (Version simplifiée vs Version complète)
   // - "simplifiee" : Les 2 questions directes (échelon ? avancement/promotion ?)
   // - "complete" : Le processus normal complet avec frise chronologique, comparateur, etc.
-  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete">("saisie");
+  // - "ldg" : Simulateur de points de promotion interne (LDG-PI)
+  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete" | "ldg">("saisie");
 
   // Onglet actif dans le mode complet
   const [activeTab, setActiveTab] = useState<"frise" | "perspectives" | "comparateur" | "conseils">("frise");
@@ -101,6 +103,11 @@ export function App() {
     setAppMode("saisie");
   };
 
+  const handleBackToMenu = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    setAppMode("choix_mode");
+  };
+
   const handleOpenAddEventWithType = (type?: string) => {
     setInitialEventType(type);
     setIsEventDrawerOpen(true);
@@ -131,6 +138,8 @@ export function App() {
         onOpenGlossary={() => setIsGlossaryOpen(true)}
         onOpenPrintSummary={() => setIsPrintSummaryOpen(true)}
         onResetEvents={handleResetEvents}
+        onBackToMenu={handleBackToMenu}
+        showBackToMenu={appMode !== "saisie" && appMode !== "choix_mode"}
       />
 
       {/* Contenu principal */}
@@ -171,6 +180,30 @@ export function App() {
               setActiveTab("frise");
             }}
             onBackToSaisie={handleBackToSaisie}
+            onOpenLdg={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("ldg");
+            }}
+          />
+        )}
+
+        {/* MODE 5 : SIMULATEUR DE POINTS LDG PROMOTION INTERNE */}
+        {appMode === "ldg" && (
+          <LdgSimulatorView
+            profil={currentProfile}
+            onBackToModeSelection={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("choix_mode");
+            }}
+            onSelectComplete={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("complete");
+              setActiveTab("frise");
+            }}
+            onSelectSimplified={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("simplifiee");
+            }}
           />
         )}
 
@@ -183,7 +216,7 @@ export function App() {
               setAppMode("complete");
               setActiveTab("frise");
             }}
-            onEditProfile={handleBackToSaisie}
+            onBackToMenu={handleBackToMenu}
             onOpenAddEvent={(type) => handleOpenAddEventWithType(type)}
           />
         )}
@@ -195,7 +228,7 @@ export function App() {
             <ProfileOverviewCard
               profil={currentProfile}
               prochainEchelonJalon={resultatSimulation.prochainEchelonJalon}
-              onEditProfile={handleBackToSaisie}
+              onBackToMenu={handleBackToMenu}
               onScrollToNextMilestone={() => {
                 if (resultatSimulation.prochainEchelonJalon) {
                   setSelectedJalon(resultatSimulation.prochainEchelonJalon);
@@ -206,23 +239,23 @@ export function App() {
             {/* Barre de navigation par onglets thématiques (Optimisée Mobile iPhone & Desktop - 100% visible sans slider) */}
             <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-2 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-3">
               
-              {/* Groupe 1 : Raccourcis Modes Saisie & Version Simplifiée (2 colonnes sur mobile, ligne sur desktop) */}
+              {/* Groupe 1 : Raccourcis Modes (Menu 3 cartes & Version Simplifiée) */}
               <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 shrink-0">
                 <button
-                  onClick={handleBackToSaisie}
-                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-2xs"
-                  title="Revenir à la saisie du profil"
+                  onClick={handleBackToMenu}
+                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-bold text-white bg-red-500 hover:bg-red-600 border border-red-400 transition-all cursor-pointer shadow-2xs active:scale-[0.98]"
+                  title="Retourner aux 3 cartes du menu"
                 >
-                  <FileEdit className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 shrink-0" />
-                  <span className="truncate">Modifier saisie</span>
+                  <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
+                  <span className="truncate">Retour au menu</span>
                 </button>
 
                 <button
                   onClick={() => setAppMode("simplifiee")}
-                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-black text-amber-950 dark:text-amber-100 bg-amber-100/90 dark:bg-amber-950/70 hover:bg-amber-200/90 dark:hover:bg-amber-900/70 border border-amber-300 dark:border-amber-700 transition-all cursor-pointer shadow-2xs"
+                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-black text-ebony dark:text-apricot bg-apricot/30 dark:bg-apricot/20 hover:bg-apricot/40 dark:hover:bg-apricot/30 border border-apricot/60 dark:border-apricot/40 transition-all cursor-pointer shadow-2xs"
                   title="Accéder directement aux 2 questions clés"
                 >
-                  <Zap className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 fill-amber-500 shrink-0" />
+                  <Zap className="w-3.5 h-3.5 text-ebony dark:text-apricot fill-apricot shrink-0" />
                   <span className="truncate">Version Simplifiée</span>
                 </button>
               </div>
@@ -236,7 +269,7 @@ export function App() {
                   onClick={() => setActiveTab("frise")}
                   className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
                     activeTab === "frise"
-                      ? "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/25 ring-2 ring-orange-400/30"
+                      ? "bg-gradient-to-r from-tangerine via-apricot to-tangerine text-ebony shadow-md shadow-tangerine/30 ring-2 ring-tangerine/40 font-black"
                       : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
                   }`}
                 >
@@ -244,8 +277,8 @@ export function App() {
                   <span className="truncate">Ma carrière</span>
                   <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black shrink-0 ${
                     activeTab === "frise"
-                      ? "bg-white/25 text-white ring-1 ring-white/30"
-                      : "bg-orange-100 dark:bg-orange-950/80 text-orange-950 dark:text-orange-200"
+                      ? "bg-ebony/15 text-ebony ring-1 ring-ebony/20"
+                      : "bg-tangerine/20 dark:bg-tangerine/30 text-ebony dark:text-tangerine"
                   }`}>
                     {resultatSimulation.jalons.length}
                   </span>
@@ -255,7 +288,7 @@ export function App() {
                   onClick={() => setActiveTab("perspectives")}
                   className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
                     activeTab === "perspectives"
-                      ? "bg-gradient-to-r from-purple-600 to-violet-700 text-white shadow-md shadow-purple-600/25 ring-2 ring-purple-500/30"
+                      ? "bg-gradient-to-r from-muted-teal via-lime-cream to-muted-teal text-ebony shadow-md shadow-muted-teal/30 ring-2 ring-muted-teal/40 font-black"
                       : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
                   }`}
                 >
@@ -267,7 +300,7 @@ export function App() {
                   onClick={() => setActiveTab("comparateur")}
                   className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
                     activeTab === "comparateur"
-                      ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-600/25 ring-2 ring-indigo-500/30"
+                      ? "bg-ebony text-lime-cream shadow-md shadow-ebony/30 ring-2 ring-ebony/40 font-black"
                       : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
                   }`}
                 >
@@ -276,8 +309,8 @@ export function App() {
                   {currentProfile.evenementsSimules.length > 0 && (
                     <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black shrink-0 ${
                       activeTab === "comparateur"
-                        ? "bg-white/25 text-white ring-1 ring-white/30"
-                        : "bg-indigo-100 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-200"
+                        ? "bg-lime-cream/25 text-lime-cream ring-1 ring-lime-cream/30"
+                        : "bg-ebony/15 dark:bg-ebony/40 text-ebony dark:text-lime-cream"
                     }`}>
                       {currentProfile.evenementsSimules.length}
                     </span>
@@ -288,7 +321,7 @@ export function App() {
                   onClick={() => setActiveTab("conseils")}
                   className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
                     activeTab === "conseils"
-                      ? "bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-600/25 ring-2 ring-amber-500/30"
+                      ? "bg-gradient-to-r from-apricot via-tangerine to-apricot text-ebony shadow-md shadow-apricot/30 ring-2 ring-apricot/40 font-black"
                       : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
                   }`}
                 >
@@ -300,9 +333,9 @@ export function App() {
               {/* Groupe 3 : Bouton Simuler un événement */}
               <button
                 onClick={() => handleOpenAddEventWithType()}
-                className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-600 text-white shadow-md shadow-emerald-600/25 hover:shadow-lg hover:shadow-emerald-600/35 active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-emerald-400/40"
+                className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-ebony via-ebony-dark to-ebony hover:brightness-115 text-lime-cream shadow-md shadow-ebony/30 hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-lime-cream/30"
               >
-                <Sparkles className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
+                <Sparkles className="w-4 h-4 text-apricot animate-pulse shrink-0" />
                 <span>Simuler un événement</span>
               </button>
             </div>
@@ -414,7 +447,7 @@ export function App() {
               </span>
               <button
                 onClick={() => setIsPrintSummaryOpen(true)}
-                className="w-full sm:w-auto text-xs font-bold bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white px-5 py-2.5 rounded-xl shadow-md shadow-orange-500/20 ring-1 ring-orange-400/30 transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto text-xs font-black bg-gradient-to-r from-tangerine via-apricot to-tangerine text-ebony px-5 py-2.5 rounded-xl shadow-md shadow-tangerine/25 ring-1 ring-tangerine/30 transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Générer la Fiche Récapitulative d Entretien Pro</span>
@@ -426,7 +459,7 @@ export function App() {
         )}
 
         {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE en bas de page pour les modes de consultation */}
-        {appMode !== "saisie" && appMode !== "simplifiee" && (
+        {appMode !== "saisie" && appMode !== "simplifiee" && appMode !== "ldg" && (
           <div className="pt-2">
             <DisclaimerBanner />
           </div>

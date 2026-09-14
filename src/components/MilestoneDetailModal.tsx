@@ -43,18 +43,18 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               {jalon.typeJalon === "avancement_echelon" ? (
-                <span className="text-xs sm:text-sm bg-emerald-500/30 text-emerald-100 border border-emerald-400/50 px-3 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-300" />
+                <span className="text-xs sm:text-sm bg-lime-cream text-ebony border-2 border-muted-teal px-3.5 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <Calendar className="w-3.5 h-3.5 text-ebony" />
                   Prise d'échelon : {formatDateFrench(jalon.date)}
                 </span>
               ) : jalon.typeJalon === "promouvabilite_grade" ? (
-                <span className="text-xs sm:text-sm bg-purple-500/30 text-purple-100 border border-purple-400/50 px-3 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
-                  <Calendar className="w-3.5 h-3.5 text-purple-300" />
+                <span className="text-xs sm:text-sm bg-tangerine text-ebony border-2 border-tangerine-dark px-3.5 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <Calendar className="w-3.5 h-3.5 text-ebony" />
                   Éligible au choix dès le {formatDateFrench(jalon.date)}
                 </span>
               ) : (
-                <span className="text-xs sm:text-sm bg-orange-500/25 text-orange-200 border border-orange-400/40 px-3 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
-                  <Clock className="w-3.5 h-3.5 text-orange-300" />
+                <span className="text-xs sm:text-sm bg-apricot text-ebony border-2 border-apricot-dark px-3.5 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <Clock className="w-3.5 h-3.5 text-ebony" />
                   Jalon au {formatDateFrench(jalon.date)}
                 </span>
               )}
