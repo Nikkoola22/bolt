@@ -1,7 +1,7 @@
 import React from "react";
 import type { ProfilAgent, JalonTimeline } from "../types/career";
 import { findCadreAndGrade, formatDurationInYearsAndMonths, formatDateFrench, diffMonths } from "../services/simulationEngine";
-import { Briefcase, Award, Clock, DollarSign, Edit3, ArrowRight, ArrowLeft, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
+import { Briefcase, Award, Clock, DollarSign, ArrowRight, ArrowLeft, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
 
 interface ProfileOverviewCardProps {
   profil: ProfilAgent;
