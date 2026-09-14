@@ -95,6 +95,12 @@ export function App() {
     }));
   };
 
+  const handleBackToSaisie = () => {
+    handleResetEvents();
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    setAppMode("saisie");
+  };
+
   const handleOpenAddEventWithType = (type?: string) => {
     setInitialEventType(type);
     setIsEventDrawerOpen(true);
@@ -164,10 +170,7 @@ export function App() {
               setAppMode("complete");
               setActiveTab("frise");
             }}
-            onBackToSaisie={() => {
-              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-              setAppMode("saisie");
-            }}
+            onBackToSaisie={handleBackToSaisie}
           />
         )}
 
@@ -180,9 +183,7 @@ export function App() {
               setAppMode("complete");
               setActiveTab("frise");
             }}
-            onEditProfile={() => {
-              setAppMode("saisie");
-            }}
+            onEditProfile={handleBackToSaisie}
             onOpenAddEvent={(type) => handleOpenAddEventWithType(type)}
           />
         )}
@@ -194,7 +195,7 @@ export function App() {
             <ProfileOverviewCard
               profil={currentProfile}
               prochainEchelonJalon={resultatSimulation.prochainEchelonJalon}
-              onEditProfile={() => setAppMode("saisie")}
+              onEditProfile={handleBackToSaisie}
               onScrollToNextMilestone={() => {
                 if (resultatSimulation.prochainEchelonJalon) {
                   setSelectedJalon(resultatSimulation.prochainEchelonJalon);
@@ -208,7 +209,7 @@ export function App() {
               {/* Groupe 1 : Raccourcis Modes Saisie & Version Simplifiée (2 colonnes sur mobile, ligne sur desktop) */}
               <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 shrink-0">
                 <button
-                  onClick={() => setAppMode("saisie")}
+                  onClick={handleBackToSaisie}
                   className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-2xs"
                   title="Revenir à la saisie du profil"
                 >
