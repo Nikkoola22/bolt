@@ -425,7 +425,7 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
                   : "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white shadow-orange-500/20 ring-1 ring-orange-400/30 cursor-pointer"
               }`}
             >
-              {selectedType ? "Ajouter et recalculer la frise" : "Veuillez choisir un événement"}
+              {selectedType ? "Ajouter un événement" : "Veuillez choisir un événement"}
             </button>
           </form>
 
@@ -489,9 +489,9 @@ export const EventSimulatorDrawer: React.FC<EventSimulatorDrawerProps> = ({
           </span>
           <button
             onClick={onClose}
-            className="text-xs font-semibold bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors cursor-pointer"
+            className="text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-md shadow-emerald-500/20 ring-1 ring-emerald-400/30 px-5 py-2.5 rounded-xl transition-all cursor-pointer"
           >
-            Lancer la simulation
+            Relancer la simulation avec l'événement
           </button>
         </div>
 
