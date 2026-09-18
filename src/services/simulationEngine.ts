@@ -5,7 +5,8 @@ import type {
   EvaluationCondition, 
   GradeDefinition, 
   CadreEmploiDefinition,
-  EvenementCarriere
+  EvenementCarriere,
+  Echelon
 } from "../types/career";
 import { CADRES_EMPLOIS, VALEUR_POINT_INDICE_MENSUEL, MOTIFS_DISPONIBILITE } from "../data/gradesData";
 
@@ -98,15 +99,160 @@ export function computeDisponibiliteSeniorityPenaltyMonths(evenements: Evenement
   return penaltyMonths;
 }
 
+export interface ReclassementConcoursResult {
+  cibleCat: string;
+  nouveauCadre: CadreEmploiDefinition;
+  nouveauGrade: GradeDefinition;
+  echelonReclassement: Echelon;
+  gainReclassementIM: number;
+  gainAvancementOrigineIM: number;
+  conserveAnciennete: boolean;
+  moisAncienneteAcquis: number;
+  moisConserves: number;
+  delaiProchainEchelonMois: number;
+  baseIM: number;
+}
+
+// Calcul réglementaire officiel du reclassement indiciaire et du report d'ancienneté (CGFP & décrets statutaires)
+export function computeReclassementConcours(
+  profil: ProfilAgent,
+  currentGrade: GradeDefinition,
+  currentCadre: CadreEmploiDefinition,
+  dateConcours: string,
+  isContractuel: boolean
+): ReclassementConcoursResult {
+  const cibleCat = currentGrade.categorie === "C" ? "B" : currentGrade.categorie === "B" ? "A" : "A+";
+
+  let nouveauCadre = currentCadre;
+  let nouveauGrade = currentGrade;
+
+  if (!isContractuel) {
+    let foundCible = false;
+    for (const c of CADRES_EMPLOIS) {
+      if (c.grades[0].categorie === cibleCat && c.grades[0].filiere === currentGrade.filiere) {
+        nouveauCadre = c;
+        nouveauGrade = c.grades[0];
+        foundCible = true;
+        break;
+      }
+    }
+    if (!foundCible) {
+      for (const c of CADRES_EMPLOIS) {
+        if (c.grades[0].categorie === cibleCat) {
+          nouveauCadre = c;
+          nouveauGrade = c.grades[0];
+          break;
+        }
+      }
+    }
+  }
+
+  // Détermination de l'échelon atteint et de l'ancienneté acquise dans le grade d'origine à la date du concours
+  let echelonAtContestNum = profil.echelonActuel;
+  let dateEffetEchelonAtContest = profil.dateEffetEchelonActuel;
+  let remainingConsAtContest = profil.ancienneteConserveeMois || 0;
+
+  if (!isContractuel) {
+    let curDate = profil.dateEffetEchelonActuel;
+    let curEch = profil.echelonActuel;
+    let remCons = profil.ancienneteConserveeMois || 0;
+
+    while (curEch < currentGrade.echelons.length) {
+      const curEchObj = currentGrade.echelons.find(e => e.numero === curEch);
+      const nextEchObj = currentGrade.echelons.find(e => e.numero === curEch + 1);
+      if (!curEchObj || !nextEchObj) break;
+
+      let durMonths = curEchObj.dureeAnnees * 12;
+      if (remCons > 0) {
+        durMonths = Math.max(1, durMonths - remCons);
+        remCons = 0;
+      }
+      const nextDate = addMonthsToDate(curDate, durMonths);
+      if (nextDate <= dateConcours) {
+        curDate = nextDate;
+        curEch = nextEchObj.numero;
+      } else {
+        break;
+      }
+    }
+    echelonAtContestNum = curEch;
+    dateEffetEchelonAtContest = curDate;
+    remainingConsAtContest = curEch === profil.echelonActuel ? (profil.ancienneteConserveeMois || 0) : 0;
+  }
+
+  // Indice de base dans le grade d'origine au moment du concours
+  const echOrigine = currentGrade.echelons.find(e => e.numero === echelonAtContestNum) || currentGrade.echelons[0];
+  const baseIM = echOrigine.indiceMajore;
+
+  // Reclassement à l'échelon doté d'un indice brut / majoré égal ou immédiatement supérieur
+  let targetEch = nouveauGrade.echelons[nouveauGrade.echelons.length - 1];
+  for (const ech of nouveauGrade.echelons) {
+    if (ech.indiceMajore >= baseIM) {
+      targetEch = ech;
+      break;
+    }
+  }
+
+  const gainReclassementIM = targetEch.indiceMajore - baseIM;
+
+  // Ancienneté acquise dans l'échelon d'origine à la date exacte du concours
+  const moisAncienneteAcquis = Math.max(
+    0,
+    diffMonths(dateEffetEchelonAtContest, dateConcours) + remainingConsAtContest
+  );
+
+  // Gain indiciaire qu'aurait procuré un avancement d'échelon dans l'ancien grade
+  const nextOldEch = currentGrade.echelons.find(e => e.numero === echelonAtContestNum + 1);
+  const gainAvancementOrigineIM = nextOldEch ? (nextOldEch.indiceMajore - baseIM) : 0;
+  const etaitAuSommet = !nextOldEch;
+
+  // Règles statutaires de conservation d'ancienneté (décrets statutaires particuliers et CGFP) :
+  // 1. Reclassement à indice égal (gainReclassementIM === 0) : conservation intégrale d'ancienneté (plafonnée à la durée de l'échelon d'accueil).
+  // 2. Reclassement avec gain indiciaire < gain d'un avancement d'échelon (gainReclassementIM < gainAvancementOrigineIM)
+  //    ou agent au sommet du grade d'origine : conservation de l'ancienneté acquise (plafonnée à la durée de l'échelon d'accueil).
+  // 3. Reclassement avec gain indiciaire >= gain d'un échelon : l'ancienneté repart à 0.
+  const conserveAnciennete = etaitAuSommet || (gainReclassementIM < gainAvancementOrigineIM);
+  const dureeMaxEchAccueilMois = targetEch.dureeAnnees * 12;
+  const moisConserves = conserveAnciennete
+    ? Math.min(moisAncienneteAcquis, dureeMaxEchAccueilMois)
+    : 0;
+
+  const delaiProchainEchelonMois = Math.max(1, dureeMaxEchAccueilMois - moisConserves);
+
+  return {
+    cibleCat,
+    nouveauCadre,
+    nouveauGrade,
+    echelonReclassement: targetEch,
+    gainReclassementIM,
+    gainAvancementOrigineIM,
+    conserveAnciennete,
+    moisAncienneteAcquis,
+    moisConserves,
+    delaiProchainEchelonMois,
+    baseIM,
+  };
+}
+
 // Moteur de simulation principal
 export function runSimulation(profil: ProfilAgent): ResultatSimulation {
   const { cadre, grade } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
   const nowStr = "2026-09-11"; // Date de référence
   const isContractuel = profil.statut === "contractuel_cdi" || profil.statut === "contractuel_cdd";
-  const concoursEvt = isContractuel ? profil.evenementsSimules.find(e => e.type === "reussite_concours") : null;
-  const dateNominationStagiaire = concoursEvt ? concoursEvt.dateDebut : null;
-  const dateTitularisation = concoursEvt ? addMonthsToDate(concoursEvt.dateDebut, 12) : null;
+  const concoursEvent = profil.evenementsSimules.find(e => e.type === "reussite_concours");
+  const dateNominationStagiaire = concoursEvent ? concoursEvent.dateDebut : null;
+  const dateTitularisation = concoursEvent ? addMonthsToDate(concoursEvent.dateDebut, 12) : null;
   const jalons: JalonTimeline[] = [];
+
+  const reclassConcours = concoursEvent
+    ? computeReclassementConcours(
+        profil,
+        grade,
+        cadre,
+        concoursEvent.dateDebut,
+        isContractuel
+      )
+    : null;
 
   // Echelon actuel
   const currentEchelonData = grade.echelons.find(e => e.numero === profil.echelonActuel) || grade.echelons[0];
@@ -227,7 +373,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       pieces.push("Attestation de réussite délivrée par le Centre de Gestion (CDG)");
       actes.push("Inscription de plein droit dans le vivier promouvable par examen");
     } else if (evt.type === "reussite_concours") {
-      const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
+      const cibleCat = reclassConcours?.cibleCat || (grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+");
       descType = isContractuel 
         ? "Lauréat de Concours & Nomination Stagiaire"
         : `Lauréat de Concours & Nomination Stagiaire (Accès Catégorie ${cibleCat})`;
@@ -236,6 +382,12 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         ? "Nomination en qualité de fonctionnaire stagiaire sur emploi permanent."
         : `Détachement pour stage probatoire dans la Catégorie ${cibleCat} (maintien du traitement antérieur garanti, art. L513-7 CGFP).`);
       alertes.push("Période probatoire de 12 mois avec formation obligatoire CNFPT avant titularisation.");
+      if (reclassConcours && !isContractuel) {
+        alertes.push(`Reclassement statutaire au ${reclassConcours.echelonReclassement.numero}e échelon de ${reclassConcours.nouveauGrade.nom} (IM ${reclassConcours.echelonReclassement.indiceMajore}) à indice égal ou immédiatement supérieur.`);
+        if (reclassConcours.moisConserves > 0) {
+          alertes.push(`Conservation de ${reclassConcours.moisConserves} mois d'ancienneté d'échelon reportés (gain inférieur à un échelon d'origine).`);
+        }
+      }
       pieces.push("Attestation de réussite au concours délivrée par le Centre de Gestion (CIG/CDG)", "Dossier de nomination stagiaire");
       actes.push("Arrêté individuel de nomination en qualité de fonctionnaire stagiaire");
     } else if (evt.type === "promotion_interne") {
@@ -254,7 +406,24 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       actes.push("Arrêté conjoint de détachement pris par les deux administrations");
     }
 
-    const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
+    const cibleCat = reclassConcours?.cibleCat || (grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+");
+
+    // Données de grade et d'échelon pour ce jalon
+    const jalonGradeNom = (evt.type === "reussite_concours" && reclassConcours && !isContractuel)
+      ? reclassConcours.nouveauGrade.nom
+      : grade.nom;
+    const jalonEchNum = (evt.type === "reussite_concours" && reclassConcours && !isContractuel)
+      ? reclassConcours.echelonReclassement.numero
+      : currentEchelonData.numero;
+    const jalonIB = (evt.type === "reussite_concours" && reclassConcours && !isContractuel)
+      ? reclassConcours.echelonReclassement.indiceBrut
+      : currentEchelonData.indiceBrut;
+    const jalonIM = (evt.type === "reussite_concours" && reclassConcours && !isContractuel)
+      ? reclassConcours.echelonReclassement.indiceMajore
+      : currentEchelonData.indiceMajore;
+    const jalonTraitement = (evt.type === "reussite_concours" && reclassConcours && !isContractuel)
+      ? calculateTraitementBrut(reclassConcours.echelonReclassement.indiceMajore, profil.quotiteActuelle)
+      : (evt.type === "temps_partiel" ? calculateTraitementBrut(currentEchelonData.indiceMajore, evt.quotite || 80) : evt.type === "conge_parental" || evt.type === "disponibilite" ? 0 : currentTraitement);
 
     const evtJalon: JalonTimeline = {
       id: evt.id,
@@ -265,23 +434,27 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       titre: evt.type === "reussite_concours" 
         ? (isContractuel
             ? `Lauréat du Concours : Nomination Stagiaire (${grade.nom})`
-            : `Lauréat du Concours : Nomination Stagiaire (Accès Cat. ${cibleCat})`)
+            : `Lauréat du Concours : Nomination Stagiaire (${reclassConcours?.nouveauCadre.nom})`)
         : evt.titre,
       sousTitre: evt.type === "reussite_concours" 
         ? (isContractuel
             ? "Début du stage probatoire de 12 mois (CGFP art. L327-1)"
-            : `Détachement pour stage probatoire (12 mois) vers la Catégorie ${cibleCat}`)
+            : `Détachement pour stage (12 mois) en Catégorie ${cibleCat} • Reclassement au ${jalonEchNum}e échelon (IM ${jalonIM})`)
         : descType,
-      gradeNom: grade.nom,
-      echelonNumero: currentEchelonData.numero,
-      indiceBrut: currentEchelonData.indiceBrut,
-      indiceMajore: currentEchelonData.indiceMajore,
-      traitementBrutMensuel: evt.type === "temps_partiel" ? calculateTraitementBrut(currentEchelonData.indiceMajore, evt.quotite || 80) : evt.type === "conge_parental" || evt.type === "disponibilite" ? 0 : currentTraitement,
+      gradeNom: jalonGradeNom,
+      echelonNumero: jalonEchNum,
+      indiceBrut: jalonIB,
+      indiceMajore: jalonIM,
+      traitementBrutMensuel: jalonTraitement,
       statutValidation: "simule",
       pourquoi: evt.type === "reussite_concours"
         ? (isContractuel
             ? "Félicitations : Vous êtes déclaré lauréat du concours et inscrit sur la liste d aptitude. Le Maire de Gennevilliers prononce votre nomination en qualité de fonctionnaire stagiaire sur un emploi permanent. Vous commencez votre année probatoire de stage et suivez la formation d intégration obligatoire CNFPT."
-            : `Félicitations : Votre admission au concours de la Fonction Publique Territoriale vous permet d accéder à la catégorie supérieure (Catégorie ${cibleCat}). En qualité de titulaire, vous êtes placé en position de détachement pour stage (art. L513-7 CGFP), ce qui garantit votre maintien de rémunération et votre droit au retour statutaire. Vous accomplissez votre période probatoire et suivez la formation obligatoire CNFPT.`)
+            : `Félicitations : Votre admission au concours FPT vous permet d accéder à la Catégorie ${cibleCat} (${reclassConcours?.nouveauCadre.nom}). En qualité de fonctionnaire titulaire, vous êtes nommé(e) stagiaire en position de détachement pour stage (art. L513-7 CGFP), ce qui garantit votre maintien de rémunération et votre droit au retour statutaire.\n\n` +
+              `• Classement indiciaire statutaire : Vous êtes classé(e) au ${reclassConcours?.echelonReclassement.numero}e échelon de ${reclassConcours?.nouveauGrade.nom} (IM ${reclassConcours?.echelonReclassement.indiceMajore})${reclassConcours && reclassConcours.gainReclassementIM > 0 ? ` avec un gain indiciaire immédiat de +${reclassConcours.gainReclassementIM} points d indice (+${Math.round(reclassConcours.gainReclassementIM * VALEUR_POINT_INDICE_MENSUEL)} € brut/mois)` : " à indice égal"}.\n` +
+              `• Report d ancienneté d échelon : ${reclassConcours && reclassConcours.moisConserves > 0
+                ? `En application de la règle statutaire en vigueur (maintien de l ancienneté si le gain indiciaire est inférieur à celui d un avancement d échelon dans votre ancien grade), vous conservez ${reclassConcours.moisConserves} mois d ancienneté acquis dans votre ancien échelon. Ces mois sont directement reportés sur votre nouvel échelon, avançant d autant votre prochaine promotion !`
+                : `Le gain indiciaire procuré (+${reclassConcours?.gainReclassementIM} pts) étant égal ou supérieur à celui d un avancement d échelon dans votre ancien grade (+${reclassConcours?.gainAvancementOrigineIM} pts), votre ancienneté commence à 0 mois dans votre nouvel échelon conformément au statut.`}`)
         : evt.descriptionDetaillee,
       conditionsRemplies: evt.type === "reussite_concours" ? [
         {
@@ -292,10 +465,20 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
           progressionPourcent: 100,
           detailsExplicatifs: isContractuel
             ? "Ouvre le droit à être nommé fonctionnaire stagiaire par la collectivité."
-            : `Ouvre le droit à être nommé fonctionnaire stagiaire dans le nouveau cadre d emplois de Catégorie ${cibleCat}.`,
+            : `Ouvre le droit à être nommé fonctionnaire stagiaire dans le nouveau cadre d emplois (${reclassConcours?.nouveauCadre.nom}) de Catégorie ${cibleCat}.`,
           piecesAFournir: ["Attestation de réussite au concours"],
           actesAdministratifs: ["Arrêté de nomination stagiaire"]
-        }
+        },
+        ...(reclassConcours && !isContractuel ? [{
+          libelle: "Classement indiciaire à indice égal ou supérieur & Report d ancienneté",
+          statut: "remplie" as const,
+          valeurActuelle: `${reclassConcours.echelonReclassement.numero}e échelon (IM ${reclassConcours.echelonReclassement.indiceMajore}) • ${reclassConcours.moisConserves} mois d ancienneté reportés`,
+          valeurRequise: `Indice majoré >= ${reclassConcours.baseIM}`,
+          progressionPourcent: 100,
+          detailsExplicatifs: `Classement réglementaire au ${reclassConcours.echelonReclassement.numero}e échelon (IM ${reclassConcours.echelonReclassement.indiceMajore} vs IM ${reclassConcours.baseIM} d origine). ${reclassConcours.moisConserves > 0 ? `Conservation de ${reclassConcours.moisConserves} mois d ancienneté reportés sur le nouvel échelon.` : "Ancienneté d échelon remise à zéro car le gain est supérieur ou égal à un avancement d échelon."}`,
+          piecesAFournir: ["Arrêté de classement indiciaire", "État récapitulatif de carrière"],
+          actesAdministratifs: ["Arrêté individuel du Maire portant nomination stagiaire et reclassement"]
+        }] : [])
       ] : [],
       conditionsManquantes: [],
       justificatifsRequis: pieces,
@@ -318,19 +501,19 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         typeJalon: "promouvabilite_interne",
         titre: isContractuel
           ? `Titularisation : Fonctionnaire Titulaire (${grade.nom})`
-          : `Titularisation : Nouveau Cadre d Emplois (Catégorie ${cibleCat})`,
+          : `Titularisation : Nouveau Cadre d Emplois (${reclassConcours?.nouveauCadre.nom})`,
         sousTitre: isContractuel
           ? "Fin de stage probatoire - Entrée pleine et entière dans le statut FPT"
-          : `Titularisation dans le nouveau corps de Catégorie ${cibleCat} avec reclassement indiciaire favorable`,
-        gradeNom: grade.nom,
-        echelonNumero: currentEchelonData.numero,
-        indiceBrut: currentEchelonData.indiceBrut,
-        indiceMajore: currentEchelonData.indiceMajore,
-        traitementBrutMensuel: currentTraitement,
+          : `Titularisation en Catégorie ${cibleCat} • Grade : ${jalonGradeNom}`,
+        gradeNom: jalonGradeNom,
+        echelonNumero: jalonEchNum,
+        indiceBrut: jalonIB,
+        indiceMajore: jalonIM,
+        traitementBrutMensuel: jalonTraitement,
         statutValidation: "simule",
         pourquoi: isContractuel
           ? "À l issue des 12 mois de stage probatoire et après avis favorable de votre hiérarchie et validation de la formation d intégration CNFPT, l autorité territoriale prend votre arrêté de titularisation. Vous accédez au statut de fonctionnaire titulaire de la FPT, ce qui débloque les avancements d échelon garantis et l avancement de grade !"
-          : `À l issue des 12 mois de stage probatoire et après avis de votre hiérarchie, vous êtes titularisé dans votre nouveau cadre d emplois de Catégorie ${cibleCat}. Vous bénéficiez d un reclassement indiciaire statutaire à indice égal ou immédiatement supérieur avec reprise d ancienneté, ouvrant une nouvelle dynamique d avancement !`,
+          : `À l issue des 12 mois de stage probatoire et après avis de votre hiérarchie, vous êtes titularisé(e) dans votre nouveau cadre d emplois (${reclassConcours?.nouveauCadre.nom}) de Catégorie ${cibleCat}. Votre titularisation confirme votre reclassement indiciaire au ${jalonEchNum}e échelon (IM ${jalonIM}) avec pérennisation de votre déroulement de carrière et de vos droits à l avancement !`,
         conditionsRemplies: [
           {
             libelle: "Accomplissement de 12 mois de stage probatoire",
@@ -359,7 +542,7 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
           "Rapport de fin de stage établi par le supérieur hiérarchique"
         ],
         decisionsAdministrativesRequises: [
-          `Arrêté individuel de titularisation dans le nouveau cadre d emplois (Catégorie ${cibleCat}) signé par le Maire de Gennevilliers`,
+          `Arrêté individuel de titularisation dans le nouveau cadre d emplois (${reclassConcours?.nouveauCadre.nom}) signé par le Maire de Gennevilliers`,
           "Transmission en Préfecture (contrôle de légalité)",
           "Notification à l agent et mise à jour de la carrière au CIG"
         ],
@@ -368,9 +551,11 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
           "Les passages d échelon futurs deviennent de plein droit et automatiques à cadence unique PPCR.",
           "Débloque l éligibilité aux tableaux d avancement de grade et aux examens professionnels."
         ] : [
-          `Consacre votre accès définitif à la Catégorie ${cibleCat}.`,
-          "Reclassement indiciaire à indice égal ou immédiatement supérieur garantissant l absence de perte de traitement.",
-          "Nouvelle grille indiciaire et nouvelles perspectives d avancement de grade dans le nouveau cadre d emplois."
+          `Consacre votre accès définitif à la Catégorie ${cibleCat} (${reclassConcours?.nouveauCadre.nom}).`,
+          `Reclassement indiciaire statutaire confirmé au ${jalonEchNum}e échelon (IM ${jalonIM}) garantissant un indice égal ou supérieur à votre indice antérieur (${reclassConcours?.baseIM}).`,
+          reclassConcours && reclassConcours.moisConserves > 0
+            ? `Conservation de ${reclassConcours.moisConserves} mois d ancienneté d échelon prise en compte pour accélérer le passage au ${jalonEchNum + 1}e échelon.`
+            : "Nouvelle grille indiciaire et nouvelles perspectives d avancement de grade dans le nouveau cadre d emplois."
         ],
         referenceReglementaire: "Article L327-10 du Code Général de la Fonction Publique"
       };
@@ -414,43 +599,87 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
   let appliedDispoDelay = false;
 
   // Intégration du changement de grille si réussite concours (Titulaire)
-  const concoursEvent = profil.evenementsSimules.find(e => e.type === "reussite_concours");
-  if (concoursEvent && !isContractuel) {
-    const cibleCat = grade.categorie === "C" ? "B" : grade.categorie === "B" ? "A" : "A+";
-    let foundCible = false;
-    for (const c of CADRES_EMPLOIS) {
-      if (c.grades[0].categorie === cibleCat && c.grades[0].filiere === grade.filiere) {
-        currentSimCadre = c;
-        currentSimGrade = c.grades[0];
-        foundCible = true;
-        break;
+  let prochainEchelonJalon: JalonTimeline | null = null;
+
+  if (reclassConcours && !isContractuel && concoursEvent) {
+    // Phase 1 : avancements éventuels dans le grade d'origine qui interviennent avant le concours
+    while (runEchelonNum < grade.echelons.length) {
+      const currentEchObj = grade.echelons.find(e => e.numero === runEchelonNum)!;
+      const nextEchObj = grade.echelons.find(e => e.numero === runEchelonNum + 1);
+      if (!nextEchObj) break;
+
+      let moisEffectifs = currentEchObj.dureeAnnees * 12;
+      if (remainingConservedMonths > 0) {
+        moisEffectifs = Math.max(1, moisEffectifs - remainingConservedMonths);
+        remainingConservedMonths = 0;
       }
-    }
-    if (!foundCible) {
-      for (const c of CADRES_EMPLOIS) {
-        if (c.grades[0].categorie === cibleCat) {
-          currentSimCadre = c;
-          currentSimGrade = c.grades[0];
-          break;
+      if (!appliedDispoDelay && dispoPenaltyMonths > 0) {
+        moisEffectifs += dispoPenaltyMonths;
+        appliedDispoDelay = true;
+      }
+
+      const nextDateEffet = addMonthsToDate(runDateEffet, moisEffectifs);
+      if (nextDateEffet <= concoursEvent.dateDebut) {
+        const gainIM = nextEchObj.indiceMajore - currentEchObj.indiceMajore;
+        const gainFinancier = gainIM * VALEUR_POINT_INDICE_MENSUEL;
+        const newTraitement = calculateTraitementBrut(nextEchObj.indiceMajore, 100);
+
+        const echJalon: JalonTimeline = {
+          id: `ech-orig-${nextEchObj.numero}`,
+          date: nextDateEffet,
+          annee: parseDate(nextDateEffet).getFullYear(),
+          mois: parseDate(nextDateEffet).getMonth() + 1,
+          typeJalon: "avancement_echelon",
+          titre: `Avancement au ${nextEchObj.numero}e échelon (${grade.nom})`,
+          sousTitre: `IM ${nextEchObj.indiceMajore} (+ ${gainIM} pts) - ${Math.round(gainFinancier)} € brut/mois`,
+          gradeNom: grade.nom,
+          echelonNumero: nextEchObj.numero,
+          indiceBrut: nextEchObj.indiceBrut,
+          indiceMajore: nextEchObj.indiceMajore,
+          traitementBrutMensuel: newTraitement,
+          gainIndiciaire: gainIM,
+          gainFinancierBrutMensuel: gainFinancier,
+          statutValidation: "garanti",
+          pourquoi: `Passage automatique d échelon dans votre grade d origine avant la date du concours.`,
+          conditionsRemplies: [
+            {
+              libelle: "Ancienneté requise dans l échelon précédent",
+              statut: "remplie",
+              valeurActuelle: `${currentEchObj.dureeAnnees} an(s)`,
+              valeurRequise: `${currentEchObj.dureeAnnees} an(s)`,
+              progressionPourcent: 100,
+              detailsExplicatifs: "Avancement d échelon garanti selon la cadence unique PPCR.",
+              piecesAFournir: ["Arrêté d avancement"],
+              actesAdministratifs: ["Arrêté individuel"]
+            }
+          ],
+          conditionsManquantes: [],
+          justificatifsRequis: ["Dernier bulletin de paie"],
+          decisionsAdministrativesRequises: ["Arrêté individuel d avancement d échelon"],
+          hypothesesEtAlertes: [],
+          referenceReglementaire: cadre.decretReference
+        };
+        jalons.push(echJalon);
+        if (prochainEchelonJalon === null && nextDateEffet > nowStr) {
+          prochainEchelonJalon = echJalon;
         }
-      }
-    }
-    
-    // Reclassement indiciaire à indice égal ou immédiatement supérieur
-    const baseIM = grade.echelons.find(e => e.numero === profil.echelonActuel)?.indiceMajore || 366;
-    let targetEch = currentSimGrade.echelons[0];
-    for (const ech of currentSimGrade.echelons) {
-      if (ech.indiceMajore >= baseIM) {
-        targetEch = ech;
+        runEchelonNum = nextEchObj.numero;
+        runDateEffet = nextDateEffet;
+      } else {
         break;
       }
     }
-    runEchelonNum = targetEch.numero;
+
+    // Bascule statutaire dans le nouveau corps et nouveau grade
+    currentSimCadre = reclassConcours.nouveauCadre;
+    currentSimGrade = reclassConcours.nouveauGrade;
+    runEchelonNum = reclassConcours.echelonReclassement.numero;
     runDateEffet = concoursEvent.dateDebut;
-    remainingConservedMonths = 0; // Remis à zéro lors du reclassement
+    remainingConservedMonths = reclassConcours.moisConserves;
   }
 
-  let prochainEchelonJalon: JalonTimeline | null = null;
+  // Phase 2 : Déroulement de carrière dans currentSimGrade (avec prise en compte de l'ancienneté conservée)
+  let isFirstStepInGrade = true;
 
   while (runEchelonNum < currentSimGrade.echelons.length) {
     const currentEchObj = currentSimGrade.echelons.find(e => e.numero === runEchelonNum)!;
@@ -462,11 +691,12 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
 
     let moisEffectifs = isEffectiveContractuel ? 36 : (currentEchObj.dureeAnnees * 12);
 
-    // Déduction de l ancienneté conservée au premier saut
-    if (runEchelonNum === profil.echelonActuel && remainingConservedMonths > 0) {
+    // Déduction effective de l'ancienneté conservée au premier saut (du profil ou du reclassement concours)
+    if (isFirstStepInGrade && remainingConservedMonths > 0) {
       moisEffectifs = Math.max(1, moisEffectifs - remainingConservedMonths);
       remainingConservedMonths = 0;
     }
+    isFirstStepInGrade = false;
 
     // Application du décalage éventuel de disponibilité sans activité
     if (!appliedDispoDelay && dispoPenaltyMonths > 0) {
@@ -969,9 +1199,9 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
     const dateEligibiliteConcours = addMonthsToDate(profil.dateEntreeFonctionPublique, moisRequisConcours);
     const dejaEligibleConcours = moisServicesPublics >= moisRequisConcours;
 
-    if (concoursEvt && dateTitularisation) {
+    if (concoursEvent && dateTitularisation) {
       pointsCles.unshift(
-        `🏆 Scénario actif : Réussite au Concours & Titularisation ! Nomination stagiaire simulée le ${formatDateFrench(concoursEvt.dateDebut)}, titularisation le ${formatDateFrench(dateTitularisation)}. Votre carrière bascule sous le statut de fonctionnaire titulaire avec avancements d échelon garantis PPCR et ouverture de l avancement de grade.`
+        `🏆 Scénario actif : Réussite au Concours & Titularisation ! Nomination stagiaire simulée le ${formatDateFrench(concoursEvent.dateDebut)}, titularisation le ${formatDateFrench(dateTitularisation)}. Votre carrière bascule sous le statut de fonctionnaire titulaire avec avancements d échelon garantis PPCR et ouverture de l avancement de grade.`
       );
       if (premierePromouvabiliteGrade) {
         pointsCles.push(

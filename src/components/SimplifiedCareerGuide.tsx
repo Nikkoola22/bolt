@@ -23,7 +23,8 @@ import {
   Star, 
   Check, 
   Briefcase, 
-  ArrowRight 
+  ArrowRight,
+  Calculator 
 } from "lucide-react";
 
 interface SimplifiedCareerGuideProps {
@@ -32,6 +33,7 @@ interface SimplifiedCareerGuideProps {
   onSwitchToComplete: () => void;
   onBackToMenu: () => void;
   onOpenAddEvent?: (type?: string) => void;
+  onOpenLdg?: () => void;
 }
 
 export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
@@ -40,6 +42,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   onSwitchToComplete,
   onBackToMenu,
   onOpenAddEvent: _onOpenAddEvent,
+  onOpenLdg,
 }) => {
   // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen) ou null (masqué par défaut)
   const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion" | null>(null);
@@ -91,9 +94,14 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   // Calculs 2ème échelon
   const moisRestantsDeuxieme = deuxiemeEchelon ? Math.max(0, diffMonths(todayStr, deuxiemeEchelon.date)) : 0;
   const delaiDeuxiemeTexte = formatDurationInYearsAndMonths(moisRestantsDeuxieme);
-  const gainIndiciaireDeuxiemeCumule = deuxiemeEchelon ? (deuxiemeEchelon.indiceMajore - resultatSimulation.jalonActuel.indiceMajore) : 0;
-  const gainBrutDeuxiemeCumule = deuxiemeEchelon ? Math.round(deuxiemeEchelon.traitementBrutMensuel - resultatSimulation.jalonActuel.traitementBrutMensuel) : 0;
-  const gainNetEstimeDeuxiemeCumule = Math.round(gainBrutDeuxiemeCumule * 0.81);
+  const gainIndiciaireDeuxieme = deuxiemeEchelon
+    ? (deuxiemeEchelon.gainIndiciaire ?? (premierEchelon ? deuxiemeEchelon.indiceMajore - premierEchelon.indiceMajore : 0))
+    : 0;
+  const gainBrutDeuxieme = Math.round(
+    deuxiemeEchelon?.gainFinancierBrutMensuel ??
+    (premierEchelon && deuxiemeEchelon ? deuxiemeEchelon.traitementBrutMensuel - premierEchelon.traitementBrutMensuel : 0)
+  );
+  const gainNetEstimeDeuxieme = Math.round(gainBrutDeuxieme * 0.81);
 
   // 2. Recherche prioritaire de la promouvabilité au choix (sans examen)
   const promouvabiliteAuChoixGrade = resultatSimulation.jalons.find(
@@ -509,31 +517,31 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                           </p>
                         </div>
 
-                        {/* Chiffres clés cumulés */}
+                        {/* Chiffres clés de paie façon Apple Wallet */}
                         <div className="grid grid-cols-2 gap-3 bg-white dark:bg-[#18181c] p-4 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
                           <div>
                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
                               <DollarSign className="w-3 h-3 text-muted-teal" />
-                              Gain Cumulé
+                              Gain Mensuel
                             </span>
                             <div className="text-xl sm:text-2xl font-black text-ebony dark:text-lime-cream mt-0.5 tracking-tight">
-                              +{gainBrutDeuxiemeCumule} € <span className="text-[11px] font-medium text-slate-400">brut</span>
+                              +{gainBrutDeuxieme} € <span className="text-[11px] font-medium text-slate-400">brut</span>
                             </div>
                             <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                              environ <strong>~+{gainNetEstimeDeuxiemeCumule} € net</strong>
+                              environ <strong>~+{gainNetEstimeDeuxieme} € net</strong>
                             </div>
                           </div>
 
                           <div>
                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
                               <Award className="w-3 h-3 text-ebony/60 dark:text-lime-cream/60" />
-                              Indice Atteint
+                              Points d'indice
                             </span>
                             <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5 tracking-tight">
                               {deuxiemeEchelon.indiceMajore} pts
                             </div>
                             <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                              +{gainIndiciaireDeuxiemeCumule} pts cumulés
+                              +{gainIndiciaireDeuxieme} points IM
                             </div>
                           </div>
                         </div>
@@ -737,10 +745,27 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                     </button>
 
                     {showLegalPromo && (
-                      <div className="p-4 text-xs text-slate-600 dark:text-slate-400 space-y-2 border-t border-black/[0.05] dark:border-white/[0.06] leading-relaxed">
+                      <div className="p-4 text-xs text-slate-600 dark:text-slate-400 space-y-3 border-t border-black/[0.05] dark:border-white/[0.06] leading-relaxed">
                         <p>
                           <strong>Lignes Directrices de Gestion (LDG) :</strong> L'avancement s'effectue au choix par inscription sur le tableau annuel selon les critères fixés par la collectivité de Gennevilliers.
                         </p>
+                        <div className="pt-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (onOpenLdg) {
+                                onOpenLdg();
+                              } else {
+                                window.location.href = "/ldg/index.html";
+                              }
+                            }}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-tangerine to-apricot text-white font-bold text-xs shadow-sm hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer"
+                          >
+                            <Calculator className="w-4 h-4 text-white" />
+                            <span>Accéder à la simulation des points de la promotion</span>
+                            <ArrowRight className="w-3.5 h-3.5 text-white/90" />
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>

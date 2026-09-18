@@ -145,7 +145,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                 onChange={(e) => handleCadreChange(e.target.value)}
                 className="w-full bg-white dark:bg-slate-900 border border-orange-300/80 dark:border-orange-700 rounded-lg px-3 py-2 font-extrabold text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-2xs cursor-pointer"
               >
-                {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
+                {["Administrative", "Technique", "Animation", "Médico-sociale", "Culturelle"].map((fil) => {
                   const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
                   if (cadresInFil.length === 0) return null;
                   return (

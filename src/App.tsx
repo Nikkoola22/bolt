@@ -218,6 +218,10 @@ export function App() {
             }}
             onBackToMenu={handleBackToMenu}
             onOpenAddEvent={(type) => handleOpenAddEventWithType(type)}
+            onOpenLdg={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("ldg");
+            }}
           />
         )}
 
@@ -333,10 +337,21 @@ export function App() {
               {/* Groupe 3 : Bouton Simuler un événement */}
               <button
                 onClick={() => handleOpenAddEventWithType()}
-                className="w-full lg:w-auto flex items-center justify-center gap-2 py-2.5 sm:py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-ebony via-ebony-dark to-ebony hover:brightness-115 text-lime-cream shadow-md shadow-ebony/30 hover:shadow-lg active:scale-[0.98] transition-all cursor-pointer shrink-0 border border-lime-cream/30"
+                className="group relative w-full lg:w-auto flex items-center justify-center gap-2.5 py-2.5 sm:py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-orange-600 via-amber-500 to-orange-500 hover:from-orange-500 hover:via-amber-400 hover:to-orange-500 text-white shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 active:scale-[0.98] transition-all duration-200 cursor-pointer shrink-0 border border-amber-300/40"
               >
-                <Sparkles className="w-4 h-4 text-apricot animate-pulse shrink-0" />
-                <span>Simuler un événement</span>
+                <span className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-transform duration-200">
+                  <Sparkles className="w-3.5 h-3.5 text-white animate-pulse shrink-0" />
+                </span>
+                <span className="tracking-tight text-white drop-shadow-xs">Simuler un événement</span>
+                {currentProfile.evenementsSimules.length > 0 ? (
+                  <span className="inline-flex items-center text-[10px] font-black bg-white text-orange-600 px-2 py-0.5 rounded-full shadow-xs">
+                    {currentProfile.evenementsSimules.length} actif{currentProfile.evenementsSimules.length > 1 ? "s" : ""}
+                  </span>
+                ) : (
+                  <span className="hidden sm:inline-flex items-center text-[10px] font-black bg-white/25 text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    + Ajouter
+                  </span>
+                )}
               </button>
             </div>
 

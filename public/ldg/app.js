@@ -30,10 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const subtotalLdg5 = document.getElementById('subtotalLdg5');
   const subtotalLdg6 = document.getElementById('subtotalLdg6');
 
+  const maitriseSansQuotaBanner = document.getElementById('maitriseSansQuotaBanner');
+
   // Specific inputs
   const checkSyndicalLdg1 = document.getElementById('checkSyndicalLdg1');
   const crepCriteriaContainer = document.getElementById('crepCriteriaContainer');
   const crepSelects = document.querySelectorAll('.select-score[data-ldg="1"]');
+  const ldg1MaxLabel = document.getElementById('ldg1MaxLabel');
+  const ldg1NotApplicableNotice = document.getElementById('ldg1NotApplicableNotice');
 
   const selectLdg2Hierarchy = document.getElementById('selectLdg2Hierarchy');
   const selectLdg2Seniority = document.getElementById('selectLdg2Seniority');
@@ -44,19 +48,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const selectLdg3Years = document.getElementById('selectLdg3Years');
   const selectLdg3Months = document.getElementById('selectLdg3Months');
+  const ldg3MaxLabel = document.getElementById('ldg3MaxLabel');
+  const ldg3NotApplicableNotice = document.getElementById('ldg3NotApplicableNotice');
+  const ldg3InputsGroup = document.getElementById('ldg3InputsGroup');
 
   const selectLdg4Concours = document.getElementById('selectLdg4Concours');
   const selectLdg4Exam = document.getElementById('selectLdg4Exam');
   const ldg4MaxLabel = document.getElementById('ldg4MaxLabel');
+  const ldg4NotApplicableNotice = document.getElementById('ldg4NotApplicableNotice');
+  const ldg4InputsGroup = document.getElementById('ldg4InputsGroup');
 
   const selectLdg5Days = document.getElementById('selectLdg5Days');
   const selectLdg5Prep = document.getElementById('selectLdg5Prep');
   const ldg5DaysLabel = document.getElementById('ldg5DaysLabel');
   const ldg5DaysPeriodDesc = document.getElementById('ldg5DaysPeriodDesc');
+  const ldg5MaxLabel = document.getElementById('ldg5MaxLabel');
   const ldg5NotApplicableNotice = document.getElementById('ldg5NotApplicableNotice');
   const ldg5InputsGroup = document.getElementById('ldg5InputsGroup');
 
   const selectLdg6Diploma = document.getElementById('selectLdg6Diploma');
+  const ldg6MaxLabel = document.getElementById('ldg6MaxLabel');
+  const ldg6NotApplicableNotice = document.getElementById('ldg6NotApplicableNotice');
+  const ldg6InputsGroup = document.getElementById('ldg6InputsGroup');
 
   // Maximum badges & indicators
   const headerScoreMax = document.getElementById('headerScoreMax');
@@ -139,9 +152,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let max5 = (category === 'C' || accessWay === 'examen') ? 0 : 17;
     let max6 = (category === 'C') ? 0 : 3;
 
-    if (category === 'C' && accessWay === 'choix') {
-      max1 = 0;
-      max3 = 0;
+    if (category === 'C') {
+      max2 = 0;
+      max5 = 0;
+      max6 = 0;
+      if (accessWay === 'choix') {
+        // Agent de maîtrise au choix est sans quota : aucune LDG n'attribue de points
+        max1 = 0;
+        max3 = 0;
+        max4 = 0;
+      }
     }
     if (category === 'B' && accessWay === 'examen') {
       max2 = 0;
@@ -167,10 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cat === 'A') {
       categoryHintText.textContent = "Pour les agents B visant un cadre d'emplois A (Attaché, Ingénieur, Conseiller...).";
-      ldg2MaxLabel.textContent = "/ 35 pts";
       ldg4MaxLabel.textContent = "/ 35 pts";
-      ldg5DaysLabel.textContent = "Jours de formations suivies au cours des 5 dernières années";
-      ldg5DaysPeriodDesc.textContent = "Sur les 5 dernières années : 1 pt par jour, 0,5 pt par demi-journée (Max 15 pts).";
+      ldg5DaysLabel.textContent = "Jours de formations suivies au cours des 5 dernières années (2022-2026)";
+      ldg5DaysPeriodDesc.textContent = "Formations suivies entre le 01/01/2022 et le 31/12/2026 (5 ans) : 1 pt par jour, 0,5 pt par demi-journée (Max 15 pts).";
 
       // Ensure Stratégique option is visible & available in LDG 2
       let hasStrat = false;
@@ -183,10 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (cat === 'B') {
       categoryHintText.textContent = "Pour les agents C visant un cadre d'emplois B (Rédacteur, Technicien, Animateur...).";
-      ldg2MaxLabel.textContent = "/ 30 pts";
       ldg4MaxLabel.textContent = "/ 35 pts";
-      ldg5DaysLabel.textContent = "Jours de formations suivies au cours des 10 dernières années";
-      ldg5DaysPeriodDesc.textContent = "Sur les 10 dernières années : 1 pt par jour, 0,5 pt par demi-journée (Max 15 pts).";
+      ldg5DaysLabel.textContent = "Jours de formations suivies au cours des 10 dernières années (2017-2026)";
+      ldg5DaysPeriodDesc.textContent = "Formations suivies entre le 01/01/2017 et le 31/12/2026 (10 ans) : 1 pt par jour, 0,5 pt par demi-journée (Max 15 pts).";
 
       // Stratégique is not applicable in B
       for (let i = 0; i < selectLdg2Hierarchy.options.length; i++) {
@@ -197,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (cat === 'C') {
       categoryHintText.textContent = "Accès au cadre d'emplois des Agents de maîtrise (Catégorie C).";
-      ldg2MaxLabel.textContent = "/ 0 pt";
     }
 
     if (way === 'examen') {
@@ -206,33 +223,140 @@ document.addEventListener('DOMContentLoaded', () => {
       accessWayHintText.textContent = "Voie d'accès au choix sur appréciation de la valeur professionnelle et des acquis.";
     }
 
-    // Toggle visibility for non-applicable LDGs according to statutory rules
-    if (cat === 'C') {
-      // LDG 2, 5, 6 do not give points for Agent de maîtrise
-      ldg2NotApplicableNotice.style.display = 'block';
-      ldg2InputsGroup.style.opacity = '0.4';
-      ldg2InputsGroup.style.pointerEvents = 'none';
+    // Calcul des plafonds selon le profil
+    const maxScores = getMaxScores(cat, way, selectLdg4Exam.value);
 
-      ldg5NotApplicableNotice.style.display = 'block';
-      ldg5InputsGroup.style.opacity = '0.4';
-      ldg5InputsGroup.style.pointerEvents = 'none';
-    } else if (way === 'examen') {
-      // Examen pro in general has specific LDG 2 / 5 restrictions
-      ldg5NotApplicableNotice.style.display = 'block';
-      ldg5InputsGroup.style.opacity = '0.4';
-      ldg5InputsGroup.style.pointerEvents = 'none';
+    // Mise à jour dynamique des libellés de plafonds de sous-totaux
+    if (ldg1MaxLabel) ldg1MaxLabel.textContent = `/ ${maxScores.max1} pt${maxScores.max1 > 1 ? 's' : ''}`;
+    if (ldg2MaxLabel) ldg2MaxLabel.textContent = `/ ${maxScores.max2} pt${maxScores.max2 > 1 ? 's' : ''}`;
+    if (ldg3MaxLabel) ldg3MaxLabel.textContent = `/ ${maxScores.max3} pt${maxScores.max3 > 1 ? 's' : ''}`;
+    if (ldg4MaxLabel) ldg4MaxLabel.textContent = `/ ${maxScores.max4} pt${maxScores.max4 > 1 ? 's' : ''}`;
+    if (ldg5MaxLabel) ldg5MaxLabel.textContent = `/ ${maxScores.max5} pt${maxScores.max5 > 1 ? 's' : ''}`;
+    if (ldg6MaxLabel) ldg6MaxLabel.textContent = `/ ${maxScores.max6} pt${maxScores.max6 > 1 ? 's' : ''}`;
 
-      ldg2NotApplicableNotice.style.display = 'none';
-      ldg2InputsGroup.style.opacity = '1';
-      ldg2InputsGroup.style.pointerEvents = 'auto';
+    // Affichage du bandeau informatif spécial pour Agent de maîtrise au choix (sans quota)
+    if (maitriseSansQuotaBanner) {
+      maitriseSansQuotaBanner.style.display = (cat === 'C' && way === 'choix') ? 'block' : 'none';
+    }
+
+    // Gestion de l'inapplicabilité et des bandeaux par ligne :
+    // LDG 1
+    if (cat === 'C' && way === 'choix') {
+      if (ldg1NotApplicableNotice) ldg1NotApplicableNotice.style.display = 'block';
+      if (crepCriteriaContainer) {
+        crepCriteriaContainer.style.opacity = '0.35';
+        crepCriteriaContainer.style.pointerEvents = 'none';
+      }
+      if (checkSyndicalLdg1) checkSyndicalLdg1.disabled = true;
     } else {
-      ldg2NotApplicableNotice.style.display = 'none';
-      ldg2InputsGroup.style.opacity = '1';
-      ldg2InputsGroup.style.pointerEvents = 'auto';
+      if (ldg1NotApplicableNotice) ldg1NotApplicableNotice.style.display = 'none';
+      if (checkSyndicalLdg1) checkSyndicalLdg1.disabled = false;
+      if (!checkSyndicalLdg1.checked && crepCriteriaContainer) {
+        crepCriteriaContainer.style.opacity = '1';
+        crepCriteriaContainer.style.pointerEvents = 'auto';
+      }
+    }
 
-      ldg5NotApplicableNotice.style.display = 'none';
-      ldg5InputsGroup.style.opacity = '1';
-      ldg5InputsGroup.style.pointerEvents = 'auto';
+    // LDG 2
+    if (cat === 'C') {
+      if (ldg2NotApplicableNotice) {
+        ldg2NotApplicableNotice.style.display = 'block';
+        ldg2NotApplicableNotice.textContent = "ℹ️ Pour l'accès au cadre d'emplois des Agents de maîtrise (Catégorie C), la LDG 2 ne s'applique pas selon les règles statutaires du CIG.";
+      }
+      if (ldg2InputsGroup) {
+        ldg2InputsGroup.style.opacity = '0.35';
+        ldg2InputsGroup.style.pointerEvents = 'none';
+      }
+    } else if (cat === 'B' && way === 'examen') {
+      if (ldg2NotApplicableNotice) {
+        ldg2NotApplicableNotice.style.display = 'block';
+        ldg2NotApplicableNotice.textContent = "ℹ️ Pour la voie après examen professionnel en catégorie B, la LDG 2 ne s'applique pas selon le barème officiel CIG.";
+      }
+      if (ldg2InputsGroup) {
+        ldg2InputsGroup.style.opacity = '0.35';
+        ldg2InputsGroup.style.pointerEvents = 'none';
+      }
+    } else {
+      if (ldg2NotApplicableNotice) ldg2NotApplicableNotice.style.display = 'none';
+      if (ldg2InputsGroup) {
+        ldg2InputsGroup.style.opacity = '1';
+        ldg2InputsGroup.style.pointerEvents = 'auto';
+      }
+    }
+
+    // LDG 3
+    if (cat === 'C' && way === 'choix') {
+      if (ldg3NotApplicableNotice) ldg3NotApplicableNotice.style.display = 'block';
+      if (ldg3InputsGroup) {
+        ldg3InputsGroup.style.opacity = '0.35';
+        ldg3InputsGroup.style.pointerEvents = 'none';
+      }
+    } else {
+      if (ldg3NotApplicableNotice) ldg3NotApplicableNotice.style.display = 'none';
+      if (ldg3InputsGroup) {
+        ldg3InputsGroup.style.opacity = '1';
+        ldg3InputsGroup.style.pointerEvents = 'auto';
+      }
+    }
+
+    // LDG 4
+    if (cat === 'C' && way === 'choix') {
+      if (ldg4NotApplicableNotice) ldg4NotApplicableNotice.style.display = 'block';
+      if (ldg4InputsGroup) {
+        ldg4InputsGroup.style.opacity = '0.35';
+        ldg4InputsGroup.style.pointerEvents = 'none';
+      }
+    } else {
+      if (ldg4NotApplicableNotice) ldg4NotApplicableNotice.style.display = 'none';
+      if (ldg4InputsGroup) {
+        ldg4InputsGroup.style.opacity = '1';
+        ldg4InputsGroup.style.pointerEvents = 'auto';
+      }
+    }
+
+    // LDG 5
+    if (cat === 'C') {
+      if (ldg5NotApplicableNotice) {
+        ldg5NotApplicableNotice.style.display = 'block';
+        ldg5NotApplicableNotice.textContent = "ℹ️ Pour l'accès au grade d'Agent de maîtrise (Catégorie C), la LDG 5 ne s'applique pas selon les règles statutaires du CIG.";
+      }
+      if (ldg5InputsGroup) {
+        ldg5InputsGroup.style.opacity = '0.35';
+        ldg5InputsGroup.style.pointerEvents = 'none';
+      }
+    } else if (way === 'examen') {
+      if (ldg5NotApplicableNotice) {
+        ldg5NotApplicableNotice.style.display = 'block';
+        ldg5NotApplicableNotice.textContent = "ℹ️ Pour la voie « après examen professionnel », la LDG 5 ne s'applique pas (sauf exceptions spécifiques Ingénieur et Chef de police).";
+      }
+      if (ldg5InputsGroup) {
+        ldg5InputsGroup.style.opacity = '0.35';
+        ldg5InputsGroup.style.pointerEvents = 'none';
+      }
+    } else {
+      if (ldg5NotApplicableNotice) ldg5NotApplicableNotice.style.display = 'none';
+      if (ldg5InputsGroup) {
+        ldg5InputsGroup.style.opacity = '1';
+        ldg5InputsGroup.style.pointerEvents = 'auto';
+      }
+    }
+
+    // LDG 6
+    if (cat === 'C') {
+      if (ldg6NotApplicableNotice) {
+        ldg6NotApplicableNotice.style.display = 'block';
+        ldg6NotApplicableNotice.textContent = "ℹ️ Pour l'accès au cadre d'emplois des Agents de maîtrise (Catégorie C), la LDG 6 ne s'applique pas selon les règles statutaires du CIG.";
+      }
+      if (ldg6InputsGroup) {
+        ldg6InputsGroup.style.opacity = '0.35';
+        ldg6InputsGroup.style.pointerEvents = 'none';
+      }
+    } else {
+      if (ldg6NotApplicableNotice) ldg6NotApplicableNotice.style.display = 'none';
+      if (ldg6InputsGroup) {
+        ldg6InputsGroup.style.opacity = '1';
+        ldg6InputsGroup.style.pointerEvents = 'auto';
+      }
     }
 
     calculateAll();
@@ -254,6 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function calculateAll() {
     const cat = selectCategoryTarget.value;
     const way = selectAccessWay.value;
+    const examVal = selectLdg4Exam ? selectLdg4Exam.value : '';
 
     // --- LDG 1 : Valeur Pro ---
     let ptsLdg1 = 0;
@@ -267,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ptsLdg1 += parseInt(sel.value, 10) || 0;
       });
     }
-    ptsLdg1 = Math.min(ptsLdg1, 45);
+    ptsLdg1 = Math.min(ptsLdg1, (cat === 'C' && way === 'choix') ? 0 : 45);
 
     // --- LDG 2 : Fonctions exercées ---
     let ptsLdg2 = 0;
@@ -301,33 +426,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LDG 4 : Concours et Examens ---
     let ptsLdg4 = 0;
-    const concoursPts = parseInt(selectLdg4Concours.value, 10) || 0;
-    const examVal = selectLdg4Exam.value;
-    let examPts = 0;
-
-    if (examVal === '10') {
-      examPts = 10;
-    } else if (examVal === '20_reg') {
-      examPts = 20;
-    } else if (examVal === '15_reg') {
-      examPts = 15;
-    } else if (examVal === '10_reg') {
-      examPts = 10;
-    } else if (examVal === 'exception_20') {
-      examPts = 20;
-    } else if (examVal === 'exception_15') {
-      examPts = 15;
-    } else if (examVal === 'exception_10') {
-      examPts = 10;
-    }
-
-    ptsLdg4 = concoursPts + examPts;
-
-    // Exception rédacteur can reach 45 pts, otherwise standard max 35 pts
-    if (examVal.startsWith('exception_')) {
-      ptsLdg4 = Math.min(ptsLdg4, 45);
+    if (cat === 'C' && way === 'choix') {
+      ptsLdg4 = 0;
     } else {
-      ptsLdg4 = Math.min(ptsLdg4, 35);
+      const concoursPts = parseInt(selectLdg4Concours.value, 10) || 0;
+      let examPts = 0;
+
+      if (examVal === '10') {
+        examPts = 10;
+      } else if (examVal === '20_reg') {
+        examPts = 20;
+      } else if (examVal === '15_reg') {
+        examPts = 15;
+      } else if (examVal === '10_reg') {
+        examPts = 10;
+      } else if (examVal === 'exception_20') {
+        examPts = 20;
+      } else if (examVal === 'exception_15') {
+        examPts = 15;
+      } else if (examVal === 'exception_10') {
+        examPts = 10;
+      }
+
+      ptsLdg4 = concoursPts + examPts;
+
+      // Exception rédacteur can reach 45 pts, otherwise standard max 35 pts
+      if (examVal.startsWith('exception_')) {
+        ptsLdg4 = Math.min(ptsLdg4, 45);
+      } else {
+        ptsLdg4 = Math.min(ptsLdg4, 35);
+      }
     }
 
     // --- LDG 5 : Formations pro ---
@@ -475,14 +603,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ligne 1
     let l1Details = '';
-    if (checkSyndicalLdg1.checked) {
+    if (cat === 'C' && way === 'choix') {
+      l1Details = "Promotion au choix sans quota réglementaire (aucun point barème CIG)";
+    } else if (checkSyndicalLdg1.checked) {
       l1Details = "Forfait mandat syndical >= 70% sans CREP ces 2 dernières années";
     } else {
       l1Details = `Croix de votre entretien professionnel (CREP) transformées en points (${subtotalLdg1.textContent}/${maxScores.max1} pts)`;
     }
     appendRecapRow("Ligne 1 : Valeur Professionnelle", l1Details, subtotalLdg1.textContent, `${maxScores.max1} pts`);
-    checklistItems.add("CREP N-1 ou N-2 dûment signé par l'agent et son supérieur hiérarchique direct.");
-    checklistItems.add("Grille d'évaluation LDG 1 visée par la collectivité de Gennevilliers.");
+    if (cat !== 'C' || way !== 'choix') {
+      checklistItems.add("CREP N-1 ou N-2 dûment signé par l'agent et son supérieur hiérarchique direct.");
+      checklistItems.add("Grille d'évaluation LDG 1 visée par la collectivité de Gennevilliers.");
+    }
 
     // Ligne 2
     let l2Details = '';
@@ -502,22 +634,38 @@ document.addEventListener('DOMContentLoaded', () => {
     appendRecapRow("Ligne 2 : Fonctions Exercées", l2Details, subtotalLdg2.textContent, `${maxScores.max2} pts`);
 
     // Ligne 3
-    const years = selectLdg3Years.value;
-    const months = selectLdg3Months.options[selectLdg3Months.selectedIndex]?.text.split('(')[0] || '';
-    const l3Details = `${years} an(s) et ${months.trim()} dans la catégorie actuelle`;
+    let l3Details = '';
+    if (cat === 'C' && way === 'choix') {
+      l3Details = "Promotion au choix sans quota réglementaire (aucun point barème CIG)";
+    } else {
+      const years = selectLdg3Years.value;
+      const months = selectLdg3Months.options[selectLdg3Months.selectedIndex]?.text.split('(')[0] || '';
+      l3Details = `${years} an(s) et ${months.trim()} dans la catégorie actuelle (calcul arrêté au 01/01/2027)`;
+    }
     appendRecapRow("Ligne 3 : Ancienneté dans la Catégorie", l3Details, subtotalLdg3.textContent, `${maxScores.max3} pts`);
-    checklistItems.add("Arrêté de nomination en qualité de stagiaire ou de titulaire dans la catégorie actuelle (avec reprise de services éventuelle).");
+    if (cat !== 'C' || way !== 'choix') {
+      checklistItems.add("Arrêté de nomination en qualité de stagiaire ou de titulaire dans la catégorie actuelle (avec reprise de services éventuelle).");
+    } else {
+      checklistItems.add("Arrêté de nomination justifiant d'au moins 9 ans de services effectifs dans un cadre technique ou ATSEM.");
+    }
 
     // Ligne 4
-    const concText = selectLdg4Concours.value === '15' ? 'Recruté sur concours (+15 pts)' : 'Sans concours';
-    const examText = selectLdg4Exam.options[selectLdg4Exam.selectedIndex]?.text.split('(')[0] || '';
-    const l4Details = `${concText} • ${examText.trim()}`;
-    appendRecapRow("Ligne 4 : Concours et Examens Professionnels", l4Details, subtotalLdg4.textContent, `${maxScores.max4} pts`);
-    if (selectLdg4Concours.value === '15') {
-      checklistItems.add("Arrêté de nomination mentionnant le visa du concours + attestation de réussite au concours ou liste d'aptitude.");
+    let l4Details = '';
+    if (cat === 'C' && way === 'choix') {
+      l4Details = "Promotion au choix sans quota réglementaire (aucun point barème CIG)";
+    } else {
+      const concText = selectLdg4Concours.value === '15' ? 'Recruté sur concours (+15 pts)' : 'Sans concours';
+      const examText = selectLdg4Exam.options[selectLdg4Exam.selectedIndex]?.text.split('(')[0] || '';
+      l4Details = `${concText} • ${examText.trim()}`;
     }
-    if (selectLdg4Exam.value !== '0') {
-      checklistItems.add("Attestation officielle de réussite à l'examen professionnel ou arrêté de nomination correspondant.");
+    appendRecapRow("Ligne 4 : Concours et Examens Professionnels", l4Details, subtotalLdg4.textContent, `${maxScores.max4} pts`);
+    if (cat !== 'C' || way !== 'choix') {
+      if (selectLdg4Concours.value === '15') {
+        checklistItems.add("Arrêté de nomination mentionnant le visa du concours + attestation de réussite au concours ou liste d'aptitude.");
+      }
+      if (selectLdg4Exam.value !== '0') {
+        checklistItems.add("Attestation officielle de réussite à l'examen professionnel ou arrêté de nomination correspondant.");
+      }
     }
 
     // Ligne 5
@@ -525,10 +673,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cat === 'C' || maxScores.max5 === 0) {
       l5Details = "Non applicable selon votre profil / voie";
     } else {
-      const daysText = `${selectLdg5Days.value} jour(s) de formation hors FSO`;
-      const prepText = selectLdg5Prep.value === '2' ? 'Avec préparation concours/examen' : 'Sans prépa concours';
+      const daysText = `${selectLdg5Days.value} jour(s) de formation hors FSO (${cat === 'A' ? '2022-2026' : '2017-2026'})`;
+      const prepText = selectLdg5Prep.value === '2' ? 'Avec préparation concours/examen (2022-2026)' : 'Sans prépa concours';
       l5Details = `${daysText} • ${prepText}`;
-      checklistItems.add("Attestations de présence CNFPT ou d'organismes de formation externes indiquant la durée (hors jours FSO).");
+      checklistItems.add("<strong>Pensez à transmettre toutes vos attestations à la DCRH</strong> (attestations de présence CNFPT ou d'organismes de formation externes indiquant la durée, hors jours FSO).");
       if (selectLdg5Prep.value === '2') {
         checklistItems.add("Attestation de présence pour la préparation au concours ou examen professionnel.");
       }
@@ -542,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       l6Details = selectLdg6Diploma.options[selectLdg6Diploma.selectedIndex]?.text || 'Aucun';
       if (selectLdg6Diploma.value !== '0') {
-        checklistItems.add("Copie du diplôme le plus élevé certifié au RNCP ou attestation officielle de réussite.");
+        checklistItems.add("<strong>À transmettre à la GCR :</strong> Copie du diplôme le plus élevé certifié au RNCP ou attestation officielle de réussite.");
       }
     }
     appendRecapRow("Ligne 6 : Diplôme le Plus Élevé", l6Details, subtotalLdg6.textContent, `${maxScores.max6} pts`);
@@ -568,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checklistItems.forEach(item => {
       const li = document.createElement('li');
-      li.textContent = item;
+      li.innerHTML = item;
       recapChecklist.appendChild(li);
     });
 
@@ -593,8 +741,159 @@ document.addEventListener('DOMContentLoaded', () => {
     recapModal.setAttribute('aria-hidden', 'true');
   }
 
+  // =========================================================
+  // GESTION BULLE D'INFORMATION (I) ET GRILLE CIG LIGNE 2
+  // =========================================================
+  const ldg2InfoWrapper = document.getElementById('ldg2InfoWrapper');
+  const btnInfoLdg2 = document.getElementById('btnInfoLdg2');
+  const popoverLdg2 = document.getElementById('popoverLdg2');
+  const btnCloseLdg2Popover = document.getElementById('btnCloseLdg2Popover');
+  const btnFooterCloseLdg2 = document.getElementById('btnFooterCloseLdg2');
+  const tabBtnCatA = document.getElementById('tabBtnCatA');
+  const tabBtnCatB = document.getElementById('tabBtnCatB');
+  const panelCatA = document.getElementById('panelCatA');
+  const panelCatB = document.getElementById('panelCatB');
+  const popoverCurrentCatLabel = document.getElementById('popoverCurrentCatLabel');
+
+  let popoverHideTimer = null;
+  let isPinnedOpen = false;
+
+  function setLdg2ActiveTab(tab) {
+    if (!tabBtnCatA || !tabBtnCatB || !panelCatA || !panelCatB) return;
+    if (tab === 'A') {
+      tabBtnCatA.classList.add('active');
+      tabBtnCatA.setAttribute('aria-selected', 'true');
+      tabBtnCatB.classList.remove('active');
+      tabBtnCatB.setAttribute('aria-selected', 'false');
+      panelCatA.style.display = 'block';
+      panelCatB.style.display = 'none';
+    } else {
+      tabBtnCatB.classList.add('active');
+      tabBtnCatB.setAttribute('aria-selected', 'true');
+      tabBtnCatA.classList.remove('active');
+      tabBtnCatA.setAttribute('aria-selected', 'false');
+      panelCatB.style.display = 'block';
+      panelCatA.style.display = 'none';
+    }
+  }
+
+  function syncLdg2PopoverCategory(cat) {
+    if (popoverCurrentCatLabel) {
+      popoverCurrentCatLabel.textContent = (cat === 'A') ? 'Catégorie A' : (cat === 'C' ? 'Catégorie C' : 'Catégorie B');
+    }
+    setLdg2ActiveTab(cat === 'A' ? 'A' : 'B');
+  }
+
+  function showLdg2Popover() {
+    if (popoverHideTimer) {
+      clearTimeout(popoverHideTimer);
+      popoverHideTimer = null;
+    }
+    if (!popoverLdg2) return;
+    syncLdg2PopoverCategory(selectCategoryTarget.value);
+    popoverLdg2.classList.add('show');
+    if (ldg2InfoWrapper) ldg2InfoWrapper.classList.add('is-open');
+    if (btnInfoLdg2) btnInfoLdg2.setAttribute('aria-expanded', 'true');
+  }
+
+  function hideLdg2Popover(force = false) {
+    if (isPinnedOpen && !force) return;
+    if (popoverHideTimer) clearTimeout(popoverHideTimer);
+    popoverHideTimer = setTimeout(() => {
+      if (!isPinnedOpen || force) {
+        if (popoverLdg2) popoverLdg2.classList.remove('show');
+        if (ldg2InfoWrapper) ldg2InfoWrapper.classList.remove('is-open');
+        if (btnInfoLdg2) btnInfoLdg2.setAttribute('aria-expanded', 'false');
+        isPinnedOpen = false;
+      }
+    }, force ? 0 : 250);
+  }
+
+  function initLdg2InfoBubble() {
+    if (!btnInfoLdg2 || !popoverLdg2 || !ldg2InfoWrapper) return;
+
+    // Survol souris (desktop)
+    btnInfoLdg2.addEventListener('mouseenter', () => {
+      showLdg2Popover();
+    });
+    btnInfoLdg2.addEventListener('mouseleave', () => {
+      hideLdg2Popover(false);
+    });
+
+    popoverLdg2.addEventListener('mouseenter', () => {
+      if (popoverHideTimer) {
+        clearTimeout(popoverHideTimer);
+        popoverHideTimer = null;
+      }
+    });
+    popoverLdg2.addEventListener('mouseleave', () => {
+      hideLdg2Popover(false);
+    });
+
+    // Clic pour épingler / basculer (mobile ou tactile)
+    btnInfoLdg2.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (popoverLdg2.classList.contains('show') && isPinnedOpen) {
+        isPinnedOpen = false;
+        hideLdg2Popover(true);
+      } else {
+        isPinnedOpen = true;
+        showLdg2Popover();
+      }
+    });
+
+    // Fermeture par bouton croix ou bouton footer
+    if (btnCloseLdg2Popover) {
+      btnCloseLdg2Popover.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isPinnedOpen = false;
+        hideLdg2Popover(true);
+      });
+    }
+    if (btnFooterCloseLdg2) {
+      btnFooterCloseLdg2.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isPinnedOpen = false;
+        hideLdg2Popover(true);
+      });
+    }
+
+    // Onglets internes du popover
+    if (tabBtnCatA) {
+      tabBtnCatA.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setLdg2ActiveTab('A');
+      });
+    }
+    if (tabBtnCatB) {
+      tabBtnCatB.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setLdg2ActiveTab('B');
+      });
+    }
+
+    // Fermeture au clic à l'extérieur
+    document.addEventListener('click', (e) => {
+      if (ldg2InfoWrapper && !ldg2InfoWrapper.contains(e.target)) {
+        isPinnedOpen = false;
+        hideLdg2Popover(true);
+      }
+    });
+
+    // Touche Echap
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        isPinnedOpen = false;
+        hideLdg2Popover(true);
+      }
+    });
+  }
+
   // Event Listeners
-  selectCategoryTarget.addEventListener('change', handleProfileChange);
+  selectCategoryTarget.addEventListener('change', () => {
+    handleProfileChange();
+    syncLdg2PopoverCategory(selectCategoryTarget.value);
+  });
   selectAccessWay.addEventListener('change', handleProfileChange);
   checkSyndicalLdg1.addEventListener('change', handleSyndicalChange);
 
@@ -619,6 +918,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.print();
   });
 
+  // Initialisation de la bulle d'information Ligne 2
+  initLdg2InfoBubble();
+
   // Initial calculation
   handleProfileChange();
 });
+

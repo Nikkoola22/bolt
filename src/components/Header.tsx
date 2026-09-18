@@ -1,6 +1,6 @@
 import React from "react";
 import type { ProfilAgent } from "../types/career";
-import { BookOpen, Printer, ShieldCheck, RotateCcw, Sun, Moon, ArrowLeft } from "lucide-react";
+import { BookOpen, Printer, ShieldCheck, RotateCcw, Sun, Moon, ArrowLeft, FileEdit } from "lucide-react";
 
 interface HeaderProps {
   currentProfile?: ProfilAgent;
@@ -17,6 +17,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   currentProfile,
+  onOpenEditProfile,
   onOpenGlossary,
   onOpenPrintSummary,
   onResetEvents,
@@ -80,6 +81,17 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <RotateCcw className="w-3.5 h-3.5 text-tangerine" />
               <span>Reset ({currentProfile.evenementsSimules.length})</span>
+            </button>
+          )}
+
+          {onOpenEditProfile && (
+            <button
+              onClick={onOpenEditProfile}
+              className="text-xs text-orange-950 dark:text-orange-200 hover:text-black dark:hover:text-white px-3 py-1.5 rounded-full bg-orange-100/90 dark:bg-orange-950/60 hover:bg-orange-200 dark:hover:bg-orange-900/80 border border-orange-300/80 dark:border-orange-700/80 transition-all flex items-center gap-1.5 cursor-pointer font-bold shadow-2xs active:scale-[0.98]"
+              title="Modifier les informations de profil"
+            >
+              <FileEdit className="w-3.5 h-3.5 text-orange-600 dark:text-orange-400" />
+              <span className="hidden sm:inline">Modifier profil</span>
             </button>
           )}
 

@@ -21,8 +21,9 @@ export const LdgSimulatorView: React.FC<LdgSimulatorViewProps> = ({
   const targetCategory = currentCategory === "C" ? "B" : currentCategory === "B" ? "A" : "A";
 
   const entryYear = profil.dateEntreeFonctionPublique ? parseInt(profil.dateEntreeFonctionPublique.split("-")[0], 10) : 2016;
-  const currentYear = new Date().getFullYear();
-  const seniorityYears = Math.min(45, Math.max(0, currentYear - entryYear));
+  // Calcul de l'ancienneté arrêté au 1er janvier 2027 pour la session LDG-PI 2027
+  const referenceYear = 2027;
+  const seniorityYears = Math.min(45, Math.max(0, referenceYear - entryYear));
 
   const iframeSrc = `/ldg/index.html?target=${targetCategory}&years=${seniorityYears}&way=choix`;
 

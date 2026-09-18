@@ -2254,6 +2254,438 @@ const CADRES_EMPLOIS_RAW: CadreEmploiDefinition[] = [
         perspectives: []
       }
     ]
+  },
+  // =========================================================================
+  // FILIÈRE ANIMATION
+  // =========================================================================
+  {
+    id: "adjoint_animation",
+    nom: "Adjoint territorial d'animation",
+    filiere: "Animation",
+    categorie: "C",
+    decretReference: "Décret n° 2006-1693 du 22 décembre 2006 modifié portant statut particulier du cadre d emplois des adjoints territoriaux d animation et Décret n° 2016-596",
+    grades: [
+      {
+        id: "adjoint_animation_c1",
+        nom: "Adjoint d'animation (C1)",
+        filiere: "Animation",
+        categorie: "C",
+        descriptionGrade: "Grade d entrée sans concours en catégorie C animation (Échelle C1). Accueil périscolaire, encadrement des activités de loisirs et surveillance de la jeunesse.",
+        echelons: [
+          { numero: 1, dureeAnnees: 1, indiceBrut: 367, indiceMajore: 366, description: "Minimum de traitement garanti" },
+          { numero: 2, dureeAnnees: 1, indiceBrut: 368, indiceMajore: 367 },
+          { numero: 3, dureeAnnees: 1, indiceBrut: 370, indiceMajore: 368 },
+          { numero: 4, dureeAnnees: 1, indiceBrut: 371, indiceMajore: 369 },
+          { numero: 5, dureeAnnees: 1, indiceBrut: 374, indiceMajore: 370 },
+          { numero: 6, dureeAnnees: 1, indiceBrut: 378, indiceMajore: 371 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 381, indiceMajore: 372 },
+          { numero: 8, dureeAnnees: 3, indiceBrut: 387, indiceMajore: 373 },
+          { numero: 9, dureeAnnees: 3, indiceBrut: 401, indiceMajore: 376 },
+          { numero: 10, dureeAnnees: 4, indiceBrut: 419, indiceMajore: 377 },
+          { numero: 11, dureeAnnees: 0, indiceBrut: 432, indiceMajore: 387, description: "Sommet C1" }
+        ],
+        perspectives: [
+          {
+            gradeCibleId: "adjoint_animation_principal_2cl",
+            nomGradeCible: "Adjoint d'animation principal de 2e classe (C2)",
+            categorieCible: "C",
+            typePerspective: "avancement_grade",
+            ratioPromusPromouvablesExplication: "Taux fixé par la collectivité après avis du CST.",
+            modaliteReclassement: "Reclassement à échelon d indice équivalent ou immédiatement supérieur.",
+            explicationReclassement: "Accès à l échelle C2 avec déroulement jusqu à l échelon 12.",
+            conditions: [
+              {
+                typeVoie: "examen_professionnel",
+                descriptionVoie: "Examen professionnel C1 -> C2",
+                echelonMinimum: 4,
+                ancienneteEchelonAnnees: 0,
+                ancienneteGradeAnnees: 3,
+                examenProfessionnelRequis: true,
+                piecesRequises: ["Attestation de réussite examen C2 délivrée par le CDG", "Évaluations annuelles"],
+                actesAdministratifs: ["Tableau d avancement annuel", "Arrêté individuel"]
+              },
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Au choix",
+                echelonMinimum: 5,
+                ancienneteEchelonAnnees: 0,
+                ancienneteGradeAnnees: 5,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["5 ans de services effectifs accomplis en C1", "Dossier professionnel"],
+                actesAdministratifs: ["Inscription tableau d avancement", "Arrêté individuel"]
+              }
+            ]
+          },
+          {
+            gradeCibleId: "animateur_classe_normale",
+            nomGradeCible: "Animateur territorial (Catégorie B)",
+            categorieCible: "B",
+            typePerspective: "promotion_interne",
+            ratioPromusPromouvablesExplication: "Promotion interne sur liste d aptitude CDG (quotas catégorie B).",
+            modaliteReclassement: "Reclassement en catégorie B avec clause de sauvegarde indiciaire.",
+            explicationReclassement: "Passage vers les fonctions d encadrement, de conception pédagogique et d animation de projets.",
+            conditions: [
+              {
+                typeVoie: "examen_professionnel",
+                descriptionVoie: "Promotion interne B par Examen Professionnel",
+                echelonMinimum: 4,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 7,
+                examenProfessionnelRequis: true,
+                piecesRequises: ["Réussite examen pro Animateur CDG", "7 ans de services publics dont 4 ans en C"],
+                actesAdministratifs: ["Inscription liste d aptitude CDG", "Arrêté individuel de nomination stagiaire"]
+              },
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Promotion interne B au choix",
+                echelonMinimum: 5,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 9,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["9 ans de services effectifs", "Dossier EPA", "Attestations de formation CNFPT"],
+                actesAdministratifs: ["Liste aptitude CDG", "Arrêté individuel"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "adjoint_animation_principal_2cl",
+        nom: "Adjoint d'animation principal de 2e classe (C2)",
+        filiere: "Animation",
+        categorie: "C",
+        descriptionGrade: "Deuxième grade de catégorie C animation (Échelle C2). Organisation d activités périscolaires et de loisirs, encadrement d animateurs vacataires ou C1.",
+        echelons: [
+          { numero: 1, dureeAnnees: 1, indiceBrut: 368, indiceMajore: 367 },
+          { numero: 2, dureeAnnees: 1, indiceBrut: 371, indiceMajore: 369 },
+          { numero: 3, dureeAnnees: 1, indiceBrut: 376, indiceMajore: 370 },
+          { numero: 4, dureeAnnees: 1, indiceBrut: 387, indiceMajore: 373 },
+          { numero: 5, dureeAnnees: 1, indiceBrut: 396, indiceMajore: 374 },
+          { numero: 6, dureeAnnees: 1, indiceBrut: 404, indiceMajore: 376, description: "Accès promouvabilité C3" },
+          { numero: 7, dureeAnnees: 2, indiceBrut: 416, indiceMajore: 377 },
+          { numero: 8, dureeAnnees: 2, indiceBrut: 430, indiceMajore: 385 },
+          { numero: 9, dureeAnnees: 3, indiceBrut: 446, indiceMajore: 397 },
+          { numero: 10, dureeAnnees: 3, indiceBrut: 461, indiceMajore: 409 },
+          { numero: 11, dureeAnnees: 4, indiceBrut: 473, indiceMajore: 417 },
+          { numero: 12, dureeAnnees: 0, indiceBrut: 486, indiceMajore: 425, description: "Sommet C2 (IM 425)" }
+        ],
+        perspectives: [
+          {
+            gradeCibleId: "adjoint_animation_principal_1cl",
+            nomGradeCible: "Adjoint d'animation principal de 1re classe (C3)",
+            categorieCible: "C",
+            typePerspective: "avancement_grade",
+            ratioPromusPromouvablesExplication: "Taux fixé par l assemblée délibérante.",
+            modaliteReclassement: "Reclassement à échelon d indice équivalent dans l échelle C3.",
+            explicationReclassement: "Grade sommital de catégorie C animation.",
+            conditions: [
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Au choix",
+                echelonMinimum: 6,
+                ancienneteEchelonAnnees: 1,
+                ancienneteGradeAnnees: 5,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["1 an au 6e échelon et 5 ans de services effectifs en C2", "Évaluations annuelles"],
+                actesAdministratifs: ["Inscription tableau d avancement", "Arrêté individuel"]
+              }
+            ]
+          },
+          {
+            gradeCibleId: "animateur_classe_normale",
+            nomGradeCible: "Animateur territorial (Catégorie B)",
+            categorieCible: "B",
+            typePerspective: "promotion_interne",
+            ratioPromusPromouvablesExplication: "Listes d aptitude CDG.",
+            modaliteReclassement: "Reclassement en B avec garantie du traitement.",
+            explicationReclassement: "Évolution vers la catégorie B.",
+            conditions: [
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Promotion interne B au choix",
+                echelonMinimum: 5,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 8,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["8 ans de services effectifs", "Dossier EPA", "Attestations de formation CNFPT"],
+                actesAdministratifs: ["Liste aptitude CDG", "Arrêté individuel"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "adjoint_animation_principal_1cl",
+        nom: "Adjoint d'animation principal de 1re classe (C3)",
+        filiere: "Animation",
+        categorie: "C",
+        descriptionGrade: "Grade sommital de la catégorie C animation (Échelle C3). Encadrement et coordination d équipes périscolaires ou de structures d accueil de loisirs.",
+        echelons: [
+          { numero: 1, dureeAnnees: 1, indiceBrut: 388, indiceMajore: 373 },
+          { numero: 2, dureeAnnees: 1, indiceBrut: 397, indiceMajore: 375 },
+          { numero: 3, dureeAnnees: 2, indiceBrut: 412, indiceMajore: 376 },
+          { numero: 4, dureeAnnees: 2, indiceBrut: 430, indiceMajore: 385 },
+          { numero: 5, dureeAnnees: 2, indiceBrut: 448, indiceMajore: 398 },
+          { numero: 6, dureeAnnees: 2, indiceBrut: 460, indiceMajore: 408 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420 },
+          { numero: 8, dureeAnnees: 3, indiceBrut: 499, indiceMajore: 435 },
+          { numero: 9, dureeAnnees: 3, indiceBrut: 525, indiceMajore: 455 },
+          { numero: 10, dureeAnnees: 0, indiceBrut: 558, indiceMajore: 478, description: "Sommet C3 (IM 478)" }
+        ],
+        perspectives: [
+          {
+            gradeCibleId: "animateur_classe_normale",
+            nomGradeCible: "Animateur territorial (Catégorie B)",
+            categorieCible: "B",
+            typePerspective: "promotion_interne",
+            ratioPromusPromouvablesExplication: "Listes d aptitude CDG.",
+            modaliteReclassement: "Reclassement en B avec garantie du traitement.",
+            explicationReclassement: "Passage en catégorie B animation.",
+            conditions: [
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Promotion interne B au choix",
+                echelonMinimum: 4,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 8,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["8 ans de services effectifs", "Dossier professionnel"],
+                actesAdministratifs: ["Liste aptitude CDG", "Arrêté individuel"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "animateur_territorial",
+    nom: "Animateur territorial",
+    filiere: "Animation",
+    categorie: "B",
+    decretReference: "Décret n° 2011-558 du 20 mai 2011 modifié portant statut particulier du cadre d emplois des animateurs territoriaux et Décrets n° 2010-329, n° 2022-1200 et n° 2022-1201 (revalorisation B)",
+    grades: [
+      {
+        id: "animateur_classe_normale",
+        nom: "Animateur (Classe normale - B1)",
+        filiere: "Animation",
+        categorie: "B",
+        descriptionGrade: "Premier grade du cadre d emplois des animateurs (Catégorie B - NES B1). Conception, coordination et mise en œuvre des activités éducatives, de loisirs, de médiation sociale et de développement des quartiers.",
+        echelons: [
+          { numero: 1, dureeAnnees: 1, indiceBrut: 389, indiceMajore: 373, description: "Stage probatoire avant titularisation" },
+          { numero: 2, dureeAnnees: 1, indiceBrut: 395, indiceMajore: 374 },
+          { numero: 3, dureeAnnees: 1, indiceBrut: 397, indiceMajore: 375 },
+          { numero: 4, dureeAnnees: 1, indiceBrut: 401, indiceMajore: 376 },
+          { numero: 5, dureeAnnees: 2, indiceBrut: 415, indiceMajore: 377 },
+          { numero: 6, dureeAnnees: 2, indiceBrut: 431, indiceMajore: 386, description: "Accès examen pro Animateur Principal 2e cl." },
+          { numero: 7, dureeAnnees: 2, indiceBrut: 452, indiceMajore: 401 },
+          { numero: 8, dureeAnnees: 3, indiceBrut: 478, indiceMajore: 420, description: "Accès au choix Animateur Principal 2e cl. après 1 an" },
+          { numero: 9, dureeAnnees: 3, indiceBrut: 500, indiceMajore: 436 },
+          { numero: 10, dureeAnnees: 3, indiceBrut: 513, indiceMajore: 446 },
+          { numero: 11, dureeAnnees: 3, indiceBrut: 538, indiceMajore: 462 },
+          { numero: 12, dureeAnnees: 4, indiceBrut: 563, indiceMajore: 482 },
+          { numero: 13, dureeAnnees: 0, indiceBrut: 597, indiceMajore: 508, description: "Sommet de la classe normale B1" }
+        ],
+        perspectives: [
+          {
+            gradeCibleId: "animateur_principal_2cl",
+            nomGradeCible: "Animateur principal de 2e classe (B2)",
+            categorieCible: "B",
+            typePerspective: "avancement_grade",
+            ratioPromusPromouvablesExplication: "Taux fixé par délibération de la collectivité après avis du CST. Souvent compris entre 30% et 60% des agents promouvables.",
+            modaliteReclassement: "Reclassement à l échelon comportant un indice égal ou immédiatement supérieur avec conservation d ancienneté si le gain indiciaire est inférieur à un avancement d échelon.",
+            explicationReclassement: "Par exemple, un agent au 8e échelon (IM 420) est reclassé au 6e échelon de 2e classe (IM 421) avec conservation de son ancienneté acquise.",
+            conditions: [
+              {
+                typeVoie: "examen_professionnel",
+                descriptionVoie: "Examen professionnel",
+                echelonMinimum: 6,
+                ancienneteEchelonAnnees: 0,
+                ancienneteCadreAnnees: 3,
+                examenProfessionnelRequis: true,
+                piecesRequises: [
+                  "Attestation de réussite à l examen professionnel organisée par le Centre de Gestion (CDG)",
+                  "Rapports d entretien professionnel annuel (EPA)",
+                  "Attestation de suivi des formations d intégration et de professionnalisation obligatoire (CNFPT)"
+                ],
+                actesAdministratifs: [
+                  "Consultation des Lignes Directrices de Gestion (LDG)",
+                  "Arrêté portant tableau annuel d avancement signé par l autorité territoriale",
+                  "Arrêté individuel de nomination et reclassement indiciaire"
+                ]
+              },
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Au choix",
+                echelonMinimum: 8,
+                ancienneteEchelonAnnees: 1,
+                ancienneteCadreAnnees: 5,
+                examenProfessionnelRequis: false,
+                piecesRequises: [
+                  "Justificatif d 1 an au moins dans le 8e échelon et 5 ans de services effectifs accomplis en catégorie B",
+                  "Comptes-rendus d entretien professionnel",
+                  "Dossier professionnel valorisant les acquis de l expérience"
+                ],
+                actesAdministratifs: [
+                  "Inscription au tableau annuel selon les critères LDG",
+                  "Application du ratio promus/promouvables",
+                  "Arrêté individuel de nomination au grade supérieur"
+                ]
+              }
+            ]
+          },
+          {
+            gradeCibleId: "attache_grade_normal",
+            nomGradeCible: "Attaché territorial (Catégorie A)",
+            categorieCible: "A",
+            typePerspective: "promotion_interne",
+            ratioPromusPromouvablesExplication: "Quotas départementaux stricts de promotion interne gérés au niveau du CDG.",
+            modaliteReclassement: "Reclassement en catégorie A avec conservation du traitement indiciaire (clause de sauvegarde indiciaire).",
+            explicationReclassement: "Passage du cadre de catégorie B vers la catégorie A (fonctions de direction, conception de politiques publiques et encadrement supérieur).",
+            conditions: [
+              {
+                typeVoie: "examen_professionnel",
+                descriptionVoie: "Promotion interne B -> A par Examen Professionnel",
+                echelonMinimum: 6,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 8,
+                examenProfessionnelRequis: true,
+                piecesRequises: [
+                  "Lauréat de l examen professionnel Attaché du CDG",
+                  "Au moins 8 ans de services publics dont 4 ans en catégorie B"
+                ],
+                actesAdministratifs: ["Inscription sur liste d aptitude CDG", "Arrêté individuel de nomination stagiaire A"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "animateur_principal_2cl",
+        nom: "Animateur principal de 2e classe (B2)",
+        filiere: "Animation",
+        categorie: "B",
+        descriptionGrade: "Deuxième grade du cadre d emplois des animateurs territoriaux (NES B2). Coordination d équipements socio-culturels ou de jeunesse, pilotage de projets territoriaux et encadrement d équipes.",
+        echelons: [
+          { numero: 1, dureeAnnees: 1, indiceBrut: 401, indiceMajore: 376 },
+          { numero: 2, dureeAnnees: 1, indiceBrut: 415, indiceMajore: 377 },
+          { numero: 3, dureeAnnees: 2, indiceBrut: 429, indiceMajore: 384 },
+          { numero: 4, dureeAnnees: 2, indiceBrut: 444, indiceMajore: 395 },
+          { numero: 5, dureeAnnees: 2, indiceBrut: 458, indiceMajore: 406 },
+          { numero: 6, dureeAnnees: 2, indiceBrut: 480, indiceMajore: 421, description: "Accès examen pro Animateur Principal 1re cl. après 1 an" },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 506, indiceMajore: 441, description: "Accès au choix Animateur Principal 1re cl. après 1 an" },
+          { numero: 8, dureeAnnees: 3, indiceBrut: 528, indiceMajore: 457 },
+          { numero: 9, dureeAnnees: 3, indiceBrut: 542, indiceMajore: 466 },
+          { numero: 10, dureeAnnees: 3, indiceBrut: 567, indiceMajore: 485 },
+          { numero: 11, dureeAnnees: 4, indiceBrut: 599, indiceMajore: 509 },
+          { numero: 12, dureeAnnees: 0, indiceBrut: 638, indiceMajore: 539, description: "Sommet B2" }
+        ],
+        perspectives: [
+          {
+            gradeCibleId: "animateur_principal_1cl",
+            nomGradeCible: "Animateur principal de 1re classe (B3)",
+            categorieCible: "B",
+            typePerspective: "avancement_grade",
+            ratioPromusPromouvablesExplication: "Taux fixé par l assemblée délibérante.",
+            modaliteReclassement: "Reclassement à indice égal ou immédiatement supérieur.",
+            explicationReclassement: "Accès au grade sommital du cadre d emplois.",
+            conditions: [
+              {
+                typeVoie: "examen_professionnel",
+                descriptionVoie: "Examen professionnel 1re classe",
+                echelonMinimum: 6,
+                ancienneteEchelonAnnees: 1,
+                ancienneteGradeAnnees: 3,
+                examenProfessionnelRequis: true,
+                piecesRequises: ["Certificat de réussite examen pro CDG", "Entretiens pro", "Attestation formation"],
+                actesAdministratifs: ["Tableau annuel d avancement", "Arrêté individuel"]
+              },
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Au choix",
+                echelonMinimum: 7,
+                ancienneteEchelonAnnees: 1,
+                ancienneteGradeAnnees: 5,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["1 an au 7e échelon et 5 ans de services effectifs accomplis en B", "Évaluations annuelles"],
+                actesAdministratifs: ["Inscription tableau d avancement", "Arrêté individuel"]
+              }
+            ]
+          },
+          {
+            gradeCibleId: "attache_grade_normal",
+            nomGradeCible: "Attaché territorial (Catégorie A)",
+            categorieCible: "A",
+            typePerspective: "promotion_interne",
+            ratioPromusPromouvablesExplication: "Promotion interne sur liste d aptitude CDG.",
+            modaliteReclassement: "Reclassement en A avec garantie de traitement.",
+            explicationReclassement: "Passage vers l encadrement supérieur.",
+            conditions: [
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Promotion interne B -> A au choix",
+                echelonMinimum: 6,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 10,
+                examenProfessionnelRequis: false,
+                piecesRequises: ["Au moins 10 ans de services effectifs dont 5 ans en catégorie B", "Dossier professionnel"],
+                actesAdministratifs: ["Inscription liste aptitude CDG", "Arrêté individuel"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "animateur_principal_1cl",
+        nom: "Animateur principal de 1re classe (B3)",
+        filiere: "Animation",
+        categorie: "B",
+        descriptionGrade: "Grade sommital du cadre d emplois des animateurs territoriaux (NES B3). Direction de structures d animation importantes, conception et pilotage de politiques jeunesse et socio-éducatives à l échelle communale ou intercommunale.",
+        echelons: [
+          { numero: 1, dureeAnnees: 1, indiceBrut: 446, indiceMajore: 397 },
+          { numero: 2, dureeAnnees: 2, indiceBrut: 461, indiceMajore: 409 },
+          { numero: 3, dureeAnnees: 2, indiceBrut: 484, indiceMajore: 424 },
+          { numero: 4, dureeAnnees: 2, indiceBrut: 513, indiceMajore: 446 },
+          { numero: 5, dureeAnnees: 2, indiceBrut: 547, indiceMajore: 470 },
+          { numero: 6, dureeAnnees: 3, indiceBrut: 573, indiceMajore: 489 },
+          { numero: 7, dureeAnnees: 3, indiceBrut: 604, indiceMajore: 513 },
+          { numero: 8, dureeAnnees: 3, indiceBrut: 638, indiceMajore: 539 },
+          { numero: 9, dureeAnnees: 3, indiceBrut: 660, indiceMajore: 556 },
+          { numero: 10, dureeAnnees: 3, indiceBrut: 684, indiceMajore: 574 },
+          { numero: 11, dureeAnnees: 0, indiceBrut: 707, indiceMajore: 592, description: "Sommet Catégorie B (IM 592)" }
+        ],
+        perspectives: [
+          {
+            gradeCibleId: "attache_grade_normal",
+            nomGradeCible: "Attaché territorial (Catégorie A)",
+            categorieCible: "A",
+            typePerspective: "promotion_interne",
+            ratioPromusPromouvablesExplication: "Promotion interne sur liste d aptitude CDG.",
+            modaliteReclassement: "Reclassement avec reprise d indice en catégorie A.",
+            explicationReclassement: "Passage vers l encadrement supérieur en catégorie A.",
+            conditions: [
+              {
+                typeVoie: "au_choix",
+                descriptionVoie: "Promotion interne au choix vers Attaché (Catégorie A)",
+                echelonMinimum: 4,
+                ancienneteEchelonAnnees: 0,
+                ancienneteServicesPublicsAnnees: 10,
+                examenProfessionnelRequis: false,
+                piecesRequises: [
+                  "Justificatif de 10 ans de services effectifs dans un corps/cadre d emplois de catégorie B",
+                  "Avis circonstancié de l autorité territoriale",
+                  "Attestations de formation CNFPT"
+                ],
+                actesAdministratifs: [
+                  "Inscription sur la liste d aptitude établie par le Président du Centre de Gestion",
+                  "Arrêté de nomination en qualité d Attaché stagiaire"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];
 

@@ -153,5 +153,22 @@ export const PROFILS_PREDEFINIS: ProfilAgent[] = [
     ancienneteConserveeMois: 0,
     quotiteActuelle: 100,
     evenementsSimules: []
+  },
+  {
+    id: "karim_animateur",
+    prenom: "Karim",
+    matricule: "RH-67230",
+    collectivite: "Collectivité de Gennevilliers",
+    versant: "FPT",
+    statut: "titulaire",
+    dateEntreeFonctionPublique: "2019-09-01",
+    dateNominationGradeActuel: "2021-01-01",
+    cadreEmploiId: "animateur_territorial",
+    gradeId: "animateur_classe_normale",
+    echelonActuel: 5,
+    dateEffetEchelonActuel: "2024-01-01",
+    ancienneteConserveeMois: 0,
+    quotiteActuelle: 100,
+    evenementsSimules: []
   }
 ];

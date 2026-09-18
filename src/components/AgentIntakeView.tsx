@@ -315,8 +315,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start gap-5 text-sm">
-              <div className="w-full sm:w-56 md:w-64 shrink-0">
+            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 text-sm">
+              <div className="w-full sm:w-60 md:w-64 shrink-0">
                 <label className="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-xs sm:text-sm">
                   Votre Prénom <span className="text-rose-500">*</span>
                 </label>
@@ -350,7 +350,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 )}
               </div>
 
-              <div className="w-full sm:w-80 md:w-96">
+              <div className="w-full flex-1">
                 <label className="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-xs sm:text-sm">
                   Statut juridique
                 </label>
@@ -421,16 +421,16 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 text-sm">
                 {/* 1. Cadre d'emplois (Thème Orange CFDT) */}
                 <div className="bg-gradient-to-b from-orange-50/90 via-white to-amber-50/40 dark:from-orange-950/40 dark:via-slate-900 dark:to-amber-950/20 border-2 border-orange-300 dark:border-orange-700/60 hover:border-orange-500 dark:hover:border-orange-400 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-2 mb-2.5 flex-wrap sm:flex-nowrap">
+                      <div className="flex items-center gap-2 min-w-0">
                         <div className="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center shadow-2xs shrink-0">
                           <Briefcase className="w-3.5 h-3.5" />
                         </div>
-                        <label className="block font-black text-orange-950 dark:text-orange-200 text-sm tracking-wide uppercase">
+                        <label className="block font-black text-orange-950 dark:text-orange-200 text-xs sm:text-sm tracking-wide uppercase truncate">
                           Cadre d'emplois
                         </label>
                       </div>
@@ -443,13 +443,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                       <select
                         value={formData.cadreEmploiId}
                         onChange={(e) => handleCadreChange(e.target.value)}
-                        className="w-full bg-orange-50/70 hover:bg-orange-50/40 dark:bg-orange-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-3.5 py-3 border-2 border-orange-200 dark:border-orange-700/60 hover:border-orange-400 dark:hover:border-orange-500 focus:bg-white dark:focus:bg-slate-900 focus:border-orange-600 focus:ring-2 focus:ring-orange-500/20 shadow-2xs transition-all cursor-pointer"
+                        className="w-full bg-orange-50/70 hover:bg-orange-50/40 dark:bg-orange-950/30 text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 border-2 border-orange-200 dark:border-orange-700/60 hover:border-orange-400 dark:hover:border-orange-500 focus:bg-white dark:focus:bg-slate-900 focus:border-orange-600 focus:ring-2 focus:ring-orange-500/20 shadow-2xs transition-all cursor-pointer truncate"
                       >
-                        {["Administrative", "Technique", "Médico-sociale", "Culturelle"].map((fil) => {
+                        {["Administrative", "Technique", "Animation", "Médico-sociale", "Culturelle"].map((fil) => {
                           const cadresInFil = CADRES_EMPLOIS.filter((c) => c.filiere === fil);
                           if (cadresInFil.length === 0) return null;
                           return (
-                            <optgroup key={fil} label={`Filière ${fil}`} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+                            <optgroup key={fil} label={`Filière ${fil}`} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">
                               {cadresInFil.map((c) => (
                                 <option key={c.id} value={c.id} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
                                   {c.nom} (Cat. {c.categorie})
@@ -462,13 +462,13 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-2.5 border-t border-orange-100/90 dark:border-orange-950/80 flex items-center justify-between text-xs text-orange-950 dark:text-orange-200 font-bold">
-                    <span className="flex items-center gap-1.5">
+                  <div className="mt-3 pt-2.5 border-t border-orange-100/90 dark:border-orange-950/80 flex items-center justify-between gap-2 flex-wrap text-xs text-orange-950 dark:text-orange-200 font-bold">
+                    <span className="flex items-center gap-1.5 shrink-0">
                       <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
                       <span>{currentCadre.grades.length} grades statutaires</span>
                     </span>
-                    <span className="font-mono text-[11px] text-slate-500">
-                      ID : {currentCadre.id}
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                      Filière {currentCadre.filiere}
                     </span>
                   </div>
                 </div>
@@ -476,12 +476,12 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 {/* 2. Grade actuel (Thème Violet/Indigo) */}
                 <div className="bg-gradient-to-b from-purple-50/90 via-white to-purple-50/40 dark:from-purple-950/40 dark:via-slate-900 dark:to-purple-950/30 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-2 mb-2.5 flex-wrap sm:flex-nowrap">
+                      <div className="flex items-center gap-2 min-w-0">
                         <div className="w-7 h-7 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-2xs shrink-0">
                           <Award className="w-3.5 h-3.5" />
                         </div>
-                        <label className="block font-black text-purple-950 dark:text-purple-200 text-sm tracking-wide uppercase">
+                        <label className="block font-black text-purple-950 dark:text-purple-200 text-xs sm:text-sm tracking-wide uppercase truncate">
                           Grade Détenu
                         </label>
                       </div>
@@ -494,7 +494,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                       <select
                         value={formData.gradeId}
                         onChange={(e) => handleGradeChange(e.target.value)}
-                        className="w-full bg-purple-50/70 hover:bg-purple-50/40 dark:bg-purple-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-3.5 py-3 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-600 focus:ring-2 focus:ring-purple-500/20 shadow-2xs transition-all cursor-pointer"
+                        className="w-full bg-purple-50/70 hover:bg-purple-50/40 dark:bg-purple-950/30 text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-600 focus:ring-2 focus:ring-purple-500/20 shadow-2xs transition-all cursor-pointer truncate"
                       >
                         {currentCadre.grades.map((g) => (
                           <option key={g.id} value={g.id} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
@@ -505,7 +505,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-2.5 border-t border-purple-100/90 dark:border-purple-950/80 flex items-center justify-between text-xs text-purple-950 dark:text-purple-200 font-bold">
+                  <div className="mt-3 pt-2.5 border-t border-purple-100/90 dark:border-purple-950/80 flex items-center justify-between gap-2 flex-wrap text-xs text-purple-950 dark:text-purple-200 font-bold">
                     <span className="truncate">
                       Sommet : Éch. {currentGrade.echelons[currentGrade.echelons.length - 1]?.numero} (IM {currentGrade.echelons[currentGrade.echelons.length - 1]?.indiceMajore})
                     </span>
@@ -515,15 +515,15 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                   </div>
                 </div>
 
-                {/* 3. Échelon actuel & Quotité (Thème Émeraude) */}
-                <div className="bg-gradient-to-b from-emerald-50/90 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/20 border-2 border-emerald-300 dark:border-emerald-700/60 hover:border-emerald-500 dark:hover:border-emerald-400 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+                {/* 3. Échelon actuel & Quotité (Thème Émeraude) - S'étend sur 2 colonnes sur tablette/fenêtre réduite */}
+                <div className="md:col-span-2 xl:col-span-1 bg-gradient-to-b from-emerald-50/90 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/20 border-2 border-emerald-300 dark:border-emerald-700/60 hover:border-emerald-500 dark:hover:border-emerald-400 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-2 mb-2.5 flex-wrap sm:flex-nowrap">
+                      <div className="flex items-center gap-2 min-w-0">
                         <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center shadow-2xs shrink-0">
                           <TrendingUp className="w-3.5 h-3.5" />
                         </div>
-                        <label className="block font-black text-emerald-950 dark:text-emerald-200 text-sm tracking-wide uppercase">
+                        <label className="block font-black text-emerald-950 dark:text-emerald-200 text-xs sm:text-sm tracking-wide uppercase truncate">
                           Échelon Détenu
                         </label>
                       </div>
@@ -532,16 +532,16 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <div>
                         <select
                           value={formData.echelonActuel}
                           onChange={(e) => setFormData({ ...formData, echelonActuel: Number(e.target.value) })}
-                          className="w-full bg-emerald-50/70 hover:bg-emerald-50/40 dark:bg-emerald-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-2.5 py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
+                          className="w-full bg-emerald-50/70 hover:bg-emerald-50/40 dark:bg-emerald-950/30 text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer truncate"
                         >
                           {currentGrade.echelons.map((ech) => (
                             <option key={ech.numero} value={ech.numero} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
-                              Éch. {ech.numero} (IB {ech.indiceBrut} - IM {ech.indiceMajore})
+                              Échelon {ech.numero} (IB {ech.indiceBrut} - IM {ech.indiceMajore})
                             </option>
                           ))}
                         </select>
@@ -551,21 +551,21 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                         <select
                           value={formData.quotiteActuelle}
                           onChange={(e) => setFormData({ ...formData, quotiteActuelle: Number(e.target.value) })}
-                          className="w-full bg-emerald-50/70 hover:bg-emerald-50/40 dark:bg-emerald-950/30 text-slate-900 dark:text-white font-extrabold text-sm rounded-xl px-2.5 py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer"
+                          className="w-full bg-emerald-50/70 hover:bg-emerald-50/40 dark:bg-emerald-950/30 text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 border-2 border-emerald-200 dark:border-emerald-700/60 hover:border-emerald-400 dark:hover:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs transition-all cursor-pointer truncate"
                         >
-                          <option value={100} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps plein 100%</option>
-                          <option value={90} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel 90%</option>
-                          <option value={80} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel 80%</option>
-                          <option value={70} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel 70%</option>
-                          <option value={50} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Mi-temps 50%</option>
+                          <option value={100} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps plein (100%)</option>
+                          <option value={90} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel (90%)</option>
+                          <option value={80} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel (80%)</option>
+                          <option value={70} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Temps partiel (70%)</option>
+                          <option value={50} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Mi-temps (50%)</option>
                         </select>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-2.5 border-t border-emerald-100/90 dark:border-emerald-950/80 flex items-center justify-between text-xs text-emerald-950 dark:text-emerald-200 font-bold">
+                  <div className="mt-3 pt-2.5 border-t border-emerald-100/90 dark:border-emerald-950/80 flex items-center justify-between gap-2 flex-wrap text-xs text-emerald-950 dark:text-emerald-200 font-bold">
                     <span>Durée statutaire : {currentEchelon.dureeAnnees} an{currentEchelon.dureeAnnees > 1 ? "s" : ""}</span>
-                    <span className="font-mono text-[11px] text-emerald-700 dark:text-emerald-400">
+                    <span className="font-mono text-[11px] text-emerald-700 dark:text-emerald-400 shrink-0">
                       IB {currentEchelon.indiceBrut}
                     </span>
                   </div>
@@ -735,11 +735,9 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 />
               </div>
 
-              {/* Bloc SIMULATION INFORMATIVE & STATUTAIRE + Bouton de soumission */}
-              <div className="pt-6 border-t border-black/[0.05] dark:border-white/[0.06] space-y-4">
-                <DisclaimerBanner />
-
-                <div className="flex justify-end pt-2">
+              {/* Bouton de soumission Lancer la simulation placé avant le bloc Disclaimer */}
+              <div className="pt-6 border-t border-black/[0.05] dark:border-white/[0.06] space-y-6">
+                <div className="flex justify-end">
                   <button
                     type="submit"
                     className="group w-full sm:w-auto bg-gradient-to-r from-tangerine via-apricot to-tangerine hover:brightness-105 text-ebony text-sm font-extrabold px-8 py-3.5 rounded-full shadow-md shadow-tangerine/30 hover:shadow-lg transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-[0.98]"
@@ -750,6 +748,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                     </span>
                   </button>
                 </div>
+
+                <DisclaimerBanner />
               </div>
             </div>
           )}
