@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import type { ProfilAgent, StatutAgent } from "../types/career";
 import { CADRES_EMPLOIS } from "../data/gradesData";
-import { calculateTraitementBrut, isGradeAvancement } from "../services/simulationEngine";
+import { calculateTraitementBrut, isGradeAvancement, isGradeAccessibleContractuel } from "../services/simulationEngine";
 import { DateFieldWithYear } from "./DateFieldWithYear";
 import { DisclaimerBanner } from "./DisclaimerBanner";
 import { 
@@ -84,6 +84,10 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
 
   const handleGradeChange = (gradeId: string) => {
     const selectedGrade = currentCadre.grades.find((g) => g.id === gradeId) || currentCadre.grades[0];
+    // Si statut contractuel et grade d'avancement fermé au recrutement, refuser la sélection
+    if (formData.statut.startsWith("contractuel") && !isGradeAccessibleContractuel(currentCadre, selectedGrade.id)) {
+      return;
+    }
     setFormData({
       ...formData,
       gradeId: selectedGrade.id,
@@ -496,13 +500,35 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                         onChange={(e) => handleGradeChange(e.target.value)}
                         className="w-full bg-purple-50/70 hover:bg-purple-50/40 dark:bg-purple-950/30 text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 border-2 border-purple-200 dark:border-purple-700/60 hover:border-purple-400 dark:hover:border-purple-500 focus:bg-white dark:focus:bg-slate-900 focus:border-purple-600 focus:ring-2 focus:ring-purple-500/20 shadow-2xs transition-all cursor-pointer truncate"
                       >
-                        {currentCadre.grades.map((g) => (
-                          <option key={g.id} value={g.id} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
-                            {g.nom}
-                          </option>
-                        ))}
+                        {currentCadre.grades.map((g) => {
+                          const isContractuel = formData.statut.startsWith("contractuel");
+                          const isAccessible = !isContractuel || isGradeAccessibleContractuel(currentCadre, g.id);
+                          return (
+                            <option
+                              key={g.id}
+                              value={g.id}
+                              disabled={!isAccessible}
+                              className={!isAccessible ? "text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-900 font-normal" : "bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold"}
+                            >
+                              {g.nom} {!isAccessible ? "— (Fermé au recrutement : grade d'avancement réservé aux titulaires)" : isContractuel ? "— (Grade de recrutement accessible)" : ""}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
+
+                    {formData.statut.startsWith("contractuel") && (
+                      <div className="mt-2.5 text-[11px] bg-amber-50/95 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 p-2.5 rounded-xl border border-amber-200 dark:border-amber-800/70 leading-snug flex items-start gap-1.5 shadow-2xs">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="font-extrabold">Statut Contractuel ({formData.statut === "contractuel_cdd" ? "CDD" : "CDI"}) : </strong>
+                          Le recrutement contractuel ne peut s'effectuer que sur les grades de recrutement du cadre d'emplois
+                          {currentCadre.filiere.toLowerCase().includes("technique")
+                            ? " (ouvert sur les 1er et 2e grades en filière technique selon les décrets statutaires)."
+                            : " (1er grade d'accès). Les grades d'avancement sont réservés aux titulaires."}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-3 pt-2.5 border-t border-purple-100/90 dark:border-purple-950/80 flex items-center justify-between gap-2 flex-wrap text-xs text-purple-950 dark:text-purple-200 font-bold">

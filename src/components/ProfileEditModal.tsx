@@ -182,15 +182,19 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   const isContractuel = form.statut.startsWith("contractuel");
                   const isDisabled = isContractuel && isAvancement;
                   return (
-                    <option key={g.id} value={g.id} disabled={isDisabled}>
-                      {g.nom} {isDisabled ? "— (Réservé aux titulaires)" : ""}
+                    <option key={g.id} value={g.id} disabled={isDisabled} className={isDisabled ? "text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-900" : ""}>
+                      {g.nom} {isDisabled ? "— (Fermé aux contractuels : grade d'avancement)" : ""}
                     </option>
                   );
                 })}
               </select>
               {form.statut.startsWith("contractuel") && (
-                <p className="text-[11px] text-amber-800 dark:text-amber-300 mt-1.5 font-medium leading-tight bg-amber-50 dark:bg-amber-950/40 p-1.5 rounded border border-amber-200 dark:border-amber-800/60">
-                  Les grades d avancement sont statutairement fermés aux contractuels.
+                <p className="text-[11px] text-amber-800 dark:text-amber-300 mt-1.5 font-medium leading-tight bg-amber-50 dark:bg-amber-950/40 p-1.5 rounded-lg border border-amber-200 dark:border-amber-800/60">
+                  <strong className="font-bold">Règle statutaire CDD/CDI : </strong>
+                  Le recrutement contractuel ne peut s effectuer que sur les grades de recrutement
+                  {currentCadre.filiere.toLowerCase().includes("technique")
+                    ? " (1er et 2e grades accessibles en filière technique)."
+                    : " (1er grade du cadre d emplois). Les grades d avancement sont statutairement fermés."}
                 </p>
               )}
             </div>

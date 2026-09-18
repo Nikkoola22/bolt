@@ -76,14 +76,37 @@ export function findGradeById(gradeId: string): { cadre: CadreEmploiDefinition; 
   return null;
 }
 
-// Vérifie si un grade est un grade d'avancement (inaccessible au recrutement contractuel)
-export function isGradeAvancement(cadre: CadreEmploiDefinition, gradeId: string): boolean {
+// Vérifie si un grade est accessible au recrutement d'un agent contractuel (CGFP & décrets statutaires)
+export function isGradeAccessibleContractuel(cadre: CadreEmploiDefinition, gradeId: string): boolean {
   const grade = cadre.grades.find(g => g.id === gradeId);
-  if (grade?.isGradeAvancement !== undefined) {
-    return grade.isGradeAvancement;
-  }
+  if (!grade) return false;
+  if (grade.isGradeAvancement === false) return true;
+  if (grade.isGradeAvancement === true) return false;
+
   const idx = cadre.grades.findIndex(g => g.id === gradeId);
-  return idx > 0;
+  if (idx === 0) return true; // Le premier grade d'un cadre d'emplois est toujours le grade de recrutement
+
+  // Exception statutaire filière technique (décret n° 2006-1691 art. 3 et décret n° 2010-1357 art. 4) :
+  // Le 2e grade (C2 pour adjoint technique, B2 pour technicien) est ouvert au recrutement direct ou concours externe
+  const isFiliereTechnique = cadre.filiere.toLowerCase().includes("technique");
+  if (isFiliereTechnique) {
+    if (cadre.id === "adjoint_technique" && idx === 1) {
+      // Adjoint technique principal de 2e classe (C2) : ouvert au recrutement
+      return true;
+    }
+    if (cadre.id === "technicien_territorial" && idx === 1) {
+      // Technicien principal de 2e classe (B2) : ouvert au concours externe et au recrutement
+      return true;
+    }
+  }
+
+  // Tous les autres grades sont des grades d'avancement réservés aux fonctionnaires titulaires
+  return false;
+}
+
+// Vérifie si un grade est un grade d'avancement pur (fermé au recrutement contractuel)
+export function isGradeAvancement(cadre: CadreEmploiDefinition, gradeId: string): boolean {
+  return !isGradeAccessibleContractuel(cadre, gradeId);
 }
 
 // Calcul de l impact d un événement sur le décalage d ancienneté
