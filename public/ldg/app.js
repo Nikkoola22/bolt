@@ -495,13 +495,13 @@ document.addEventListener('DOMContentLoaded', () => {
     subtotalLdg5.textContent = formatPts(ptsLdg5);
     subtotalLdg6.textContent = formatPts(ptsLdg6);
 
-    // Update Mini-breakdown
-    miniL1.textContent = formatPts(ptsLdg1);
-    miniL2.textContent = formatPts(ptsLdg2);
-    miniL3.textContent = formatPts(ptsLdg3);
-    miniL4.textContent = formatPts(ptsLdg4);
-    miniL5.textContent = formatPts(ptsLdg5);
-    miniL6.textContent = formatPts(ptsLdg6);
+    // Update Mini-breakdown (if present)
+    if (miniL1) miniL1.textContent = formatPts(ptsLdg1);
+    if (miniL2) miniL2.textContent = formatPts(ptsLdg2);
+    if (miniL3) miniL3.textContent = formatPts(ptsLdg3);
+    if (miniL4) miniL4.textContent = formatPts(ptsLdg4);
+    if (miniL5) miniL5.textContent = formatPts(ptsLdg5);
+    if (miniL6) miniL6.textContent = formatPts(ptsLdg6);
 
     // Update Sticky Header & trigger pulse
     const oldScore = headerScoreValue.textContent;
@@ -901,7 +901,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sel.addEventListener('change', calculateAll);
   });
 
-  btnReset.addEventListener('click', resetAll);
+  if (btnReset) btnReset.addEventListener('click', resetAll);
 
   btnPrintModal.addEventListener('click', openRecapModal);
   btnBottomModal.addEventListener('click', openRecapModal);
@@ -921,7 +921,62 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialisation de la bulle d'information Ligne 2
   initLdg2InfoBubble();
 
+  // =========================================================
+  // MEMENTORH DRAWER LOGIC
+  // =========================================================
+  const btnOpenMementoDrawer = document.getElementById('btnOpenMementoDrawer');
+  const btnCloseMementoDrawer = document.getElementById('btnCloseMementoDrawer');
+  const mementoDrawerOverlay = document.getElementById('mementoDrawerOverlay');
+  const mementoDrawer = document.getElementById('mementoDrawer');
+  
+  const btnRoleGestionnaire = document.getElementById('btnRoleGestionnaire');
+  const btnRoleAgent = document.getElementById('btnRoleAgent');
+  const gestionnaireOnlyElements = document.querySelectorAll('[data-vue-only="gestionnaire"]');
+
+  function openMementoDrawer() {
+    mementoDrawerOverlay.classList.remove('hidden');
+    mementoDrawer.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  }
+
+  function closeMementoDrawer() {
+    mementoDrawerOverlay.classList.add('hidden');
+    mementoDrawer.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  if (btnOpenMementoDrawer) {
+    btnOpenMementoDrawer.addEventListener('click', openMementoDrawer);
+  }
+  
+  if (btnCloseMementoDrawer) {
+    btnCloseMementoDrawer.addEventListener('click', closeMementoDrawer);
+  }
+  
+  if (mementoDrawerOverlay) {
+    mementoDrawerOverlay.addEventListener('click', closeMementoDrawer);
+  }
+
+  function setMementoRole(role) {
+    if (role === 'gestionnaire') {
+      btnRoleGestionnaire.classList.add('active');
+      btnRoleAgent.classList.remove('active');
+      gestionnaireOnlyElements.forEach(el => el.classList.remove('vue-hidden'));
+    } else {
+      btnRoleAgent.classList.add('active');
+      btnRoleGestionnaire.classList.remove('active');
+      gestionnaireOnlyElements.forEach(el => el.classList.add('vue-hidden'));
+    }
+  }
+
+  if (btnRoleGestionnaire) {
+    btnRoleGestionnaire.addEventListener('click', () => setMementoRole('gestionnaire'));
+  }
+  
+  if (btnRoleAgent) {
+    btnRoleAgent.addEventListener('click', () => setMementoRole('agent'));
+  }
+
   // Initial calculation
   handleProfileChange();
 });
-

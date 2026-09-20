@@ -1,12 +1,13 @@
 import React from "react";
 import type { ProfilAgent } from "../types/career";
-import { BookOpen, Printer, ShieldCheck, RotateCcw, Sun, Moon, ArrowLeft, FileEdit } from "lucide-react";
+import { BookOpen, ShieldCheck, RotateCcw, Sun, Moon, ArrowLeft, FileEdit } from "lucide-react";
 
 interface HeaderProps {
   currentProfile?: ProfilAgent;
   onSelectProfile?: (profil: ProfilAgent) => void;
   onOpenEditProfile?: () => void;
   onOpenGlossary?: () => void;
+  onOpenMemento?: () => void;
   onOpenPrintSummary?: () => void;
   onResetEvents?: () => void;
   isDark?: boolean;
@@ -19,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   currentProfile,
   onOpenEditProfile,
   onOpenGlossary,
-  onOpenPrintSummary,
+  onOpenMemento,
   onResetEvents,
   isDark = false,
   onToggleTheme,
@@ -106,16 +107,18 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {onOpenPrintSummary && (
+          {onOpenMemento && (
             <button
-              onClick={onOpenPrintSummary}
-              className="text-xs text-ebony px-3.5 py-1.5 rounded-full bg-gradient-to-r from-tangerine to-apricot hover:opacity-90 active:scale-[0.98] shadow-sm transition-all flex items-center gap-1.5 cursor-pointer font-bold border border-tangerine/30"
-              title="Exporter la fiche d'entretien professionnel"
+              onClick={onOpenMemento}
+              className="text-xs text-indigo-700 dark:text-indigo-200 hover:text-indigo-900 dark:hover:text-white px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-800/50 border border-indigo-200 dark:border-indigo-700 transition-all flex items-center gap-1.5 cursor-pointer font-medium"
+              title="Boîte à outils RH (MementoRH)"
             >
-              <Printer className="w-3.5 h-3.5 text-ebony" />
-              <span className="hidden sm:inline">Fiche Entretien</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-600 dark:text-indigo-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              <span className="hidden sm:inline">Outils RH</span>
             </button>
           )}
+
+
 
           {onToggleTheme && (
             <button

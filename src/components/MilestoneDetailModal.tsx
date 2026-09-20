@@ -3,7 +3,7 @@ import type { JalonTimeline } from "../types/career";
 import { formatDateFrench } from "../services/simulationEngine";
 import { 
   X, 
-  CheckCircle2, 
+  CircleCheck, 
   AlertCircle, 
   AlertTriangle, 
   Clock, 
@@ -60,7 +60,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
               )}
               {jalon.statutValidation === "garanti" && (
                 <span className="text-xs bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium">
-                  <CheckCircle2 className="w-3 h-3" /> De plein droit (PPCR)
+                  <CircleCheck className="w-3 h-3" /> De plein droit (PPCR)
                 </span>
               )}
               {jalon.statutValidation === "conditionnel" && (
@@ -137,7 +137,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                   <div key={`rempli-${idx}`} className="p-3 bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-lg">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                         <span className="text-xs font-bold text-emerald-950 dark:text-emerald-200">{cond.libelle}</span>
                       </div>
                       <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-full">

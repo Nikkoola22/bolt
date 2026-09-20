@@ -9,13 +9,12 @@ import {
 import { 
   Clock, 
   Award, 
-  CheckCircle2, 
+  CircleCheck, 
   Calendar, 
   DollarSign, 
   Sparkles, 
   ShieldCheck, 
   Layers, 
-  ArrowLeft, 
   HelpCircle, 
   ChevronDown, 
   ChevronUp, 
@@ -40,7 +39,6 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   profil,
   resultatSimulation,
   onSwitchToComplete,
-  onBackToMenu,
   onOpenAddEvent: _onOpenAddEvent,
   onOpenLdg,
 }) => {
@@ -210,14 +208,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
 
             {/* Boutons d'actions gélules (Pills) */}
             <div className="flex items-center gap-2.5 self-start md:self-center shrink-0 w-full sm:w-auto">
-              <button
-                onClick={onBackToMenu}
-                className="flex-1 sm:flex-initial text-xs font-bold bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-full transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98] shadow-sm border border-red-400"
-                title="Retour au menu (les 3 cartes)"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
-                <span>Retour au menu</span>
-              </button>
+
 
               <button
                 onClick={onSwitchToComplete}
@@ -679,7 +670,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {prochainePromouvabilite.conditionsRemplies.map((c, idx) => (
                           <div key={idx} className="flex items-center gap-2.5 bg-lime-cream/30 p-3 rounded-2xl border border-muted-teal/40 text-xs">
-                            <CheckCircle2 className="w-4 h-4 text-muted-teal-dark dark:text-lime-cream shrink-0" />
+                            <CircleCheck className="w-4 h-4 text-muted-teal-dark dark:text-lime-cream shrink-0" />
                             <span className="font-semibold text-ebony dark:text-lime-cream">{c.libelle} (Validé !)</span>
                           </div>
                         ))}
@@ -756,7 +747,10 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                               if (onOpenLdg) {
                                 onOpenLdg();
                               } else {
-                                window.location.href = "/ldg/index.html";
+                                const basePrefix = window.location.pathname.endsWith("/")
+                                  ? window.location.pathname
+                                  : window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1);
+                                window.location.href = `${basePrefix}ldg/index.html`;
                               }
                             }}
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-tangerine to-apricot text-white font-bold text-xs shadow-sm hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer"

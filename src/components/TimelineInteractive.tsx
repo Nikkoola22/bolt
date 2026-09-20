@@ -5,7 +5,7 @@ import {
   Calendar, 
   ChevronRight, 
   AlertCircle, 
-  CheckCircle2, 
+  CircleCheck, 
   Clock, 
   Filter, 
   HelpCircle,
@@ -340,7 +340,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                     <div className="flex items-center gap-2 flex-wrap">
                       {jalon.statutValidation === "garanti" && (
                         <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200/90 dark:border-emerald-800 px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> De plein droit
+                          <CircleCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> De plein droit
                         </span>
                       )}
                       {jalon.statutValidation === "conditionnel" && (

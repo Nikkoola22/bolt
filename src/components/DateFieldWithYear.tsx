@@ -148,7 +148,7 @@ export const DateFieldWithYear: React.FC<DateFieldWithYearProps> = ({
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <label className={`block font-black ${styles.labelText} text-xs uppercase leading-snug`} title={subLabel ? `${label} (${subLabel})` : label}>
+                <label className={`block font-black ${styles.labelText} text-sm sm:text-base uppercase leading-snug`} title={subLabel ? `${label} (${subLabel})` : label}>
                   {label}
                 </label>
                 {subLabel && (

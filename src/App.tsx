@@ -11,6 +11,7 @@ import { EventSimulatorDrawer } from "./components/EventSimulatorDrawer";
 import { PerspectivesChecklist } from "./components/PerspectivesChecklist";
 import { ScenarioComparator } from "./components/ScenarioComparator";
 import { GlossaryModal } from "./components/GlossaryModal";
+import { MementoHubView } from "./components/MementoHubView";
 import { PrintSummary } from "./components/PrintSummary";
 import { ProfileEditModal } from "./components/ProfileEditModal";
 import { AgentIntakeView } from "./components/AgentIntakeView";
@@ -22,13 +23,11 @@ import confetti from "canvas-confetti";
 import { 
   Calendar, 
   TrendingUp, 
-  GitCompare, 
   Lightbulb, 
   Sparkles, 
   FileText, 
   ShieldCheck, 
   Zap,
-  ArrowLeft 
 } from "lucide-react";
 
 export function App() {
@@ -44,7 +43,8 @@ export function App() {
   // - "simplifiee" : Les 2 questions directes (échelon ? avancement/promotion ?)
   // - "complete" : Le processus normal complet avec frise chronologique, comparateur, etc.
   // - "ldg" : Simulateur de points de promotion interne (LDG-PI)
-  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete" | "ldg">("saisie");
+  // - "memento" : Hub du mémento statutaire
+  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete" | "ldg" | "memento">("saisie");
 
   // Onglet actif dans le mode complet
   const [activeTab, setActiveTab] = useState<"frise" | "perspectives" | "comparateur" | "conseils">("frise");
@@ -136,6 +136,10 @@ export function App() {
         }}
         onOpenEditProfile={() => setIsEditProfileOpen(true)}
         onOpenGlossary={() => setIsGlossaryOpen(true)}
+        onOpenMemento={() => {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          setAppMode("memento");
+        }}
         onOpenPrintSummary={() => setIsPrintSummaryOpen(true)}
         onResetEvents={handleResetEvents}
         onBackToMenu={handleBackToMenu}
@@ -145,7 +149,7 @@ export function App() {
       {/* Contenu principal */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6">
 
-        {/* MODE 1 : SAISIE DU PROFIL (Écran d'accueil pur, sans barre d'onglets de frise) */}
+        {/* MODE 1 : SAISIE DU PROFIL (Écran d'accueil pur, sans onglets de frise) */}
         {appMode === "saisie" && (
           <AgentIntakeView
             currentProfile={currentProfile}
@@ -184,6 +188,10 @@ export function App() {
               window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("ldg");
             }}
+            onOpenMemento={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("memento");
+            }}
           />
         )}
 
@@ -203,6 +211,16 @@ export function App() {
             onSelectSimplified={() => {
               window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("simplifiee");
+            }}
+          />
+        )}
+
+        {/* MODE 6 : MEMENTO RH HUB */}
+        {appMode === "memento" && (
+          <MementoHubView
+            onBackToMenu={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+              setAppMode("choix_mode");
             }}
           />
         )}
@@ -243,20 +261,11 @@ export function App() {
             {/* Barre de navigation par onglets thématiques (Optimisée Mobile iPhone & Desktop - 100% visible sans slider) */}
             <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-2 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-3">
               
-              {/* Groupe 1 : Raccourcis Modes (Menu 3 cartes & Version Simplifiée) */}
-              <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 shrink-0">
-                <button
-                  onClick={handleBackToMenu}
-                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-bold text-white bg-red-500 hover:bg-red-600 border border-red-400 transition-all cursor-pointer shadow-2xs active:scale-[0.98]"
-                  title="Retourner aux 3 cartes du menu"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
-                  <span className="truncate">Retour au menu</span>
-                </button>
-
+              {/* Groupe 1 : Raccourci Version Simplifiée */}
+              <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   onClick={() => setAppMode("simplifiee")}
-                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-xl text-xs font-black text-ebony dark:text-apricot bg-apricot/30 dark:bg-apricot/20 hover:bg-apricot/40 dark:hover:bg-apricot/30 border border-apricot/60 dark:border-apricot/40 transition-all cursor-pointer shadow-2xs"
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-black text-ebony dark:text-apricot bg-apricot/30 dark:bg-apricot/20 hover:bg-apricot/40 dark:hover:bg-apricot/30 border border-apricot/60 dark:border-apricot/40 transition-all cursor-pointer shadow-2xs"
                   title="Accéder directement aux 2 questions clés"
                 >
                   <Zap className="w-3.5 h-3.5 text-ebony dark:text-apricot fill-apricot shrink-0" />
@@ -267,8 +276,8 @@ export function App() {
               {/* Séparateur visible uniquement sur grand écran */}
               <div className="hidden lg:block h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1 shrink-0"></div>
 
-              {/* Groupe 2 : Les 4 Onglets thématiques en Grille 2x2 sur Mobile iPhone, et 4 colonnes sur sm / lg */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 flex-1">
+              {/* Groupe 2 : Les 2 Onglets thématiques majeurs */}
+              <div className="grid grid-cols-2 gap-1.5 flex-1">
                 <button
                   onClick={() => setActiveTab("frise")}
                   className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
@@ -298,39 +307,6 @@ export function App() {
                 >
                   <TrendingUp className="w-4 h-4 shrink-0" />
                   <span className="truncate">Avancement / Promotion</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveTab("comparateur")}
-                  className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
-                    activeTab === "comparateur"
-                      ? "bg-ebony text-lime-cream shadow-md shadow-ebony/30 ring-2 ring-ebony/40 font-black"
-                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
-                  }`}
-                >
-                  <GitCompare className="w-4 h-4 shrink-0" />
-                  <span className="truncate">Comparateur</span>
-                  {currentProfile.evenementsSimules.length > 0 && (
-                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black shrink-0 ${
-                      activeTab === "comparateur"
-                        ? "bg-lime-cream/25 text-lime-cream ring-1 ring-lime-cream/30"
-                        : "bg-ebony/15 dark:bg-ebony/40 text-ebony dark:text-lime-cream"
-                    }`}>
-                      {currentProfile.evenementsSimules.length}
-                    </span>
-                  )}
-                </button>
-
-                <button
-                  onClick={() => setActiveTab("conseils")}
-                  className={`flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-2.5 px-2.5 sm:px-3 rounded-xl text-xs font-extrabold transition-all duration-150 cursor-pointer text-center sm:text-left ${
-                    activeTab === "conseils"
-                      ? "bg-gradient-to-r from-apricot via-tangerine to-apricot text-ebony shadow-md shadow-apricot/30 ring-2 ring-apricot/40 font-black"
-                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700"
-                  }`}
-                >
-                  <Lightbulb className="w-4 h-4 shrink-0" />
-                  <span className="truncate">Conseils DRH</span>
                 </button>
               </div>
 

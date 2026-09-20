@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import type { ProfilAgent, ResultatSimulation } from "../types/career";
 import { findCadreAndGrade } from "../services/simulationEngine";
-import { Zap, Layers, ArrowRight, FileEdit, CheckCircle2, Sparkles, Smile, Award } from "lucide-react";
+import { Zap, Layers, ArrowRight, FileEdit, CircleCheck, Sparkles, Smile, Award } from "lucide-react";
 
 interface ModeSelectionViewProps {
   profil: ProfilAgent;
@@ -10,6 +10,7 @@ interface ModeSelectionViewProps {
   onSelectComplete: () => void;
   onBackToSaisie: () => void;
   onOpenLdg: () => void;
+  onOpenMemento: () => void;
 }
 
 export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
@@ -19,6 +20,7 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
   onSelectComplete,
   onBackToSaisie,
   onOpenLdg,
+  onOpenMemento,
 }) => {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -40,7 +42,7 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2.5 flex-wrap">
           <div className="inline-flex items-center gap-2 bg-lime-cream/30 text-ebony dark:text-lime-cream border border-muted-teal/40 px-4 py-1.5 rounded-full text-xs font-bold shadow-2xs">
-            <CheckCircle2 className="w-3.5 h-3.5 text-muted-teal shrink-0" />
+            <CircleCheck className="w-3.5 h-3.5 text-muted-teal shrink-0" />
             <span>
               Simulation prête pour <strong>{profil.prenom}</strong> • {cadreLibelle} ({statutLibelle})
             </span>
@@ -186,11 +188,11 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
 
       </div>
 
-      {/* CARTE 3 : SIMULATEUR DE POINTS LDG (Centrée en dessous des 2 cartes) */}
-      <div className="flex justify-center">
+      {/* CARTE 3 & 4 : SIMULATEUR DE POINTS LDG & MEMENTO RH (En dessous des 2 premières cartes) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div 
           onClick={onOpenLdg}
-          className="w-full max-w-xl p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl"
+          className="w-full p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl"
         >
           <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-7 sm:p-8 flex flex-col justify-between h-full space-y-6">
             <div>
@@ -238,7 +240,67 @@ export const ModeSelectionView: React.FC<ModeSelectionViewProps> = ({
                 type="button"
                 className="w-full py-3 px-5 rounded-full font-bold text-xs sm:text-sm bg-gradient-to-r from-apricot via-tangerine to-apricot text-ebony hover:brightness-105 transition-all flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-[0.98]"
               >
-                <span>Comprendre et simuler mes points pour ma promotion</span>
+                <span>Comprendre et simuler mes points</span>
+                <span className="w-6 h-6 rounded-full bg-ebony/15 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                  <ArrowRight className="w-3.5 h-3.5 text-ebony" />
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* CARTE 4 : MEMENTO RH */}
+        <div 
+          onClick={onOpenMemento}
+          className="w-full p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-xl"
+        >
+          <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-7 sm:p-8 flex flex-col justify-between h-full space-y-6">
+            <div>
+              <div className="flex items-center justify-between gap-3 mb-6">
+                <span className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-ebony dark:text-indigo-400 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-indigo-600 dark:text-indigo-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full bg-indigo-500/20 text-ebony dark:text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                  Boîte à outils
+                </span>
+              </div>
+
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-tangerine-dark dark:group-hover:text-apricot transition-colors tracking-tight">
+                MementoRH
+              </h2>
+              
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Boîte à outils pratique avec simulateurs et modèles de documents RH :
+              </p>
+
+              <div className="mt-5 space-y-2.5 bg-black/[0.02] dark:bg-white/[0.03] p-4 rounded-2xl border border-black/[0.03] dark:border-white/[0.04] text-xs">
+                <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
+                  <span className="w-6 h-6 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-200 flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
+                    💶
+                  </span>
+                  <span>Simulateurs de paie et de net à payer</span>
+                </div>
+                <div className="flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200">
+                  <span className="w-6 h-6 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-200 flex items-center justify-center font-black shrink-0 text-xs shadow-2xs">
+                    📜
+                  </span>
+                  <span>Outils réglementaires (temps de travail, maladie)</span>
+                </div>
+                <div className="flex items-center gap-2 font-medium text-slate-500 dark:text-slate-400 pt-1 text-[11px]">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                  <span>Modules ciblés (Profil gestionnaire / agent)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Nested CTA Capsule */}
+            <div className="pt-5 border-t border-black/[0.05] dark:border-white/[0.06]">
+              <button
+                type="button"
+                className="w-full py-3 px-5 rounded-full font-bold text-xs sm:text-sm bg-gradient-to-r from-apricot via-tangerine to-apricot text-ebony hover:brightness-105 transition-all flex items-center justify-center gap-3 cursor-pointer shadow-md active:scale-[0.98]"
+              >
+                <span>Explorer les outils</span>
                 <span className="w-6 h-6 rounded-full bg-ebony/15 flex items-center justify-center group-hover:translate-x-1 transition-transform">
                   <ArrowRight className="w-3.5 h-3.5 text-ebony" />
                 </span>

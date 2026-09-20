@@ -17,7 +17,7 @@ import {
   FileText,
   Clock,
   ShieldCheck,
-  CheckCircle2,
+  CircleCheck,
   AlertCircle
 } from "lucide-react";
 
@@ -383,7 +383,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
             <div className="pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
               {unlockedStep > 1 ? (
                 <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                  <CheckCircle2 className="w-4 h-4" />
+                  <CircleCheck className="w-4 h-4" />
                   Étape 1 validée ({formData.prenom} • {formData.statut})
                 </span>
               ) : (
@@ -626,7 +626,7 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
               <div className="pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
                 {unlockedStep > 2 ? (
                   <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CircleCheck className="w-4 h-4" />
                     Étape 2 validée ({currentGrade.nom} • Échelon {formData.echelonActuel})
                   </span>
                 ) : (

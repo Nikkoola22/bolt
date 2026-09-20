@@ -25,7 +25,12 @@ export const LdgSimulatorView: React.FC<LdgSimulatorViewProps> = ({
   const referenceYear = 2027;
   const seniorityYears = Math.min(45, Math.max(0, referenceYear - entryYear));
 
-  const iframeSrc = `/ldg/index.html?target=${targetCategory}&years=${seniorityYears}&way=choix`;
+  const basePrefix = typeof window !== "undefined"
+    ? (window.location.pathname.endsWith("/")
+        ? window.location.pathname
+        : window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1))
+    : "./";
+  const iframeSrc = `${basePrefix}ldg/index.html?target=${targetCategory}&years=${seniorityYears}&way=choix`;
 
   return (
     <div className="space-y-4 animate-fadeIn">

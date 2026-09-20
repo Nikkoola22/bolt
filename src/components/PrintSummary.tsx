@@ -1,7 +1,7 @@
 import React from "react";
 import type { ResultatSimulation } from "../types/career";
 import { findCadreAndGrade, formatDateFrench } from "../services/simulationEngine";
-import { X, Printer, CheckCircle2, FileText, User } from "lucide-react";
+import { X, Printer, CircleCheck, FileText, User } from "lucide-react";
 
 interface PrintSummaryProps {
   isOpen: boolean;
@@ -115,7 +115,7 @@ export const PrintSummary: React.FC<PrintSummaryProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 print:bg-emerald-50/60 p-3 rounded-xl">
                 <div className="font-bold text-emerald-950 dark:text-emerald-300 print:text-emerald-950 flex items-center gap-1 mb-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <CircleCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   Prochain Avancement d Échelon (De plein droit)
                 </div>
                 <div className="text-sm font-black text-slate-900 dark:text-white print:text-slate-900">
@@ -131,7 +131,7 @@ export const PrintSummary: React.FC<PrintSummaryProps> = ({
 
               <div className="bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/60 print:bg-purple-50/60 p-3 rounded-xl">
                 <div className="font-bold text-purple-950 dark:text-purple-300 print:text-purple-950 flex items-center gap-1 mb-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                  <CircleCheck className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                   Première Promouvabilité au Grade Supérieur
                 </div>
                 <div className="text-sm font-black text-slate-900 dark:text-white print:text-slate-900">
