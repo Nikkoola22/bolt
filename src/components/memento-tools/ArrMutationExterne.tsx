@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileSignature, Copy, CircleCheck, User, Building, Calendar, Info, MapPin } from "lucide-react";
+import { FileSignature, Copy, CircleCheck, User, Building, Info, MapPin } from "lucide-react";
 import { fptCadres, echelonsList, getIndicesForGradeAndEchelon } from "../../utils/fptData";
 
 export const ArrMutationExterne: React.FC = () => {

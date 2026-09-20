@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { UserCog, User, BriefcaseBusiness, FileText, Settings, ExternalLink, ArrowRight, Wallet, Clock, Scale } from "lucide-react";
+import { UserCog, User, BriefcaseBusiness, ExternalLink, ArrowRight, Wallet, Clock, Scale } from "lucide-react";
 import { NetPaySimulator } from "./memento-tools/NetPaySimulator";
 import { RttCalculator } from "./memento-tools/RttCalculator";
 import { IhtsCalculator } from "./memento-tools/IhtsCalculator";

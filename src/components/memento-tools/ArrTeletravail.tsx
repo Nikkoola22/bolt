@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileSignature, Copy, CircleCheck, User, Building, Calendar, Info, FileText } from "lucide-react";
+import { FileSignature, Copy, CircleCheck, User, Building, Calendar, Info } from "lucide-react";
 import { fptCadres } from "../../utils/fptData";
 
 export const ArrTeletravail: React.FC = () => {

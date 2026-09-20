@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Activity, AlertCircle, Info, Stethoscope, Calendar as CalendarIcon, BookOpen, Plus, Trash2, Clock } from "lucide-react";
+import { Activity, Info, Calendar as CalendarIcon, BookOpen, Plus, Trash2, Clock } from "lucide-react";
 
 interface Arret {
   id: string;

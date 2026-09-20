@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Handshake, AlertCircle, Info } from "lucide-react";
+import { Handshake, Info } from "lucide-react";
 
 export const IsrcSimulator: React.FC = () => {
   const [rba, setRba] = useState<number | "">("");

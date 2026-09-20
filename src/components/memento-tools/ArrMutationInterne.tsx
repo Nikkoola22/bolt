@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileSignature, Copy, CircleCheck, User, Building, Calendar, Info, RefreshCw } from "lucide-react";
+import { FileSignature, Copy, CircleCheck, User, Building, Info, RefreshCw } from "lucide-react";
 import { fptCadres } from "../../utils/fptData";
 
 export const ArrMutationInterne: React.FC = () => {

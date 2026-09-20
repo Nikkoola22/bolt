@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Calculator, AlertTriangle, Download, Plus, Trash2, Users, Settings2, FileSpreadsheet, FileBox } from "lucide-react";
+import { Calculator, AlertTriangle, Plus, Trash2, Users, Settings2, FileSpreadsheet, FileBox } from "lucide-react";
 
 interface Agent {
   id: string;

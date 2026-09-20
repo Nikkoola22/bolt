@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TrendingUp, AlertCircle, Info, Calendar as CalendarIcon } from "lucide-react";
+import { TrendingUp, Info, Calendar as CalendarIcon } from "lucide-react";
 
 export const AvancementEchelon: React.FC = () => {
   const [dateEffet, setDateEffet] = useState<string>("");

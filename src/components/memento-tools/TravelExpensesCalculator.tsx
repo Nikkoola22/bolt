@@ -52,10 +52,10 @@ export const TravelExpensesCalculator: React.FC = () => {
   const [trajetsCount, setTrajetsCount] = useState<number>(2);
   const [puissance, setPuissance] = useState<number>(5);
   const [bareme, setBareme] = useState<string>("base");
-  const [majorationTemporaire, setMajorationTemporaire] = useState<boolean>(true); // For 2026
+  const [majorationTemporaire] = useState<boolean>(true); // For 2026
 
   // Repas & Nuitées
-  const [communeHebergement, setCommuneHebergement] = useState("");
+  const [, setCommuneHebergement] = useState("");
   const [repas, setRepas] = useState<number>(0);
   const [nuitees, setNuitees] = useState<number>(0);
   const [zoneNuitee, setZoneNuitee] = useState<"province" | "grandes-villes" | "paris">("province");
