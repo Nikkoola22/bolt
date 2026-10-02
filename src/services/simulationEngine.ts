@@ -9,6 +9,7 @@ import type {
   Echelon
 } from "../types/career";
 import { CADRES_EMPLOIS, VALEUR_POINT_INDICE_MENSUEL, MOTIFS_DISPONIBILITE } from "../data/gradesData";
+import { SESSIONS_CONCOURS_EXAMENS, type SessionConcoursExamen } from "../data/calendrierConcoursData";
 
 // Utilitaires de date
 export function parseDate(dStr: string): Date {
@@ -120,6 +121,76 @@ export function isGradeAccessibleContractuel(cadre: CadreEmploiDefinition, grade
 // Vérifie si un grade est un grade d'avancement pur (fermé au recrutement contractuel)
 export function isGradeAvancement(cadre: CadreEmploiDefinition, gradeId: string): boolean {
   return !isGradeAccessibleContractuel(cadre, gradeId);
+}
+
+// Recherche des futures sessions de concours et examens CIG Petite Couronne & IDF correspondant à l'agent
+export function findSessionsCorrespondantes(
+  profil: ProfilAgent,
+  cadre: CadreEmploiDefinition,
+  grade: GradeDefinition
+): SessionConcoursExamen[] {
+  const norm = (s: string) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  const cadreNomNorm = norm(cadre.nom);
+  const gradeNomNorm = norm(grade.nom);
+  const filiereNorm = norm(cadre.filiere);
+  const perspectivesCibles = grade.perspectives.map(p => norm(p.nomGradeCible));
+  const isContractuel = profil.statut === "contractuel_cdi" || profil.statut === "contractuel_cdd";
+
+  return SESSIONS_CONCOURS_EXAMENS.filter((session) => {
+    // Uniquement sessions 2026/2027 et futures
+    if (session.anneeSession < 2026) return false;
+
+    const sCadre = norm(session.cadreEmploi);
+    const sGrade = norm(session.gradeCible);
+    const sIntitule = norm(session.intitule);
+    const sFiliere = norm(session.filiere);
+
+    // 1. Voie avancement de grade (réservé titulaires)
+    if (session.voie === "avancement_grade") {
+      if (isContractuel) return false;
+      const matchGradeCible = perspectivesCibles.some(pc => sGrade.includes(pc) || pc.includes(sGrade) || sIntitule.includes(pc));
+      const matchCadre = sCadre.includes(cadreNomNorm) || cadreNomNorm.includes(sCadre);
+      return matchGradeCible || (matchCadre && !sGrade.includes(gradeNomNorm));
+    }
+
+    // 2. Voie promotion interne (C vers B ou B vers A dans la même filière)
+    if (session.voie === "promotion_interne") {
+      if (isContractuel) return false;
+      const matchFiliere = sFiliere.includes(filiereNorm) || filiereNorm.includes(sFiliere);
+      if (!matchFiliere) return false;
+
+      // Catégorie C -> promotion vers B ou maîtrise technique
+      if (cadre.categorie === "C") {
+        return session.categorie === "B" || sCadre.includes("maitrise");
+      }
+      // Catégorie B -> promotion vers A
+      if (cadre.categorie === "B") {
+        return session.categorie === "A";
+      }
+      return false;
+    }
+
+    // 3. Concours interne
+    if (session.typeEpreuve === "concours_interne") {
+      const matchFiliere = sFiliere.includes(filiereNorm) || filiereNorm.includes(sFiliere);
+      if (!matchFiliere) return false;
+
+      if (isContractuel) {
+        // Contractuel : concours de son cadre actuel pour se titulariser ou cadre supérieur
+        const matchSameCadre = sCadre.includes(cadreNomNorm) || cadreNomNorm.includes(sCadre);
+        const matchCadreSuperieur = (cadre.categorie === "C" && session.categorie === "B") ||
+                                    (cadre.categorie === "B" && session.categorie === "A");
+        return matchSameCadre || matchCadreSuperieur;
+      } else {
+        // Titulaire : concours supérieur dans la filière
+        if (cadre.categorie === "C" && session.categorie === "B") return true;
+        if (cadre.categorie === "B" && session.categorie === "A") return true;
+        return false;
+      }
+    }
+
+    return false;
+  });
 }
 
 // Calcul de l impact d un événement sur le décalage d ancienneté
@@ -1221,6 +1292,70 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
       };
       jalons.push(recrutementDirectJalon);
     }
+  }
+
+  // 5. Intégration dans la frise des futures sessions de concours et examens professionnels correspondants (CIG Petite Couronne & IDF)
+  const sessionsCorrespondantes = findSessionsCorrespondantes(profil, cadre, grade);
+
+  for (const session of sessionsCorrespondantes) {
+    const isExam = session.typeEpreuve === "examen_professionnel";
+    const isAvancement = session.voie === "avancement_grade";
+    const isPromoInterne = session.voie === "promotion_interne";
+
+    const sessionJalon: JalonTimeline = {
+      id: `session-${session.id}`,
+      date: session.dateDebutEpreuves,
+      annee: parseDate(session.dateDebutEpreuves).getFullYear(),
+      mois: parseDate(session.dateDebutEpreuves).getMonth() + 1,
+      typeJalon: "session_concours_examen",
+      titre: session.intitule,
+      sousTitre: `${isExam ? "Examen Professionnel" : "Concours Territorial"} • Session CIG ${session.anneeSession} (${session.organisateur})`,
+      gradeNom: session.gradeCible,
+      echelonNumero: 1,
+      indiceBrut: 0,
+      indiceMajore: 0,
+      traitementBrutMensuel: 0,
+      statutValidation: "conditionnel",
+      pourquoi: `Session officielle ${session.anneeSession} organisée par le ${session.organisateur}. Inscriptions : du ${formatDateFrench(session.dateOuvertureInscriptions)} au ${formatDateFrench(session.dateClotureInscriptions)} (clôture des dossiers : ${formatDateFrench(session.dateLimiteDepotDossier)}). Épreuves prévues à partir du ${formatDateFrench(session.dateDebutEpreuves)}. ${session.conseilPreparation || ""}`,
+      conditionsRemplies: [],
+      conditionsManquantes: [
+        {
+          libelle: "Conditions statutaires d'accès",
+          statut: "en_cours",
+          valeurActuelle: `${profil.prenom} (${grade.nom})`,
+          valeurRequise: session.conditionsAccesSynthese,
+          progressionPourcent: 75,
+          detailsExplicatifs: session.conditionsAccesSynthese,
+          piecesAFournir: session.piecesPrincipales,
+          actesAdministratifs: ["Dossier d'inscription CIG", "Attestation de services effectifs DRH"]
+        },
+        {
+          libelle: "Calendrier des inscriptions CIG",
+          statut: isDatePassed(session.dateClotureInscriptions) ? "remplie" : "en_cours",
+          valeurActuelle: `Inscriptions : ${formatDateFrench(session.dateOuvertureInscriptions)} -> ${formatDateFrench(session.dateClotureInscriptions)}`,
+          valeurRequise: `Dépôt dossier avant le ${formatDateFrench(session.dateLimiteDepotDossier)}`,
+          progressionPourcent: isDatePassed(session.dateClotureInscriptions) ? 100 : 50,
+          detailsExplicatifs: `Préinscriptions closes le ${formatDateFrench(session.dateClotureInscriptions)}. Les épreuves débutent le ${formatDateFrench(session.dateDebutEpreuves)}.`,
+          piecesAFournir: ["Dossier RAEP", "Justificatifs de services"],
+          actesAdministratifs: ["Arrêté d'ouverture CIG"]
+        }
+      ],
+      justificatifsRequis: session.piecesPrincipales,
+      decisionsAdministrativesRequises: [
+        `Arrêté d'ouverture de la session par le ${session.organisateur}`,
+        "Délibération du jury et inscription sur la liste d'aptitude",
+        "Arrêté individuel de nomination par le Maire de Gennevilliers"
+      ],
+      hypothesesEtAlertes: [
+        `Session officielle CIG Petite Couronne (92-93-94) - Année ${session.anneeSession}`,
+        `Date des épreuves : ${formatDateFrench(session.dateDebutEpreuves)}`,
+        session.conseilPreparation || "Préparez votre dossier professionnel RAEP et sollicitez les préparations CNFPT."
+      ],
+      referenceReglementaire: `CIG Petite Couronne • ${isAvancement ? "Avancement de grade" : isPromoInterne ? "Promotion interne" : "Recrutement statutaire"} (${session.cadreEmploi})`,
+      sessionConcoursAssociee: session
+    };
+
+    jalons.push(sessionJalon);
   }
 
   // Trier les jalons par ordre chronologique

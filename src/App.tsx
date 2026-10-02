@@ -360,6 +360,7 @@ export function App() {
                   onSelectJalon={(j) => setSelectedJalon(j)}
                   onOpenAddEvent={() => handleOpenAddEventWithType()}
                   onOpenConcoursSearch={handleOpenConcoursModal}
+                  onSimulerExamen={handleSimulerConcoursOuExamen}
                 />
               </div>
             )}
@@ -501,6 +502,7 @@ export function App() {
         onClose={() => setSelectedJalon(null)}
         onOpenAddEvent={(type) => handleOpenAddEventWithType(type)}
         onOpenConcoursSearch={handleOpenConcoursModal}
+        onSimulerExamen={handleSimulerConcoursOuExamen}
         isContractuel={currentProfile.statut.startsWith("contractuel")}
       />
 

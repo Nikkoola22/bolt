@@ -145,6 +145,7 @@ export interface JalonTimeline {
     | "avancement_echelon"
     | "promouvabilite_grade"
     | "promouvabilite_interne"
+    | "session_concours_examen"
     | "evenement_vie"
     | "promotion_effective"
     | "fin_evenement";
@@ -167,6 +168,7 @@ export interface JalonTimeline {
   hypothesesEtAlertes: string[];
   referenceReglementaire: string;
   evenementAssocie?: EvenementCarriere;
+  sessionConcoursAssociee?: import("../data/calendrierConcoursData").SessionConcoursExamen;
 }
 
 // Résultat global d une simulation
