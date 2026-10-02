@@ -1,6 +1,6 @@
 import React from "react";
 import type { ProfilAgent } from "../types/career";
-import { BookOpen, ShieldCheck, RotateCcw, Sun, Moon, ArrowLeft, FileEdit, GraduationCap } from "lucide-react";
+import { BookOpen, RotateCcw, Sun, Moon, ArrowLeft, FileEdit, GraduationCap } from "lucide-react";
 
 interface HeaderProps {
   currentProfile?: ProfilAgent;
@@ -33,36 +33,8 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-2 sm:top-3 z-40 max-w-6xl w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] mx-auto transition-all duration-300">
       <div className="rounded-full backdrop-blur-2xl bg-white/85 dark:bg-black/85 border border-black/[0.08] dark:border-white/[0.12] shadow-md shadow-black/[0.03] dark:shadow-black/40 py-2 sm:py-2.5 px-3.5 sm:px-5 flex items-center justify-between gap-3">
         
-        {/* Marque institutionnelle */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="relative flex items-center">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-tangerine to-apricot flex items-center justify-center text-ebony font-black text-[11px] shadow-sm tracking-wider">
-              CFDT
-            </div>
-            {/* Délicat liseré tricolore discret */}
-            <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 flex h-0.5 w-4 rounded-full overflow-hidden opacity-90">
-              <span className="w-1/3 bg-blue-500"></span>
-              <span className="w-1/3 bg-white"></span>
-              <span className="w-1/3 bg-red-500"></span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs sm:text-sm font-bold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
-              Ma Carrière
-            </span>
-            <span className="hidden sm:inline-flex text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">
-              Gennevilliers
-            </span>
-            <span className="hidden lg:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-lime-cream/30 dark:bg-lime-cream/15 text-ebony dark:text-lime-cream border border-lime-cream/40">
-              <ShieldCheck className="w-3 h-3 text-muted-teal" />
-              CGFP
-            </span>
-          </div>
-        </div>
-
-        {/* Actions et utilitaires sous forme de capsules arrondies */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Navigation retour (si actif) */}
+        <div>
           {showBackToMenu && onBackToMenu && (
             <button
               onClick={onBackToMenu}
@@ -73,6 +45,10 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Retour au menu</span>
             </button>
           )}
+        </div>
+
+        {/* Actions et utilitaires sous forme de capsules arrondies */}
+        <div className="flex items-center gap-1.5 sm:gap-2 ml-auto">
 
           {hasEvents && onResetEvents && (
             <button
