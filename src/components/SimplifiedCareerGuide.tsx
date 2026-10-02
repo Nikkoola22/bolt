@@ -4,7 +4,9 @@ import {
   formatDateFrench, 
   diffMonths, 
   formatDurationInYearsAndMonths, 
-  findCadreAndGrade 
+  findCadreAndGrade,
+  isDatePassed,
+  getElapsedSinceDate
 } from "../services/simulationEngine";
 import { 
   Clock, 
@@ -23,7 +25,8 @@ import {
   Check, 
   Briefcase, 
   ArrowRight,
-  Calculator 
+  Calculator,
+  GraduationCap
 } from "lucide-react";
 
 interface SimplifiedCareerGuideProps {
@@ -33,6 +36,7 @@ interface SimplifiedCareerGuideProps {
   onBackToMenu: () => void;
   onOpenAddEvent?: (type?: string) => void;
   onOpenLdg?: () => void;
+  onOpenConcoursSearch?: (query?: string) => void;
 }
 
 export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
@@ -41,6 +45,7 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
   onSwitchToComplete,
   onOpenAddEvent: _onOpenAddEvent,
   onOpenLdg,
+  onOpenConcoursSearch,
 }) => {
   // Question active : "echelon" (Hausse automatique) ou "promotion" (Monter en grade sans examen) ou null (masqué par défaut)
   const [activeQuestion, setActiveQuestion] = useState<"echelon" | "promotion" | null>(null);
@@ -654,12 +659,56 @@ export const SimplifiedCareerGuide: React.FC<SimplifiedCareerGuideProps> = ({
                           <span className="text-sm sm:text-base font-black text-ebony dark:text-apricot">
                             {formatDateFrench(prochainePromouvabilite.date)}
                           </span>
-                          <span className="text-[11px] text-slate-500 block">
-                            (dans {delaiPromoTexte})
+                          <span className="text-[11px] block font-semibold">
+                            {isDatePassed(prochainePromouvabilite.date) ? (
+                              <span className="text-emerald-700 dark:text-emerald-400 flex items-center gap-1 mt-0.5 font-bold">
+                                <CircleCheck className="w-3.5 h-3.5" />
+                                Conditions déjà acquises ({getElapsedSinceDate(prochainePromouvabilite.date)}) !
+                              </span>
+                            ) : (
+                              <span className="text-slate-500">(dans {delaiPromoTexte})</span>
+                            )}
                           </span>
                         </div>
                       </div>
                     </div>
+
+                    {/* Alerte si déjà éligible */}
+                    {isDatePassed(prochainePromouvabilite.date) && (
+                      <div className="bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-400/60 dark:border-emerald-700/60 rounded-2xl p-4 text-xs flex items-start gap-3 text-emerald-950 dark:text-emerald-200">
+                        <CircleCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                        <div className="space-y-0.5">
+                          <strong className="text-emerald-800 dark:text-emerald-300 font-extrabold text-sm block">
+                            Conditions statutaires d'ancienneté d'ores et déjà remplies !
+                          </strong>
+                          <p className="leading-relaxed text-xs">
+                            Vous remplissez l'ensemble des conditions requises d'échelon et de durée statutaire depuis le <strong>{formatDateFrench(prochainePromouvabilite.date)}</strong>. Votre employeur peut inscrire votre candidature au prochain tableau annuel d'avancement de grade ou sur la liste d'aptitude.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Accès direct aux sessions de concours et examens */}
+                    {onOpenConcoursSearch && (
+                      <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/40 dark:to-blue-950/40 p-4 rounded-2xl border border-indigo-200/80 dark:border-indigo-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                        <div className="space-y-0.5">
+                          <span className="font-extrabold text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5">
+                            <GraduationCap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            Sessions de Concours & Examens Professionnels (CIG Petite Couronne)
+                          </span>
+                          <p className="text-indigo-900/80 dark:text-indigo-300 text-[11px]">
+                            Consultez les dates des prochaines sessions 2026/2027 et périodes de préinscription.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => onOpenConcoursSearch(prochainePromouvabilite.gradeNom || prochainePromouvabilite.titre)}
+                          className="px-3.5 py-1.5 rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-2xs self-start sm:self-auto cursor-pointer shrink-0"
+                        >
+                          Rechercher les sessions
+                        </button>
+                      </div>
+                    )}
 
                     {/* Check-list des conditions façon quête */}
                     <div className="space-y-3">

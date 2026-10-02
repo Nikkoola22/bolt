@@ -11,13 +11,14 @@ import { EventSimulatorDrawer } from "./components/EventSimulatorDrawer";
 import { PerspectivesChecklist } from "./components/PerspectivesChecklist";
 import { ScenarioComparator } from "./components/ScenarioComparator";
 import { GlossaryModal } from "./components/GlossaryModal";
-import { MementoHubView } from "./components/MementoHubView";
 import { PrintSummary } from "./components/PrintSummary";
 import { ProfileEditModal } from "./components/ProfileEditModal";
 import { AgentIntakeView } from "./components/AgentIntakeView";
 import { ModeSelectionView } from "./components/ModeSelectionView";
 import { SimplifiedCareerGuide } from "./components/SimplifiedCareerGuide";
 import { LdgSimulatorView } from "./components/LdgSimulatorView";
+import { ConcoursExamensSearchModal } from "./components/ConcoursExamensSearchModal";
+import type { SessionConcoursExamen } from "./data/calendrierConcoursData";
 import { useDarkMode } from "./hooks/useDarkMode";
 import confetti from "canvas-confetti";
 import { 
@@ -28,6 +29,7 @@ import {
   FileText, 
   ShieldCheck, 
   Zap,
+  GraduationCap,
 } from "lucide-react";
 
 export function App() {
@@ -43,8 +45,7 @@ export function App() {
   // - "simplifiee" : Les 2 questions directes (échelon ? avancement/promotion ?)
   // - "complete" : Le processus normal complet avec frise chronologique, comparateur, etc.
   // - "ldg" : Simulateur de points de promotion interne (LDG-PI)
-  // - "memento" : Hub du mémento statutaire
-  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete" | "ldg" | "memento">("saisie");
+  const [appMode, setAppMode] = useState<"saisie" | "choix_mode" | "simplifiee" | "complete" | "ldg">("saisie");
 
   // Onglet actif dans le mode complet
   const [activeTab, setActiveTab] = useState<"frise" | "perspectives" | "comparateur" | "conseils">("frise");
@@ -56,6 +57,13 @@ export function App() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
   const [isPrintSummaryOpen, setIsPrintSummaryOpen] = useState(false);
+  const [isConcoursModalOpen, setIsConcoursModalOpen] = useState(false);
+  const [concoursSearchQuery, setConcoursSearchQuery] = useState("");
+
+  const handleOpenConcoursModal = (query?: string) => {
+    setConcoursSearchQuery(query || "");
+    setIsConcoursModalOpen(true);
+  };
 
   // Moteur de calcul statutaire
   const resultatSimulation = useMemo(() => {
@@ -113,6 +121,25 @@ export function App() {
     setIsEventDrawerOpen(true);
   };
 
+  const handleSimulerConcoursOuExamen = (session: SessionConcoursExamen) => {
+    const typeEvt = session.typeEpreuve === "examen_professionnel" ? "examen_professionnel" : "reussite_concours";
+    const dateEpreuve = session.dateDebutEpreuves 
+      || (session.anneeSession === 2026 ? "2026-09-15" : "2027-04-15");
+
+    const newEvt: EvenementCarriere = {
+      id: `evt-session-${Date.now()}`,
+      type: typeEvt,
+      dateDebut: dateEpreuve,
+      dureeMois: 0,
+      titre: `Réussite ${session.intitule}`,
+      descriptionDetaillee: `Simulation de la réussite à la session CIG ${session.intitule} (${session.cadreEmploi}). Grade visé : ${session.gradeCible}.`,
+      impacteAvancementEchelon: false,
+      impacteRemuneration: true,
+      justificatifsFournis: true,
+    };
+    handleAddEvent(newEvt);
+  };
+
   return (
     <div className="min-h-screen bg-slate-100/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans antialiased">
       {/* Barre de navigation principale */}
@@ -136,11 +163,8 @@ export function App() {
         }}
         onOpenEditProfile={() => setIsEditProfileOpen(true)}
         onOpenGlossary={() => setIsGlossaryOpen(true)}
-        onOpenMemento={() => {
-          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-          setAppMode("memento");
-        }}
         onOpenPrintSummary={() => setIsPrintSummaryOpen(true)}
+        onOpenConcours={() => handleOpenConcoursModal()}
         onResetEvents={handleResetEvents}
         onBackToMenu={handleBackToMenu}
         showBackToMenu={appMode !== "saisie" && appMode !== "choix_mode"}
@@ -188,10 +212,6 @@ export function App() {
               window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("ldg");
             }}
-            onOpenMemento={() => {
-              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-              setAppMode("memento");
-            }}
           />
         )}
 
@@ -215,16 +235,6 @@ export function App() {
           />
         )}
 
-        {/* MODE 6 : MEMENTO RH HUB */}
-        {appMode === "memento" && (
-          <MementoHubView
-            onBackToMenu={() => {
-              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-              setAppMode("choix_mode");
-            }}
-          />
-        )}
-
         {/* MODE 3 : VERSION SIMPLIFIÉE (2 boutons de questions directes & réponses claires) */}
         {appMode === "simplifiee" && (
           <SimplifiedCareerGuide
@@ -240,6 +250,7 @@ export function App() {
               window.scrollTo({ top: 0, left: 0, behavior: "instant" });
               setAppMode("ldg");
             }}
+            onOpenConcoursSearch={handleOpenConcoursModal}
           />
         )}
 
@@ -261,8 +272,8 @@ export function App() {
             {/* Barre de navigation par onglets thématiques (Optimisée Mobile iPhone & Desktop - 100% visible sans slider) */}
             <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-2 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-3">
               
-              {/* Groupe 1 : Raccourci Version Simplifiée */}
-              <div className="flex items-center gap-1.5 shrink-0">
+              {/* Groupe 1 : Raccourcis Utiles */}
+              <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
                 <button
                   onClick={() => setAppMode("simplifiee")}
                   className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-black text-ebony dark:text-apricot bg-apricot/30 dark:bg-apricot/20 hover:bg-apricot/40 dark:hover:bg-apricot/30 border border-apricot/60 dark:border-apricot/40 transition-all cursor-pointer shadow-2xs"
@@ -270,6 +281,15 @@ export function App() {
                 >
                   <Zap className="w-3.5 h-3.5 text-ebony dark:text-apricot fill-apricot shrink-0" />
                   <span className="truncate">Version Simplifiée</span>
+                </button>
+
+                <button
+                  onClick={() => handleOpenConcoursModal()}
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-black text-indigo-900 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-300/80 dark:border-indigo-700/80 transition-all cursor-pointer shadow-2xs"
+                  title="Consulter les dates des prochains examens professionnels et concours CIG Petite Couronne"
+                >
+                  <GraduationCap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                  <span className="truncate">Concours & Examens</span>
                 </button>
               </div>
 
@@ -339,6 +359,7 @@ export function App() {
                   selectedJalonId={selectedJalon ? selectedJalon.id : null}
                   onSelectJalon={(j) => setSelectedJalon(j)}
                   onOpenAddEvent={() => handleOpenAddEventWithType()}
+                  onOpenConcoursSearch={handleOpenConcoursModal}
                 />
               </div>
             )}
@@ -350,6 +371,7 @@ export function App() {
               jalons={resultatSimulation.jalons}
               onSelectJalon={(j) => setSelectedJalon(j)}
               onOpenAddEvent={(t) => handleOpenAddEventWithType(t)}
+              onOpenConcoursSearch={handleOpenConcoursModal}
             />
           </div>
         )}
@@ -478,6 +500,7 @@ export function App() {
         jalon={selectedJalon}
         onClose={() => setSelectedJalon(null)}
         onOpenAddEvent={(type) => handleOpenAddEventWithType(type)}
+        onOpenConcoursSearch={handleOpenConcoursModal}
         isContractuel={currentProfile.statut.startsWith("contractuel")}
       />
 
@@ -498,6 +521,14 @@ export function App() {
         onClose={() => setIsEditProfileOpen(false)}
         profil={currentProfile}
         onSave={(newProf) => setCurrentProfile(newProf)}
+      />
+
+      {/* Modal de recherche des sessions de concours et examens professionnels */}
+      <ConcoursExamensSearchModal
+        isOpen={isConcoursModalOpen}
+        onClose={() => setIsConcoursModalOpen(false)}
+        initialQuery={concoursSearchQuery}
+        onSimulerExamen={handleSimulerConcoursOuExamen}
       />
 
       {/* Modal du lexique statutaire */}

@@ -1,6 +1,6 @@
 import React from "react";
 import type { JalonTimeline } from "../types/career";
-import { formatDateFrench } from "../services/simulationEngine";
+import { formatDateFrench, isDatePassed, getElapsedSinceDate } from "../services/simulationEngine";
 import { 
   X, 
   CircleCheck, 
@@ -16,13 +16,15 @@ import {
   Sparkles,
   BookOpen,
   ArrowRight,
-  Calendar
+  Calendar,
+  GraduationCap
 } from "lucide-react";
 
 interface MilestoneDetailModalProps {
   jalon: JalonTimeline | null;
   onClose: () => void;
   onOpenAddEvent: (typePredefini?: string) => void;
+  onOpenConcoursSearch?: (query?: string) => void;
   isContractuel?: boolean;
 }
 
@@ -30,6 +32,7 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
   jalon,
   onClose,
   onOpenAddEvent,
+  onOpenConcoursSearch,
   isContractuel = false,
 }) => {
   if (!jalon) return null;
@@ -46,6 +49,11 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                 <span className="text-xs sm:text-sm bg-lime-cream text-ebony border-2 border-muted-teal px-3.5 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
                   <Calendar className="w-3.5 h-3.5 text-ebony" />
                   Prise d'échelon : {formatDateFrench(jalon.date)}
+                </span>
+              ) : isDatePassed(jalon.date) ? (
+                <span className="text-xs sm:text-sm bg-emerald-100 dark:bg-emerald-950 text-emerald-950 dark:text-emerald-100 border-2 border-emerald-500 px-3.5 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
+                  <CircleCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  Conditions déjà acquises depuis le {formatDateFrench(jalon.date)} ✅
                 </span>
               ) : jalon.typeJalon === "promouvabilite_grade" ? (
                 <span className="text-xs sm:text-sm bg-tangerine text-ebony border-2 border-tangerine-dark px-3.5 py-1 rounded-xl font-black inline-flex items-center gap-1.5 shadow-xs">
@@ -100,6 +108,22 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
               <HelpCircle className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               Pourquoi cette date et cette situation ?
             </div>
+
+            {/* Alerte valorisante lorsque les conditions statutaires sont déjà acquises */}
+            {isDatePassed(jalon.date) && (jalon.typeJalon === "promouvabilite_grade" || jalon.typeJalon === "promouvabilite_interne") && (
+              <div className="mb-3 bg-emerald-500/15 border border-emerald-500/40 rounded-xl p-3 text-xs text-emerald-950 dark:text-emerald-200 flex items-start gap-2.5">
+                <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <strong className="text-emerald-800 dark:text-emerald-300 block">
+                    Conditions statutaires déjà remplies depuis le {formatDateFrench(jalon.date)} ({getElapsedSinceDate(jalon.date)}) !
+                  </strong>
+                  <span className="text-[11px] leading-relaxed">
+                    Vous totalisez déjà l'ancienneté statutaire et l'échelon requis. Votre dossier est recevable pour être présenté au tableau annuel d'avancement ou sur liste d'aptitude.
+                  </span>
+                </div>
+              </div>
+            )}
+
             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
               {jalon.pourquoi}
             </p>
@@ -117,6 +141,23 @@ export const MilestoneDetailModal: React.FC<MilestoneDetailModalProps> = ({
                 </div>
               </div>
             ) : null}
+
+            {/* Bouton pour rechercher les prochaines sessions d'examen / concours */}
+            {(jalon.id.includes("examen_professionnel") || jalon.titre.toLowerCase().includes("examen pro") || jalon.titre.toLowerCase().includes("concours")) && onOpenConcoursSearch && (
+              <div className="mt-3 pt-2.5 border-t border-orange-200/60 dark:border-orange-800/60">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenConcoursSearch(jalon.gradeNom || jalon.titre);
+                  }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-300 dark:border-indigo-700 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-2xs"
+                >
+                  <GraduationCap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>Consulter le calendrier des prochaines sessions (CIG Petite Couronne)</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Section 2 : QUELLES CONDITIONS SONT ENCORE À REMPLIR ? */}

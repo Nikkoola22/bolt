@@ -1,13 +1,15 @@
 import React from "react";
 import type { ProfilAgent, JalonTimeline } from "../types/career";
-import { formatDateFrench } from "../services/simulationEngine";
+import { formatDateFrench, isDatePassed, getElapsedSinceDate } from "../services/simulationEngine";
 import { 
   TrendingUp, 
   Clock, 
   AlertTriangle, 
   Sparkles,
   ChevronRight,
-  Calendar
+  Calendar,
+  CircleCheck,
+  GraduationCap
 } from "lucide-react";
 
 interface PerspectivesChecklistProps {
@@ -15,6 +17,7 @@ interface PerspectivesChecklistProps {
   jalons: JalonTimeline[];
   onSelectJalon: (jalon: JalonTimeline) => void;
   onOpenAddEvent: (type: string) => void;
+  onOpenConcoursSearch?: (query?: string) => void;
 }
 
 export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
@@ -22,6 +25,7 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
   jalons,
   onSelectJalon,
   onOpenAddEvent,
+  onOpenConcoursSearch,
 }) => {
   
 
@@ -183,7 +187,15 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
 
                       {(() => {
                         const isExamenPro = jalon.id.includes("examen_professionnel") || jalon.titre.toLowerCase().includes("examen pro") || jalon.conditionsManquantes.some(c => c.libelle.toLowerCase().includes("examen"));
-                        if (isExamenPro) {
+                        const isPassed = isDatePassed(jalon.date);
+                        if (isPassed) {
+                          return (
+                            <span className="text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 dark:border-emerald-600 px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-emerald-500/20">
+                              <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                              <span>{isExamenPro ? "Examen pro : Déjà acquis" : jalon.typeJalon === "promouvabilite_grade" ? "Éligible au choix : Déjà acquis" : "Choix interne : Déjà acquis"} ({formatDateFrench(jalon.date)}) ✅</span>
+                            </span>
+                          );
+                        } else if (isExamenPro) {
                           return (
                             <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-apricot border-2 border-apricot-dark px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-apricot/30">
                               <Calendar className="w-4 h-4 text-ebony shrink-0" />
@@ -201,7 +213,7 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
                           return (
                             <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-lime-cream border-2 border-muted-teal px-3.5 py-1 rounded-xl flex items-center gap-1.5 shadow-xs ring-2 ring-muted-teal/30">
                               <Clock className="w-4 h-4 text-ebony shrink-0" />
-                              <span>Éligible dès le {formatDateFrench(jalon.date)}</span>
+                              <span>Éligible choix interne dès le {formatDateFrench(jalon.date)}</span>
                             </span>
                           );
                         }
@@ -213,7 +225,22 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
                       {jalon.titre}
                     </h4>
 
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">
+                    {/* Alerte valorisante si conditions d'ancienneté déjà remplies */}
+                    {isDatePassed(jalon.date) && (
+                      <div className="mt-2.5 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-400/60 dark:border-emerald-700/60 rounded-xl p-3 text-xs flex items-start gap-2.5 text-emerald-950 dark:text-emerald-200">
+                        <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                        <div className="space-y-0.5">
+                          <div className="font-extrabold text-emerald-800 dark:text-emerald-300">
+                            Conditions d'ancienneté d'ores et déjà remplies !
+                          </div>
+                          <p className="text-emerald-900/90 dark:text-emerald-200/90 leading-relaxed text-[11px]">
+                            Vous totalisez déjà l'ancienneté statutaire et l'échelon requis depuis le <strong>{formatDateFrench(jalon.date)}</strong> ({getElapsedSinceDate(jalon.date)}). Votre situation peut être examinée lors de la prochaine campagne annuelle de promotion / tableau d'avancement.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 line-clamp-2">
                       {jalon.pourquoi}
                     </p>
 
@@ -297,6 +324,17 @@ export const PerspectivesChecklist: React.FC<PerspectivesChecklistProps> = ({
                     <span className="text-[11px] text-slate-500 dark:text-slate-400 italic">
                       Soumis aux LDG
                     </span>
+                  )}
+
+                  {(isExamenPro || isConcours) && onOpenConcoursSearch && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenConcoursSearch(jalon.gradeNom || jalon.titre)}
+                      className="text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-300/80 dark:border-indigo-700/80 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    >
+                      <GraduationCap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                      <span>Sessions CIG</span>
+                    </button>
                   )}
 
                   <button

@@ -50,6 +50,19 @@ export function formatDurationInYearsAndMonths(totalMonths: number): string {
   return `${years} an${years > 1 ? "s" : ""} et ${months} mois`;
 }
 
+export function isDatePassed(dStr: string): boolean {
+  if (!dStr) return false;
+  const today = formatDateISO(new Date());
+  return dStr <= today;
+}
+
+export function getElapsedSinceDate(dStr: string): string {
+  if (!dStr) return "";
+  const today = formatDateISO(new Date());
+  const months = Math.max(0, diffMonths(dStr, today));
+  return formatDurationInYearsAndMonths(months);
+}
+
 export function calculateTraitementBrut(indiceMajore: number, quotite: number, typePosition?: string): number {
   if (typePosition === "conge_parental" || typePosition === "disponibilite") {
     return 0;
@@ -1037,7 +1050,11 @@ export function runSimulation(profil: ProfilAgent): ResultatSimulation {
         statutValidation: isExamenMissing ? "bloque" : "conditionnel",
         pourquoi: isPostConcoursPromo
           ? `Perspective d avancement de grade débloquée grâce à votre réussite au concours et votre titularisation simulée au ${formatDateFrench(dateTitularisation)}. Date théorique à laquelle vous remplirez l ensemble des conditions statutaires requises d échelon et d ancienneté pour accéder au grade supérieur.`
-          : `Date théorique à laquelle vous remplirez l ensemble des conditions statutaires obligatoires (échelon et ancienneté). ${
+          : dateEligibiliteTheorique <= nowStr
+          ? `CONDITIONS D'ANCIENNETÉ DÉJÀ REMPLIES ! Vous remplissez l'ensemble des conditions statutaires requises (échelon et ancienneté) depuis le ${formatDateFrench(dateEligibiliteTheorique)} (soit depuis ${formatDurationInYearsAndMonths(Math.max(0, diffMonths(dateEligibiliteTheorique, nowStr)))}). Votre candidature peut d'ores et déjà être proposée par votre collectivité au prochain tableau annuel d'avancement de grade ou sur la liste d'aptitude (LDG). ${
+              isExamenMissing ? "ATTENTION : Pour concrétiser cette nomination, la réussite préalable à l'examen professionnel est requise." : ""
+            }`
+          : `Date prévisionnelle à laquelle vous remplirez l ensemble des conditions statutaires obligatoires (échelon et ancienneté). ${
               isExamenMissing ? "ATTENTION : Vous devez préalablement vous inscrire et réussir l examen professionnel pour concrétiser cette perspective." : ""
             }`,
         conditionsRemplies: conditionsRemplies,

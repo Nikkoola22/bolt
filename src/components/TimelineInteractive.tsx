@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { JalonTimeline } from "../types/career";
-import { formatDateFrench } from "../services/simulationEngine";
+import { formatDateFrench, isDatePassed, getElapsedSinceDate } from "../services/simulationEngine";
 import { 
   Calendar, 
   ChevronRight, 
@@ -10,7 +10,8 @@ import {
   Filter, 
   HelpCircle,
   AlertTriangle,
-  Award
+  Award,
+  GraduationCap
 } from "lucide-react";
 
 interface TimelineInteractiveProps {
@@ -18,6 +19,7 @@ interface TimelineInteractiveProps {
   selectedJalonId: string | null;
   onSelectJalon: (jalon: JalonTimeline) => void;
   onOpenAddEvent?: () => void;
+  onOpenConcoursSearch?: (query?: string) => void;
 }
 
 type FilterType = "all" | "echelon" | "grade" | "interne" | "evenement";
@@ -26,6 +28,7 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
   jalons,
   selectedJalonId,
   onSelectJalon,
+  onOpenConcoursSearch,
 }) => {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
@@ -252,6 +255,8 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
 
             // Style de la pastille date selon le type de jalon (agrandi et visibilisé)
             const isExamenPro = jalon.id.includes("examen_professionnel") || jalon.titre.toLowerCase().includes("examen pro") || jalon.conditionsManquantes.some(c => c.libelle.toLowerCase().includes("examen"));
+            const isPassed = isDatePassed(jalon.date);
+            const elapsed = getElapsedSinceDate(jalon.date);
 
             let dateBadgeContent: React.ReactNode;
             if (jalon.typeJalon === "avancement_echelon") {
@@ -266,7 +271,12 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                 </span>
               );
             } else if (isExamenPro) {
-              dateBadgeContent = (
+              dateBadgeContent = isPassed ? (
+                <span className="text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 dark:border-emerald-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-emerald-500/20 transition-all">
+                  <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span className="tracking-tight">Examen pro : Rempli depuis le {formatDateFrench(jalon.date)} (Déjà acquis ✅)</span>
+                </span>
+              ) : (
                 <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-apricot border-2 border-apricot-dark px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-apricot/30 transition-all">
                   <span className="relative flex h-2.5 w-2.5 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tangerine opacity-75"></span>
@@ -277,7 +287,12 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                 </span>
               );
             } else if (jalon.typeJalon === "promouvabilite_grade") {
-              dateBadgeContent = (
+              dateBadgeContent = isPassed ? (
+                <span className="text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 dark:border-emerald-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-emerald-500/20 transition-all">
+                  <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span className="tracking-tight">Éligible au choix : Rempli depuis le {formatDateFrench(jalon.date)} (Déjà acquis ✅)</span>
+                </span>
+              ) : (
                 <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-tangerine border-2 border-tangerine-dark px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-tangerine/30 transition-all">
                   <span className="relative flex h-2.5 w-2.5 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tangerine-dark opacity-75"></span>
@@ -288,7 +303,12 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                 </span>
               );
             } else if (jalon.typeJalon === "promouvabilite_interne") {
-              dateBadgeContent = (
+              dateBadgeContent = isPassed ? (
+                <span className="text-xs sm:text-sm font-black text-emerald-950 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 dark:border-emerald-600 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-emerald-500/20 transition-all">
+                  <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span className="tracking-tight">Éligible choix interne : Rempli depuis le {formatDateFrench(jalon.date)} (Déjà acquis ✅)</span>
+                </span>
+              ) : (
                 <span className="animate-blink-date text-xs sm:text-sm font-black text-ebony bg-muted-teal border-2 border-muted-teal-dark px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-xs ring-2 ring-muted-teal/30 transition-all">
                   <span className="relative flex h-2.5 w-2.5 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-cream opacity-75"></span>
@@ -378,10 +398,42 @@ export const TimelineInteractive: React.FC<TimelineInteractiveProps> = ({
                     </p>
                   </div>
 
+                  {/* Alerte valorisante lorsque les conditions statutaires sont déjà acquises */}
+                  {isPassed && (jalon.typeJalon === "promouvabilite_grade" || jalon.typeJalon === "promouvabilite_interne") && (
+                    <div className="mt-3 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-400/60 dark:border-emerald-700/60 rounded-xl p-3 text-xs flex items-start gap-2.5 text-emerald-950 dark:text-emerald-200">
+                      <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                      <div className="space-y-0.5">
+                        <div className="font-extrabold text-emerald-800 dark:text-emerald-300">
+                          Conditions statutaires d'ancienneté d'ores et déjà remplies !
+                        </div>
+                        <p className="text-emerald-900/90 dark:text-emerald-200/90 leading-relaxed text-[11px]">
+                          Vous remplissez l'ensemble des conditions requises (échelon et ancienneté) depuis le <strong>{formatDateFrench(jalon.date)}</strong> ({elapsed ? `soit depuis ${elapsed}` : "déjà acquis"}). Votre employeur peut d'ores et déjà proposer votre inscription sur le tableau annuel d'avancement ou la liste d'aptitude.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Résumé de l explication */}
                   <p className="text-xs text-slate-700 dark:text-slate-300 mt-3 line-clamp-2 bg-slate-50/80 dark:bg-slate-800/80 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800 leading-relaxed">
                     {jalon.pourquoi}
                   </p>
+
+                  {/* Lien direct de recherche de concours/examens si applicable */}
+                  {(isExamenPro || jalon.titre.toLowerCase().includes("concours")) && onOpenConcoursSearch && (
+                    <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenConcoursSearch(jalon.gradeNom || jalon.titre);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-300/80 dark:border-indigo-700/80 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-2xs"
+                      >
+                        <GraduationCap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                        <span>Rechercher les prochaines sessions d'examen / concours (CIG)</span>
+                      </button>
+                    </div>
+                  )}
 
                   <div className="mt-3.5 flex items-center justify-between text-xs text-orange-600 dark:text-orange-400 font-bold">
                     <span className="flex items-center gap-1.5 hover:underline">
