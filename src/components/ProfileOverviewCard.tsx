@@ -1,18 +1,21 @@
 import React from "react";
 import type { ProfilAgent, JalonTimeline } from "../types/career";
 import { findCadreAndGrade, formatDurationInYearsAndMonths, formatDateFrench, diffMonths } from "../services/simulationEngine";
-import { Briefcase, Award, Clock, DollarSign, ArrowRight, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
+import { Briefcase, Award, Clock, DollarSign, ArrowRight, ArrowLeft, FileEdit, User, Sparkles, Building2, AlertTriangle, Calendar } from "lucide-react";
 
 interface ProfileOverviewCardProps {
   profil: ProfilAgent;
   prochainEchelonJalon: JalonTimeline | null;
   onBackToMenu: () => void;
+  onOpenEditProfile?: () => void;
   onScrollToNextMilestone?: () => void;
 }
 
 export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
   profil,
   prochainEchelonJalon,
+  onBackToMenu,
+  onOpenEditProfile,
   onScrollToNextMilestone
 }) => {
   const { cadre, grade } = findCadreAndGrade(profil.cadreEmploiId, profil.gradeId);
@@ -99,7 +102,31 @@ export const ProfileOverviewCard: React.FC<ProfileOverviewCardProps> = ({
             </div>
           </div>
 
-
+          {/* Actions : Modifier le profil & Retour menu */}
+          <div className="flex items-center gap-2 sm:self-center shrink-0">
+            {onBackToMenu && (
+              <button
+                type="button"
+                onClick={onBackToMenu}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-white bg-red-600 hover:bg-red-700 border border-red-500/40 shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+                title="Retour au menu de sélection des modes"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Retour menu</span>
+              </button>
+            )}
+            {onOpenEditProfile && (
+              <button
+                type="button"
+                onClick={onOpenEditProfile}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-slate-900 bg-amber-400 hover:bg-amber-300 border border-amber-300 shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+                title="Modifier mes informations de profil"
+              >
+                <FileEdit className="w-3.5 h-3.5" />
+                <span>Modifier profil</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

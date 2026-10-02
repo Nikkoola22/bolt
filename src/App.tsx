@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import type { ProfilAgent, JalonTimeline, EvenementCarriere } from "./types/career";
 import { PROFILS_PREDEFINIS } from "./data/presetProfiles";
 import { runSimulation } from "./services/simulationEngine";
-import { Header } from "./components/Header";
 import { DisclaimerBanner } from "./components/DisclaimerBanner";
 import { ProfileOverviewCard } from "./components/ProfileOverviewCard";
 import { TimelineInteractive } from "./components/TimelineInteractive";
@@ -30,11 +29,12 @@ import {
   ShieldCheck, 
   Zap,
   GraduationCap,
+  BookOpen,
 } from "lucide-react";
 
 export function App() {
   // Mode sombre persistant
-  const { isDark, toggleTheme } = useDarkMode();
+  useDarkMode();
 
   // Profil sélectionné
   const [currentProfile, setCurrentProfile] = useState<ProfilAgent>(PROFILS_PREDEFINIS[0]);
@@ -142,34 +142,6 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-slate-100/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans antialiased">
-      {/* Barre de navigation principale */}
-      <Header
-        currentProfile={currentProfile}
-        isDark={isDark}
-        onToggleTheme={toggleTheme}
-        onSelectProfile={(p) => {
-          const isContractuel = p.statut.startsWith("contractuel");
-          const cleanedProfile = isContractuel
-            ? {
-                ...p,
-                evenementsSimules: p.evenementsSimules.filter(
-                  (e) => e.type !== "examen_professionnel" && e.type !== "disponibilite"
-                ),
-              }
-            : p;
-          setCurrentProfile(cleanedProfile);
-          setSelectedJalon(null);
-          setActiveTab("frise");
-        }}
-        onOpenEditProfile={() => setIsEditProfileOpen(true)}
-        onOpenGlossary={() => setIsGlossaryOpen(true)}
-        onOpenPrintSummary={() => setIsPrintSummaryOpen(true)}
-        onOpenConcours={() => handleOpenConcoursModal()}
-        onResetEvents={handleResetEvents}
-        onBackToMenu={handleBackToMenu}
-        showBackToMenu={appMode !== "saisie" && appMode !== "choix_mode"}
-      />
-
       {/* Contenu principal */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6">
 
@@ -262,6 +234,7 @@ export function App() {
               profil={currentProfile}
               prochainEchelonJalon={resultatSimulation.prochainEchelonJalon}
               onBackToMenu={handleBackToMenu}
+              onOpenEditProfile={() => setIsEditProfileOpen(true)}
               onScrollToNextMilestone={() => {
                 if (resultatSimulation.prochainEchelonJalon) {
                   setSelectedJalon(resultatSimulation.prochainEchelonJalon);
@@ -290,6 +263,15 @@ export function App() {
                 >
                   <GraduationCap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
                   <span className="truncate">Concours & Examens</span>
+                </button>
+
+                <button
+                  onClick={() => setIsGlossaryOpen(true)}
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-black dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-2xs"
+                  title="Consulter le lexique statutaire FPT"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                  <span className="truncate">Lexique</span>
                 </button>
               </div>
 
