@@ -153,9 +153,12 @@ export function findSessionsCorrespondantes(
       return matchGradeCible || (matchCadre && !sGrade.includes(gradeNomNorm));
     }
 
-    // 2. Voie promotion interne (C vers B ou B vers A dans la même filière)
+    // 2. Voie promotion interne (C vers B, B vers A ou Maîtrise)
     if (session.voie === "promotion_interne") {
       if (isContractuel) return false;
+      const matchPerspectiveCible = perspectivesCibles.some(pc => sGrade.includes(pc) || pc.includes(sGrade) || sIntitule.includes(pc) || sCadre.includes(pc));
+      if (matchPerspectiveCible) return true;
+
       const matchFiliere = sFiliere.includes(filiereNorm) || filiereNorm.includes(sFiliere);
       if (!matchFiliere) return false;
 
