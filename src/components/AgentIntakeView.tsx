@@ -215,8 +215,8 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
       <form onSubmit={handleSubmit} className="p-1.5 sm:p-2 rounded-[2.5rem] bg-black/[0.03] dark:bg-white/[0.04] ring-1 ring-black/[0.05] dark:ring-white/[0.06] shadow-sm">
         <div className="rounded-[2.1rem] bg-white dark:bg-[#111114] p-5 sm:p-8 lg:p-9 space-y-8 sm:space-y-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)]">
           
-          {/* Indicateur de progression des étapes (Stepper Apple-style) */}
-          <div className="flex items-center justify-between gap-2 pb-6 border-b border-black/[0.05] dark:border-white/[0.06] overflow-x-auto no-scrollbar">
+          {/* Indicateur de progression des étapes (Stepper Apple-style élargi et équilibré) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-6 border-b border-black/[0.05] dark:border-white/[0.06] w-full">
             {/* Étape 1 */}
             <button
               type="button"
@@ -224,21 +224,24 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                 const el = document.getElementById("section-1");
                 el?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer shrink-0 ${
+              className={`flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-left w-full ${
                 unlockedStep >= 1
-                  ? "bg-tangerine/20 text-ebony dark:text-tangerine border border-tangerine/40 shadow-2xs"
-                  : "bg-black/[0.03] dark:bg-white/[0.05] text-slate-400"
+                  ? "bg-tangerine/20 dark:bg-tangerine/10 text-ebony dark:text-tangerine border-2 border-tangerine/50 shadow-sm"
+                  : "bg-black/[0.03] dark:bg-white/[0.05] text-slate-400 border border-transparent"
               }`}
             >
-              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
+              <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black shrink-0 shadow-xs ${
                 unlockedStep > 1 ? "bg-muted-teal text-ebony" : "bg-tangerine text-ebony"
               }`}>
                 {unlockedStep > 1 ? "✓" : "1"}
               </span>
-              <span>1. Identité & Statut</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-black text-sm tracking-tight truncate">1. Identité & Statut</div>
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  {formData.prenom.trim() ? `${formData.prenom} • ${formData.statut === 'titulaire' ? 'Titulaire' : formData.statut === 'stagiaire' ? 'Stagiaire' : 'Contractuel'}` : "Cadre & profil de base"}
+                </div>
+              </div>
             </button>
-
-            <span className="w-6 h-0.5 bg-black/[0.08] dark:bg-white/[0.1] shrink-0"></span>
 
             {/* Étape 2 */}
             <button
@@ -250,21 +253,24 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                   el?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }
               }}
-              className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 ${
+              className={`flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm font-bold transition-all text-left w-full ${
                 unlockedStep >= 2
-                  ? "bg-apricot/30 text-ebony dark:text-apricot border border-apricot/50 cursor-pointer shadow-2xs"
-                  : "bg-black/[0.02] dark:bg-white/[0.03] text-slate-400 opacity-50 cursor-not-allowed"
+                  ? "bg-apricot/30 dark:bg-apricot/10 text-ebony dark:text-apricot border-2 border-apricot/50 cursor-pointer shadow-sm"
+                  : "bg-black/[0.02] dark:bg-white/[0.03] text-slate-400 opacity-50 cursor-not-allowed border border-transparent"
               }`}
             >
-              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
+              <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black shrink-0 shadow-xs ${
                 unlockedStep > 2 ? "bg-muted-teal text-ebony" : unlockedStep === 2 ? "bg-apricot text-ebony" : "bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
               }`}>
                 {unlockedStep > 2 ? "✓" : "2"}
               </span>
-              <span>2. Cadre & Grade</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-black text-sm tracking-tight truncate">2. Cadre & Grade</div>
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  {unlockedStep >= 2 ? `${currentCadre.nom} • Éch. ${formData.echelonActuel}` : "Grade & échelon"}
+                </div>
+              </div>
             </button>
-
-            <span className="w-6 h-0.5 bg-black/[0.08] dark:bg-white/[0.1] shrink-0"></span>
 
             {/* Étape 3 */}
             <button
@@ -276,129 +282,188 @@ export const AgentIntakeView: React.FC<AgentIntakeViewProps> = ({
                   el?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }
               }}
-              className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 ${
+              className={`flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm font-bold transition-all text-left w-full ${
                 unlockedStep >= 3
-                  ? "bg-lime-cream/40 text-ebony dark:text-lime-cream border border-lime-cream/60 cursor-pointer shadow-2xs"
-                  : "bg-black/[0.02] dark:bg-white/[0.03] text-slate-400 opacity-50 cursor-not-allowed"
+                  ? "bg-lime-cream/40 dark:bg-lime-cream/10 text-ebony dark:text-lime-cream border-2 border-lime-cream/60 cursor-pointer shadow-sm"
+                  : "bg-black/[0.02] dark:bg-white/[0.03] text-slate-400 opacity-50 cursor-not-allowed border border-transparent"
               }`}
             >
-              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
+              <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black shrink-0 shadow-xs ${
                 unlockedStep === 3 ? "bg-lime-cream text-ebony" : "bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
               }`}>
                 3
               </span>
-              <span>3. Dates d'ancienneté</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-black text-sm tracking-tight truncate">3. Dates d'ancienneté</div>
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  {unlockedStep >= 3 ? "Ancienneté & simulation" : "Arrêtés & ancienneté"}
+                </div>
+              </div>
             </button>
           </div>
 
-          {/* Section 1 : Identité & Statut administratif (Toujours visible au départ) */}
-          <div id="section-1" className="space-y-6 scroll-mt-24">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-black/[0.05] dark:border-white/[0.06]">
-              <div className="flex items-center gap-3">
-                <span className="w-8 h-8 rounded-xl bg-tangerine text-ebony font-black flex items-center justify-center text-sm shadow-xs shrink-0">
+          {/* Section 1 : Identité & Statut administratif (Agrandie et richement remplie) */}
+          <div id="section-1" className="space-y-6 sm:space-y-8 scroll-mt-24">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-black/[0.05] dark:border-white/[0.06]">
+              <div className="flex items-center gap-3.5">
+                <span className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-500 via-amber-500 to-orange-400 text-slate-950 font-black flex items-center justify-center text-base shadow-md shrink-0">
                   1
                 </span>
                 <div>
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
-                    <User className="w-5 h-5 text-tangerine-dark dark:text-tangerine" />
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2.5 tracking-tight">
+                    <User className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                     Votre Identité & Statut Administratif
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                    Informations de base et cadre statutaire de référence
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                    Informations de base et cadre statutaire de référence applicables à votre carrière
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 self-start sm:self-center">
-                <span className="text-xs bg-orange-500/10 text-orange-700 dark:text-orange-300 border border-orange-500/20 font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-orange-600" />
+              <div className="flex items-center gap-2.5 self-start sm:self-center flex-wrap">
+                <span className="text-xs sm:text-sm bg-orange-500/10 text-orange-700 dark:text-orange-300 border border-orange-500/25 font-bold px-3.5 py-1.5 rounded-full flex items-center gap-2 shadow-2xs">
+                  <Building2 className="w-4 h-4 text-orange-600" />
                   Collectivité de Gennevilliers
                 </span>
-                <span className="text-xs bg-black/[0.04] dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 font-bold px-2.5 py-1 rounded-full">
+                <span className="text-xs sm:text-sm bg-black/[0.04] dark:bg-white/[0.06] text-slate-700 dark:text-slate-300 font-black px-3 py-1.5 rounded-full border border-black/[0.05] dark:border-white/[0.08]">
                   FPT
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 text-sm">
-              <div className="w-full sm:w-60 md:w-64 shrink-0">
-                <label className="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-xs sm:text-sm">
-                  Votre Prénom <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  id="input-prenom"
-                  type="text"
-                  value={formData.prenom}
-                  onChange={(e) => {
-                    setFormData({ ...formData, prenom: e.target.value });
-                    if (prenomError && e.target.value.trim().length > 0) {
-                      setPrenomError(false);
-                    }
-                  }}
-                  placeholder="Ex: Atlas, Sophie, Karim..."
-                  className={`w-full bg-slate-50/70 dark:bg-[#18181c] border rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm focus:bg-white dark:focus:bg-[#18181c] transition-all shadow-2xs ${
-                    prenomError 
-                      ? "border-rose-500 ring-2 ring-rose-500/20" 
-                      : "border-slate-300 dark:border-slate-700 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-                  }`}
-                  required
-                />
-                {prenomError ? (
-                  <p className="text-xs text-rose-500 mt-1.5 flex items-center gap-1 font-semibold">
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    Veuillez renseigner votre prénom pour continuer.
-                  </p>
-                ) : (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
-                    Prénom de l'agent
-                  </p>
-                )}
+            {/* Cartes spacieuses pour remplir et structurer le bloc */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 text-sm">
+              {/* Carte 1 : Prénom de l'agent */}
+              <div className="bg-gradient-to-b from-orange-50/90 via-white to-amber-50/40 dark:from-orange-950/40 dark:via-slate-900 dark:to-amber-950/20 border-2 border-orange-300 dark:border-orange-700/60 hover:border-orange-500 dark:hover:border-orange-400 rounded-3xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <label htmlFor="input-prenom" className="block font-black text-orange-950 dark:text-orange-200 text-xs sm:text-sm tracking-wider uppercase">
+                        Votre Prénom <span className="text-rose-500">*</span>
+                      </label>
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-orange-100 dark:bg-orange-950/80 text-orange-900 dark:text-orange-200 border border-orange-300 dark:border-orange-700 shrink-0">
+                      Requis
+                    </span>
+                  </div>
+
+                  <div className="relative mt-2">
+                    <input
+                      id="input-prenom"
+                      type="text"
+                      value={formData.prenom}
+                      onChange={(e) => {
+                        setFormData({ ...formData, prenom: e.target.value });
+                        if (prenomError && e.target.value.trim().length > 0) {
+                          setPrenomError(false);
+                        }
+                      }}
+                      placeholder="Ex: Atlas, Sophie, Karim, Thomas..."
+                      className={`w-full bg-white dark:bg-[#18181c] border-2 rounded-2xl px-4 py-3.5 text-slate-900 dark:text-white font-bold text-base focus:bg-white dark:focus:bg-[#18181c] transition-all shadow-sm ${
+                        prenomError 
+                          ? "border-rose-500 ring-4 ring-rose-500/20" 
+                          : "border-orange-200 dark:border-orange-800/80 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20"
+                      }`}
+                      required
+                    />
+                  </div>
+
+                  {prenomError ? (
+                    <p className="text-xs text-rose-500 mt-2.5 flex items-center gap-1.5 font-bold">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      Veuillez renseigner votre prénom pour déverrouiller la suite.
+                    </p>
+                  ) : formData.prenom.trim().length > 0 ? (
+                    <div className="mt-3.5 p-3 rounded-xl bg-orange-500/10 border border-orange-500/25 text-xs text-orange-900 dark:text-orange-200 flex items-center gap-2 font-medium">
+                      <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
+                      <span>Bienvenue, <strong>{formData.prenom}</strong> ! Votre simulation de carrière personnalisée est prête à être calculée.</span>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2.5 leading-relaxed">
+                      Prénom de l'agent : personnalise l'affichage de vos jalons, simulations d'échelons et synthèses statutaires.
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-5 pt-3.5 border-t border-orange-200/60 dark:border-orange-800/40 text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Données strictement confidentielles traitées localement dans votre navigateur.</span>
+                </div>
               </div>
 
-              <div className="w-full flex-1">
-                <label className="block font-bold text-slate-800 dark:text-slate-200 mb-1.5 text-xs sm:text-sm">
-                  Statut juridique
-                </label>
-                <select
-                  value={formData.statut}
-                  onChange={(e) => handleStatutChange(e.target.value as StatutAgent)}
-                  className="w-full bg-amber-50/60 hover:bg-amber-50/90 dark:bg-amber-950/30 border border-amber-300/80 dark:border-amber-700/60 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white font-semibold text-sm focus:bg-white dark:focus:bg-[#18181c] focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-2xs cursor-pointer"
-                >
-                  <option value="titulaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fonctionnaire Titulaire</option>
-                  <option value="stagiaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Fonctionnaire Stagiaire (en cours de stage)</option>
-                  <option value="contractuel_cdi" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Contractuel de droit public en CDI</option>
-                  <option value="contractuel_cdd" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Contractuel de droit public en CDD</option>
-                </select>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
-                  Régit les conditions d'avancement selon le CGFP.
-                </p>
-                {formData.statut.startsWith("contractuel") && (
-                  <div className="mt-2 text-xs text-amber-900 dark:text-amber-200 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-lg p-2.5 leading-relaxed">
-                    <strong>Régime contractuel (Décret 88-145) :</strong> Rémunération par assimilation indiciaire sur le grade d'accès.
+              {/* Carte 2 : Statut juridique */}
+              <div className="bg-gradient-to-b from-amber-50/90 via-white to-orange-50/40 dark:from-amber-950/40 dark:via-slate-900 dark:to-orange-950/20 border-2 border-amber-300 dark:border-amber-700/60 hover:border-amber-500 dark:hover:border-amber-400 rounded-3xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                        <Briefcase className="w-4 h-4" />
+                      </div>
+                      <label className="block font-black text-amber-950 dark:text-amber-200 text-xs sm:text-sm tracking-wider uppercase">
+                        Statut Juridique
+                      </label>
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 shrink-0">
+                      Code Général CGFP
+                    </span>
                   </div>
-                )}
+
+                  <div className="relative mt-2">
+                    <select
+                      value={formData.statut}
+                      onChange={(e) => handleStatutChange(e.target.value as StatutAgent)}
+                      className="w-full bg-white dark:bg-[#18181c] border-2 border-amber-300 dark:border-amber-700/80 rounded-2xl px-4 py-3.5 text-slate-900 dark:text-white font-bold text-sm sm:text-base focus:bg-white dark:focus:bg-[#18181c] focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-sm cursor-pointer"
+                    >
+                      <option value="titulaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">Fonctionnaire Titulaire</option>
+                      <option value="stagiaire" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">Fonctionnaire Stagiaire (en cours de stage)</option>
+                      <option value="contractuel_cdi" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">Contractuel de droit public en CDI</option>
+                      <option value="contractuel_cdd" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">Contractuel de droit public en CDD</option>
+                    </select>
+                  </div>
+
+                  <div className="mt-3.5 p-3 rounded-xl bg-white/80 dark:bg-slate-950/60 border border-amber-200 dark:border-amber-800/60 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                    {formData.statut === "titulaire" && (
+                      <p><strong>✅ Régime titulaire :</strong> Avancement d'échelon garanti à la cadence unique, avancement de grade au choix/examen et promotion interne selon les LDG de Gennevilliers.</p>
+                    )}
+                    {formData.statut === "stagiaire" && (
+                      <p><strong>⏳ Période probatoire :</strong> Titularisation sous réserve d'aptitude. Vos années d'expérience antérieure sont reprises à la nomination selon les textes statutaires.</p>
+                    )}
+                    {formData.statut.startsWith("contractuel") && (
+                      <p><strong>📄 Régime contractuel (Décret 88-145) :</strong> Rémunération fixée par assimilation indiciaire sur la grille du grade de recrutement.</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-5 pt-3.5 border-t border-amber-200/60 dark:border-amber-800/40 text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                  <Building2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>Régit les conditions d'avancement et de rémunération selon le CGFP.</span>
+                </div>
               </div>
             </div>
 
-            {/* Bouton pour valider le bloc 1 et afficher le bloc 2 */}
-            <div className="pt-4 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
+            {/* Bouton de validation spacieux et engageant */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.02] border border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-4">
               {unlockedStep > 1 ? (
-                <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                  <CircleCheck className="w-4 h-4" />
-                  Étape 1 validée ({formData.prenom} • {formData.statut})
-                </span>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-emerald-700 dark:text-emerald-400 font-bold">
+                  <CircleCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Étape 1 validée ({formData.prenom} • {formData.statut === 'titulaire' ? 'Titulaire' : formData.statut === 'stagiaire' ? 'Stagiaire' : 'Contractuel'})</span>
+                </div>
               ) : (
-                <span className="text-xs text-slate-400">
-                  Renseignez votre prénom pour déverrouiller la suite
-                </span>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+                  <Sparkles className="w-4 h-4 text-orange-500 shrink-0" />
+                  <span>Renseignez votre prénom pour déverrouiller la suite</span>
+                </div>
               )}
 
               <button
                 type="button"
                 onClick={handleValidateStep1}
-                className="group px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-[#1d1d1f] hover:bg-black dark:bg-white dark:hover:bg-[#f5f5f7] text-white dark:text-black shadow-sm flex items-center gap-2.5 transition-all cursor-pointer active:scale-[0.98]"
+                className="group px-7 py-3 rounded-full text-xs sm:text-sm font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-md hover:shadow-lg flex items-center gap-2.5 transition-all cursor-pointer active:scale-[0.98]"
               >
                 <span>{unlockedStep > 1 ? "Accéder à l'Étape 2 : Cadre & Grade" : "Valider et passer à l'Étape 2"}</span>
-                <span className="w-6 h-6 rounded-full bg-white/20 dark:bg-black/10 flex items-center justify-center transition-transform group-hover:translate-x-1">
+                <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-1">
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </button>
