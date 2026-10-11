@@ -23,7 +23,65 @@ export interface SessionConcoursExamen {
   urlOfficielleCig: string;
   urlTelechargementPdf?: string;
   conseilPreparation?: string;
+  motsCles?: string[];
+  cadresOrigineEligibles?: string[];
 }
+
+export interface AvancementAuChoixInfo {
+  id: string;
+  gradePattern: RegExp;
+  gradeAffiche: string;
+  filiere: string;
+  categorie: "A" | "B" | "C";
+  conditionsResume: string;
+  explicationStatutaire: string;
+  sessionsAlternativesConseillees: string[];
+}
+
+export const GRADES_AVANCEMENT_AU_CHOIX: AvancementAuChoixInfo[] = [
+  {
+    id: "adjoint-admin-c3",
+    gradePattern: /adjoint\s+administratif\s+principal\s+de\s+1(re|ère)\s+classe/i,
+    gradeAffiche: "Adjoint administratif principal de 1re classe (C3)",
+    filiere: "Administrative",
+    categorie: "C",
+    conditionsResume: "Avoir atteint au moins 1 an d'ancienneté au 4e échelon de C2 (ou 5e échelon selon décret) et compter au moins 5 ans de services effectifs dans le grade d'Adjoint administratif principal de 2e classe.",
+    explicationStatutaire: "L'avancement vers le grade d'Adjoint administratif principal de 1re classe (C3) s'effectue exclusivement AU CHOIX (inscription annuelle au tableau d'avancement après avis des LDG / CAP). Il n'existe pas d'examen professionnel pour ce grade. Pour progresser par voie d'examen ou de concours, vous pouvez présenter le concours interne ou l'examen de promotion interne vers la Catégorie B (Rédacteur territorial).",
+    sessionsAlternativesConseillees: [
+      "concours-redacteur-2027",
+      "exam-redacteur-promotion-interne-2027",
+      "exam-adjoint-adm-ppal-2cl-2027",
+      "concours-adjoint-adm-2026"
+    ]
+  },
+  {
+    id: "adjoint-tech-c3",
+    gradePattern: /adjoint\s+technique\s+principal\s+de\s+1(re|ère)\s+classe/i,
+    gradeAffiche: "Adjoint technique principal de 1re classe (C3)",
+    filiere: "Technique",
+    categorie: "C",
+    conditionsResume: "Au moins 1 an au 4e échelon de C2 et 5 ans de services effectifs dans le grade de C2.",
+    explicationStatutaire: "L'accès à ce grade C3 s'effectue au choix sans examen professionnel. Pour évoluer par examen, visez l'Agent de maîtrise territorial ou le cadre de Technicien territorial (Cat. B).",
+    sessionsAlternativesConseillees: [
+      "exam-agent-maitrise-2027",
+      "concours-technicien-2027",
+      "exam-adjoint-tech-ppal-2cl-2027"
+    ]
+  },
+  {
+    id: "adjoint-anim-c3",
+    gradePattern: /adjoint\s+d'animation\s+principal\s+de\s+1(re|ère)\s+classe/i,
+    gradeAffiche: "Adjoint d'animation principal de 1re classe (C3)",
+    filiere: "Animation",
+    categorie: "C",
+    conditionsResume: "Au moins 1 an au 4e échelon de C2 et 5 ans de services effectifs dans le grade de C2.",
+    explicationStatutaire: "Avancement au choix sans examen professionnel. Évolution possible par concours ou promotion interne vers Animateur territorial (Cat. B).",
+    sessionsAlternativesConseillees: [
+      "exam-animateur-ppal-2cl-2027",
+      "exam-adjoint-animation-ppal-2cl-2027"
+    ]
+  }
+];
 
 export const LIENS_OFFICIELS_CIG = {
   portailConcours: "https://www.cig929394.fr/liste-des-concours/",
@@ -57,7 +115,8 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Arrêté d'échelon", "État de services effectifs", "Dossier RAEP"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2026,
-    conseilPreparation: "Épreuve écrite : note de synthèse ou rapport avec propositions à partir d'un dossier. Entretien oral avec le jury."
+    conseilPreparation: "Épreuve écrite : note de synthèse ou rapport avec propositions à partir d'un dossier. Entretien oral avec le jury.",
+    motsCles: ["redacteur", "b1 vers b2", "examen professionnel", "redacteur principal"]
   },
   {
     id: "exam-redacteur-ppal-2cl-2027",
@@ -79,7 +138,8 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Arrêté individuel d'échelon", "État des services effectifs validé DRH", "Dossier RAEP"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Session 2027 CIG Petite Couronne. Anticipez la constitution de votre dossier RAEP dès fin 2026."
+    conseilPreparation: "Session 2027 CIG Petite Couronne. Anticipez la constitution de votre dossier RAEP dès fin 2026.",
+    motsCles: ["redacteur", "b1 vers b2", "examen professionnel", "redacteur principal"]
   },
   {
     id: "exam-redacteur-promotion-interne-2027",
@@ -97,11 +157,13 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     dateLimiteDepotDossier: "2027-04-22",
     dateDebutEpreuves: "2027-09-23",
     statutSession: "a_venir",
-    conditionsAccesSynthese: "Fonctionnaires de catégorie C comptant au moins 7 ans de services publics dont au moins 4 ans en catégorie C.",
+    conditionsAccesSynthese: "Fonctionnaires de catégorie C (notamment Adjoints administratifs territoriaux et filières connexes) comptant au moins 7 ans de services publics dont au moins 4 ans en catégorie C.",
     piecesPrincipales: ["État détaillé des services publics", "Dossier professionnel", "Avis hiérarchique"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Permet l'accès à la catégorie B par liste d'aptitude après réussite de l'examen et avis de la commission LDG."
+    conseilPreparation: "Permet l'accès à la catégorie B par liste d'aptitude après réussite de l'examen et avis des Lignes Directrices de Gestion (LDG).",
+    motsCles: ["adjoint administratif", "adjoint", "categorie c", "promotion interne", "redacteur", "c vers b", "liste d aptitute"],
+    cadresOrigineEligibles: ["Adjoint administratif territorial", "Adjoint technique territorial", "Adjoint d'animation territorial"]
   },
   {
     id: "concours-redacteur-2027",
@@ -119,11 +181,61 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     dateLimiteDepotDossier: "2027-03-25",
     dateDebutEpreuves: "2027-10-14",
     statutSession: "a_venir",
-    conditionsAccesSynthese: "Concours interne ouvert aux agents titulaires ou contractuels justifiant d'au moins 4 ans de services publics au 1er janvier de l'année du concours.",
+    conditionsAccesSynthese: "Concours interne ouvert aux agents titulaires (notamment Adjoints administratifs et agents de catégorie C) ou contractuels justifiant d'au moins 4 ans de services publics au 1er janvier de l'année du concours.",
     piecesPrincipales: ["État général des services publics", "Justificatifs d'état civil", "Dossier d'inscription"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2027,
-    conseilPreparation: "Concours biennal. Épreuves écrites : note de synthèse avec propositions opérationnelles. Préparation CNFPT recommandée."
+    conseilPreparation: "Concours biennal. Épreuves écrites : note de synthèse avec propositions opérationnelles. Préparation CNFPT vivement recommandée.",
+    motsCles: ["adjoint administratif", "adjoint", "concours interne", "categorie c", "redacteur", "categorie b", "evolution"],
+    cadresOrigineEligibles: ["Adjoint administratif territorial", "Adjoint technique territorial", "Adjoint d'animation territorial"]
+  },
+  {
+    id: "concours-adjoint-adm-2026",
+    intitule: "Adjoint administratif territorial principal de 2e classe (Concours Interne & Externe)",
+    typeEpreuve: "concours_interne",
+    voie: "recrutement",
+    categorie: "C",
+    filiere: "Administrative",
+    cadreEmploi: "Adjoint administratif territorial",
+    gradeCible: "Adjoint administratif principal de 2e classe",
+    organisateur: "CIG Petite Couronne (92-93-94) / CDG Île-de-France",
+    anneeSession: 2026,
+    dateOuvertureInscriptions: "2026-03-10",
+    dateClotureInscriptions: "2026-04-15",
+    dateLimiteDepotDossier: "2026-04-23",
+    dateDebutEpreuves: "2026-10-08",
+    statutSession: "a_venir",
+    conditionsAccesSynthese: "Concours interne ouvert aux fonctionnaires et agents contractuels comptant au moins 1 an de services publics. Concours externe ouvert aux candidats titulaires d'un diplôme de niveau 3 (DNB/BEP/CAP) ou sans condition de diplôme pour les parents de 3 enfants.",
+    piecesPrincipales: ["État des services publics ou diplôme", "Pièce d'identité", "Dossier d'inscription CIG"],
+    urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
+    urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2026,
+    conseilPreparation: "Épreuve écrite de français (compréhension et rédaction) et tableau numérique. Épreuve orale d'entretien professionnel.",
+    motsCles: ["adjoint administratif", "adjoint", "concours interne", "concours externe", "principal de 2e classe", "categorie c"],
+    cadresOrigineEligibles: ["Adjoint administratif territorial"]
+  },
+  {
+    id: "exam-adjoint-adm-ppal-2cl-2027",
+    intitule: "Adjoint administratif principal de 2e classe (Examen Professionnel C1 -> C2)",
+    typeEpreuve: "examen_professionnel",
+    voie: "avancement_grade",
+    categorie: "C",
+    filiere: "Administrative",
+    cadreEmploi: "Adjoint administratif territorial",
+    gradeCible: "Adjoint administratif principal de 2e classe",
+    organisateur: "CIG Petite Couronne (92-93-94)",
+    anneeSession: 2027,
+    dateOuvertureInscriptions: "2027-01-12",
+    dateClotureInscriptions: "2027-02-17",
+    dateLimiteDepotDossier: "2027-02-25",
+    dateDebutEpreuves: "2027-05-20",
+    statutSession: "a_venir",
+    conditionsAccesSynthese: "Avoir atteint le 4e échelon et compter au moins 3 ans de services effectifs dans le grade d'adjoint administratif territorial (C1).",
+    piecesPrincipales: ["Arrêté d'échelon", "Certificat de services effectifs", "Dossier d'inscription"],
+    urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
+    urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
+    conseilPreparation: "Épreuve pratique / questionnaire à choix multiple et réponses courtes sur l'environnement territorial.",
+    motsCles: ["adjoint administratif", "adjoint", "principal de 2e classe", "c1 vers c2", "examen professionnel", "categorie c"],
+    cadresOrigineEligibles: ["Adjoint administratif territorial"]
   },
   {
     id: "exam-attache-ppal-2027",
@@ -145,7 +257,8 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Dernier arrêté d'avancement d'échelon", "Dossier RAEP complet", "Rapport d'évaluation professionnelle"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Inscriptions ouvertes du 03/11/2026 au 16/12/2026 ! Épreuve orale de reconnaissance des acquis de l'expérience professionnelle (RAEP)."
+    conseilPreparation: "Inscriptions ouvertes du 03/11/2026 au 16/12/2026 ! Épreuve orale de reconnaissance des acquis de l'expérience professionnelle (RAEP).",
+    motsCles: ["attache", "attache principal", "examen professionnel", "categorie a"]
   },
   {
     id: "concours-attache-2026",
@@ -163,33 +276,13 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     dateLimiteDepotDossier: "2026-05-07",
     dateDebutEpreuves: "2026-11-19",
     statutSession: "a_venir",
-    conditionsAccesSynthese: "Concours interne : 4 ans de services publics au 1er janvier. Externe : Diplôme de niveau 6 (Licence, Master, IEP).",
+    conditionsAccesSynthese: "Concours interne : 4 ans de services publics au 1er janvier (accessible notamment aux Rédacteurs territoriaux de Catégorie B). Externe : Diplôme de niveau 6 (Licence, Master, IEP).",
     piecesPrincipales: ["Justificatif de services publics", "Diplôme requis ou attestation RAEP", "Fiche individuelle"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2026,
-    conseilPreparation: "Épreuve écrite le 19 novembre 2026. Note de cadrage / rapport avec propositions sur les politiques publiques territoriales."
-  },
-  {
-    id: "exam-adjoint-adm-ppal-2cl-2027",
-    intitule: "Adjoint administratif principal de 2e classe (Examen Professionnel C1 -> C2)",
-    typeEpreuve: "examen_professionnel",
-    voie: "avancement_grade",
-    categorie: "C",
-    filiere: "Administrative",
-    cadreEmploi: "Adjoint administratif territorial",
-    gradeCible: "Adjoint administratif principal de 2e classe",
-    organisateur: "CIG Petite Couronne (92-93-94)",
-    anneeSession: 2027,
-    dateOuvertureInscriptions: "2027-01-12",
-    dateClotureInscriptions: "2027-02-17",
-    dateLimiteDepotDossier: "2027-02-25",
-    dateDebutEpreuves: "2027-05-20",
-    statutSession: "a_venir",
-    conditionsAccesSynthese: "Avoir atteint le 4e échelon et compter au moins 3 ans de services effectifs dans le grade d'adjoint administratif.",
-    piecesPrincipales: ["Arrêté d'échelon", "Certificat de services effectifs", "Dossier d'inscription"],
-    urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
-    urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Épreuve pratique / questionnaire à choix multiple et réponses courtes sur l'environnement territorial."
+    conseilPreparation: "Épreuve écrite le 19 novembre 2026. Note de cadrage / rapport avec propositions sur les politiques publiques territoriales.",
+    motsCles: ["attache", "concours interne", "concours externe", "redacteur vers attache", "categorie a"],
+    cadresOrigineEligibles: ["Rédacteur territorial"]
   },
 
   // --- FILIÈRE TECHNIQUE ---
@@ -202,18 +295,19 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     filiere: "Technique",
     cadreEmploi: "Technicien territorial",
     gradeCible: "Technicien principal de 2e classe",
-    organisateur: "CIG Petite Couronne / CDG 77",
+    organisateur: "CIG Petite Couronne (92-93-94)",
     anneeSession: 2026,
-    dateOuvertureInscriptions: "2026-10-13",
-    dateClotureInscriptions: "2026-11-18",
-    dateLimiteDepotDossier: "2026-11-26",
-    dateDebutEpreuves: "2027-04-15",
-    statutSession: "a_venir",
-    conditionsAccesSynthese: "Au moins 1 an dans le 4e échelon et au moins 3 ans de services effectifs dans le grade de Technicien.",
-    piecesPrincipales: ["Arrêté d'échelon", "Dossier RAEP technique", "État de services"],
+    dateOuvertureInscriptions: "2026-03-03",
+    dateClotureInscriptions: "2026-04-08",
+    dateLimiteDepotDossier: "2026-04-16",
+    dateDebutEpreuves: "2026-09-24",
+    statutSession: "cloturee",
+    conditionsAccesSynthese: "Au moins 1 an au 4e échelon et 3 ans de services effectifs dans le grade de technicien.",
+    piecesPrincipales: ["Arrêté d'échelon", "État de services", "Dossier RAEP"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2026,
-    conseilPreparation: "Inscriptions dès le 13/10/2026 ! Épreuve d'admissibilité technique puis oral devant jury spécialisé."
+    conseilPreparation: "Rapport technique avec solutions chiffrées et argumentation réglementaire.",
+    motsCles: ["technicien", "technicien principal", "examen professionnel", "categorie b"]
   },
   {
     id: "concours-technicien-2027",
@@ -229,13 +323,15 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     dateOuvertureInscriptions: "2027-02-09",
     dateClotureInscriptions: "2027-03-17",
     dateLimiteDepotDossier: "2027-03-25",
-    dateDebutEpreuves: "2027-09-16",
+    dateDebutEpreuves: "2027-10-14",
     statutSession: "a_venir",
-    conditionsAccesSynthese: "Concours interne : 4 ans de services publics au 1er janvier. Spécialités : réseaux, bâtiment, espaces verts, informatique, etc.",
-    piecesPrincipales: ["Dossier complet", "État de services publics", "Justificatifs de spécialité"],
+    conditionsAccesSynthese: "Concours interne : 4 ans de services publics au 1er janvier (ouvert aux Adjoints techniques et agents de maîtrise de catégorie C). Externe : Baccalauréat technique ou titre professionnel niveau 4.",
+    piecesPrincipales: ["Diplôme ou état de services", "Dossier d'inscription", "Justificatifs"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2027,
-    conseilPreparation: "Choisissez judicieusement votre spécialité technique lors de la préinscription (bâtiment, VRD, environnement, SIG)."
+    conseilPreparation: "Spécialités : aménagement urbain, réseaux, espaces verts, bâtiment. Étude de cas technique.",
+    motsCles: ["technicien", "adjoint technique", "agent de maitrise", "concours interne", "categorie b"],
+    cadresOrigineEligibles: ["Adjoint technique territorial", "Agent de maîtrise territorial"]
   },
   {
     id: "exam-adjoint-tech-ppal-2cl-2027",
@@ -251,13 +347,15 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     dateOuvertureInscriptions: "2027-01-12",
     dateClotureInscriptions: "2027-02-17",
     dateLimiteDepotDossier: "2027-02-25",
-    dateDebutEpreuves: "2027-05-27",
+    dateDebutEpreuves: "2027-05-20",
     statutSession: "a_venir",
     conditionsAccesSynthese: "Avoir atteint le 4e échelon et compter au moins 3 ans de services effectifs dans le grade d'Adjoint technique.",
-    piecesPrincipales: ["Arrêté d'échelon", "Certificat de services effectifs", "Dossier d'inscription"],
+    piecesPrincipales: ["Arrêté d'échelon", "Attestation de services", "Dossier d'inscription"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Épreuve pratique portant sur l'option technique choisie (bâtiment, restauration, voirie, mécanique, etc.)."
+    conseilPreparation: "Épreuve pratique selon l'option choisie (bâtiment, restauration collective, espaces verts).",
+    motsCles: ["adjoint technique", "c1 vers c2", "examen professionnel", "categorie c"],
+    cadresOrigineEligibles: ["Adjoint technique territorial"]
   },
   {
     id: "exam-agent-maitrise-2027",
@@ -270,16 +368,18 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     gradeCible: "Agent de maîtrise territorial",
     organisateur: "CIG Petite Couronne (92-93-94)",
     anneeSession: 2027,
-    dateOuvertureInscriptions: "2027-03-09",
-    dateClotureInscriptions: "2027-04-14",
-    dateLimiteDepotDossier: "2027-04-22",
-    dateDebutEpreuves: "2027-10-07",
+    dateOuvertureInscriptions: "2027-01-12",
+    dateClotureInscriptions: "2027-02-17",
+    dateLimiteDepotDossier: "2027-02-25",
+    dateDebutEpreuves: "2027-05-20",
     statutSession: "a_venir",
     conditionsAccesSynthese: "Adjoints techniques titulaires justifiant d'au moins 7 ans de services effectifs dans leur cadre d'emplois.",
-    piecesPrincipales: ["État de services", "Arrêté individuel", "Dossier professionnel"],
+    piecesPrincipales: ["Arrêté de nomination", "Dossier de candidature", "Avis hiérarchique"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Accès au cadre d'emplois de maîtrise (encadrement d'équipe de terrain). Épreuve écrite d'organisation de chantier."
+    conseilPreparation: "Accès au cadre d'emplois de maîtrise (encadrement d'équipe de terrain). Épreuve écrite d'organisation de chantier.",
+    motsCles: ["agent de maitrise", "adjoint technique", "promotion interne", "examen professionnel", "categorie c"],
+    cadresOrigineEligibles: ["Adjoint technique territorial"]
   },
   {
     id: "concours-ingenieur-2027",
@@ -297,11 +397,13 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     dateLimiteDepotDossier: "2027-02-25",
     dateDebutEpreuves: "2027-06-17",
     statutSession: "a_venir",
-    conditionsAccesSynthese: "Concours interne : 4 ans de services publics au 1er janvier. Externe : Titre d'ingénieur ou Master 2 scientifique/technique.",
+    conditionsAccesSynthese: "Concours interne : 4 ans de services publics au 1er janvier (notamment Techniciens de Catégorie B). Externe : Titre d'ingénieur ou Master 2 scientifique/technique.",
     piecesPrincipales: ["Diplôme ou état de services publics", "Dossier d'inscription", "Projet professionnel"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2027,
-    conseilPreparation: "Épreuve écrite d'ingénierie territoriale et étude de cas technique."
+    conseilPreparation: "Épreuve écrite d'ingénierie territoriale et étude de cas technique.",
+    motsCles: ["ingenieur", "technicien vers ingenieur", "concours interne", "categorie a"],
+    cadresOrigineEligibles: ["Technicien territorial"]
   },
 
   // --- FILIÈRE MÉDICO-SOCIALE & PETITE ENFANCE ---
@@ -325,7 +427,8 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Diplôme DEEJE", "État des services", "Dossier d'inscription"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2027,
-    conseilPreparation: "Projet pédagogique, développement du jeune enfant et accueil collectif petite enfance."
+    conseilPreparation: "Projet pédagogique, développement du jeune enfant et accueil collectif petite enfance.",
+    motsCles: ["eje", "educateur jeunes enfants", "concours interne", "petite enfance", "categorie a"]
   },
   {
     id: "exam-auxiliaire-puericulture-ppal-2cl-2027",
@@ -347,7 +450,8 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Arrêté d'échelon", "Attestation de services", "Dossier RAEP"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Entretien axé sur les pratiques en crèche municipale, hygiène, sécurité et accompagnement de l'enfant."
+    conseilPreparation: "Entretien axé sur les pratiques en crèche municipale, hygiène, sécurité et accompagnement de l'enfant.",
+    motsCles: ["auxiliaire de puericulture", "puericulture", "examen professionnel", "categorie b"]
   },
 
   // --- FILIÈRE ANIMATION & CULTURELLE ---
@@ -371,7 +475,8 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Arrêté d'échelon", "Projet d'animation", "Dossier RAEP"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Conception et pilotage de projets jeunesse, péri-scolaires ou séniors."
+    conseilPreparation: "Conception et pilotage de projets jeunesse, péri-scolaires ou séniors.",
+    motsCles: ["animateur", "animateur principal", "examen professionnel", "categorie b"]
   },
   {
     id: "exam-adjoint-animation-ppal-2cl-2027",
@@ -393,7 +498,9 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Arrêté d'échelon", "Attestation de services", "Dossier d'inscription"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfExamens2027,
-    conseilPreparation: "Réglementation des accueils collectifs de mineurs (ACM), sécurité des enfants et dynamique d'équipe."
+    conseilPreparation: "Réglementation des accueils collectifs de mineurs (ACM), sécurité des enfants et dynamique d'équipe.",
+    motsCles: ["adjoint animation", "c1 vers c2", "examen professionnel", "categorie c"],
+    cadresOrigineEligibles: ["Adjoint d'animation territorial"]
   },
 
   // --- FILIÈRE POLICE MUNICIPALE ---
@@ -417,26 +524,62 @@ export const SESSIONS_CONCOURS_EXAMENS: SessionConcoursExamen[] = [
     piecesPrincipales: ["Certificat médical d'aptitude", "Casier judiciaire bulletin n°2 vierge", "État de services"],
     urlOfficielleCig: "https://www.cig929394.fr/liste-des-concours/",
     urlTelechargementPdf: LIENS_OFFICIELS_CIG.pdfConcours2026,
-    conseilPreparation: "Épreuves physiques éliminatoires, rapport de police municipale et entretien de mise en situation."
+    conseilPreparation: "Épreuves physiques éliminatoires, rapport de police municipale et entretien de mise en situation.",
+    motsCles: ["police municipale", "gardien brigadier", "concours interne", "asvp", "categorie c"]
   }
 ];
 
 // Helper pour filtrer les sessions pertinentes selon un grade ou un profil
 export function findSessionsForGrade(gradeNom: string, cadreNom?: string): SessionConcoursExamen[] {
-  const norm = (str: string) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  const targetGrade = norm(gradeNom);
+  const norm = (str: string) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  const cleanedGrade = gradeNom.replace(/\s*\([ABC][0-9]\)/gi, "").trim();
+  const targetGrade = norm(cleanedGrade);
   const targetCadre = cadreNom ? norm(cadreNom) : "";
 
+  // 1. Vérifier si c'est un grade d'avancement au choix
+  const auChoix = GRADES_AVANCEMENT_AU_CHOIX.find(
+    (info) => info.gradePattern.test(gradeNom) || info.gradePattern.test(cleanedGrade)
+  );
+
+  // 2. Extraire les mots-clés signifiants
+  const stopWords = new Set(["pour", "dans", "avec", "sans", "sous", "vers", "classe", "principal", "principale", "1re", "2e", "3e", "1ere", "2eme", "3eme", "de", "la", "le", "du", "des"]);
+  const tokens = targetGrade.split(/\s+/).filter(t => t.length >= 3 && !stopWords.has(t));
+
   return SESSIONS_CONCOURS_EXAMENS.filter((session) => {
+    // Si c'est une session alternative recommandée pour un grade au choix
+    if (auChoix && auChoix.sessionsAlternativesConseillees.includes(session.id)) {
+      return true;
+    }
+
     const sIntitule = norm(session.intitule);
     const sGrade = norm(session.gradeCible);
     const sCadre = norm(session.cadreEmploi);
+    const sCond = norm(session.conditionsAccesSynthese);
+    const sKeywords = (session.motsCles || []).map(norm);
+    const sEligibles = (session.cadresOrigineEligibles || []).map(norm);
 
-    return (
+    // Exact matches
+    if (
       sIntitule.includes(targetGrade) ||
       sGrade.includes(targetGrade) ||
       targetGrade.includes(sGrade) ||
       (targetCadre && (sCadre.includes(targetCadre) || targetCadre.includes(sCadre)))
-    );
+    ) {
+      return true;
+    }
+
+    // Token match (ex: "adjoint" + "administratif")
+    if (tokens.length > 0) {
+      const combined = `${sIntitule} ${sGrade} ${sCadre} ${sCond} ${sKeywords.join(" ")} ${sEligibles.join(" ")}`;
+      const allTokensPresent = tokens.every(t => combined.includes(t));
+      if (allTokensPresent) return true;
+    }
+
+    // Si la session indique ce cadre comme éligible en promotion interne / concours
+    if (sEligibles.some(c => c.includes(targetGrade) || targetGrade.includes(c))) {
+      return true;
+    }
+
+    return false;
   });
 }

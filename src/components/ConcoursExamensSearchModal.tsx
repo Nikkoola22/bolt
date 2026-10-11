@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { 
   X, 
   Search, 
@@ -11,11 +11,14 @@ import {
   Clock, 
   Building2, 
   FileText,
-  AlertCircle
+  AlertCircle,
+  Info,
+  RotateCcw,
 } from "lucide-react";
 import { 
   SESSIONS_CONCOURS_EXAMENS, 
   LIENS_OFFICIELS_CIG, 
+  GRADES_AVANCEMENT_AU_CHOIX,
   type SessionConcoursExamen 
 } from "../data/calendrierConcoursData";
 import { formatDateFrench } from "../services/simulationEngine";
@@ -39,44 +42,103 @@ export const ConcoursExamensSearchModal: React.FC<ConcoursExamensSearchModalProp
   const [selectedType, setSelectedType] = useState<string>("all");
   const [selectedYear, setSelectedYear] = useState<string>("all");
 
-  // Synchroniser la recherche initiale si elle change
-  React.useEffect(() => {
-    if (initialQuery) {
-      setSearchQuery(initialQuery);
+  // Réinitialiser systématiquement tous les filtres par défaut à chaque ouverture du modal
+  useEffect(() => {
+    if (isOpen) {
+      setSearchQuery(initialQuery || "");
+      setSelectedCat("all");
+      setSelectedFiliere("all");
+      setSelectedType("all");
+      setSelectedYear("all");
     }
-  }, [initialQuery]);
+  }, [isOpen, initialQuery]);
+
+  // Détection si la recherche porte sur un grade dont l'avancement se fait exclusivement au choix
+  const activeAuChoix = useMemo(() => {
+    if (!searchQuery.trim()) return null;
+    const cleaned = searchQuery.replace(/\s*\([ABC][0-9]\)/gi, "").trim();
+    return (
+      GRADES_AVANCEMENT_AU_CHOIX.find(
+        (info) => info.gradePattern.test(searchQuery) || info.gradePattern.test(cleaned)
+      ) || null
+    );
+  }, [searchQuery]);
 
   const filteredSessions = useMemo(() => {
+    const rawQ = searchQuery.trim();
+    const cleanedQ = rawQ.replace(/\s*\([ABC][0-9]\)/gi, "").trim();
+    const norm = (str: string) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const qNorm = norm(cleanedQ);
+
+    const stopWords = new Set(["pour", "dans", "avec", "sans", "sous", "vers", "classe", "principal", "principale", "1re", "2e", "3e", "1ere", "2eme", "3eme", "de", "la", "le", "du", "des"]);
+    const tokens = qNorm.split(/\s+/).filter(t => t.length >= 3 && !stopWords.has(t));
+
     return SESSIONS_CONCOURS_EXAMENS.filter((s) => {
-      // Filtre texte
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const matchTitle = s.intitule.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(q);
-        const matchCadre = s.cadreEmploi.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(q);
-        const matchGrade = s.gradeCible.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(q);
-        const matchCond = s.conditionsAccesSynthese.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(q);
-        if (!matchTitle && !matchCadre && !matchGrade && !matchCond) return false;
+      // 1. Filtre texte intelligent et souple
+      if (rawQ) {
+        // Est-ce une session recommandée pour ce grade au choix ?
+        const isAlternativeForAuChoix = activeAuChoix && activeAuChoix.sessionsAlternativesConseillees.includes(s.id);
+
+        const sTitle = norm(s.intitule);
+        const sCadre = norm(s.cadreEmploi);
+        const sGrade = norm(s.gradeCible);
+        const sCond = norm(s.conditionsAccesSynthese);
+        const sKeywords = (s.motsCles || []).map(norm);
+        const sEligibles = (s.cadresOrigineEligibles || []).map(norm);
+
+        // Correspondance de la phrase complète nettoyée
+        const matchPhrase =
+          sTitle.includes(qNorm) ||
+          sCadre.includes(qNorm) ||
+          sGrade.includes(qNorm) ||
+          sCond.includes(qNorm) ||
+          sKeywords.some(k => k.includes(qNorm));
+
+        // Correspondance par mots-clés distincts (ex: "adjoint" ET "administratif")
+        const combined = `${sTitle} ${sCadre} ${sGrade} ${sCond} ${sKeywords.join(" ")} ${sEligibles.join(" ")}`;
+        const matchTokens = tokens.length > 0 && tokens.every(token => combined.includes(token));
+
+        // Correspondance des cadres éligibles en promotion interne
+        const matchEligible = sEligibles.some(c => c.includes(qNorm) || (tokens.length > 0 && tokens.every(t => c.includes(t))));
+
+        if (!matchPhrase && !matchTokens && !isAlternativeForAuChoix && !matchEligible) {
+          return false;
+        }
       }
 
-      // Filtre catégorie
-      if (selectedCat !== "all" && s.categorie !== selectedCat) return false;
+      // 2. Filtre catégorie
+      if (selectedCat !== "all" && s.categorie !== selectedCat) {
+        return false;
+      }
 
-      // Filtre filière
-      if (selectedFiliere !== "all" && s.filiere !== selectedFiliere) return false;
+      // 3. Filtre filière
+      if (selectedFiliere !== "all" && s.filiere !== selectedFiliere) {
+        return false;
+      }
 
-      // Filtre type
+      // 4. Filtre type
       if (selectedType !== "all") {
         if (selectedType === "examen" && s.typeEpreuve !== "examen_professionnel") return false;
         if (selectedType === "concours_interne" && s.typeEpreuve !== "concours_interne") return false;
         if (selectedType === "promotion_interne" && s.voie !== "promotion_interne") return false;
       }
 
-      // Filtre année
-      if (selectedYear !== "all" && s.anneeSession.toString() !== selectedYear) return false;
+      // 5. Filtre année
+      if (selectedYear !== "all" && s.anneeSession.toString() !== selectedYear) {
+        return false;
+      }
 
       return true;
     });
-  }, [searchQuery, selectedCat, selectedFiliere, selectedType, selectedYear]);
+  }, [searchQuery, selectedCat, selectedFiliere, selectedType, selectedYear, activeAuChoix]);
+
+  const handleResetAllFilters = () => {
+    setSearchQuery("");
+    setSelectedCat("all");
+    setSelectedFiliere("all");
+    setSelectedType("all");
+    setSelectedYear("all");
+  };
 
   if (!isOpen) return null;
 
@@ -129,8 +191,9 @@ export const ConcoursExamensSearchModal: React.FC<ConcoursExamensSearchModalProp
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-1.5 py-0.5 rounded cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-1.5 py-0.5 rounded cursor-pointer flex items-center gap-1"
               >
+                <X className="w-3 h-3" />
                 Effacer
               </button>
             )}
@@ -195,6 +258,19 @@ export const ConcoursExamensSearchModal: React.FC<ConcoursExamensSearchModalProp
               <option value="2026">Sessions 2026</option>
               <option value="2027">Sessions 2027</option>
             </select>
+
+            {/* Bouton de réinitialisation rapide si au moins un filtre est actif */}
+            {(searchQuery || selectedCat !== "all" || selectedFiliere !== "all" || selectedType !== "all" || selectedYear !== "all") && (
+              <button
+                type="button"
+                onClick={handleResetAllFilters}
+                className="ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-300 px-2 py-1 rounded-md transition-colors cursor-pointer"
+                title="Réinitialiser l'ensemble des filtres"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Réinitialiser</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -243,29 +319,98 @@ export const ConcoursExamensSearchModal: React.FC<ConcoursExamensSearchModalProp
 
         {/* Liste des résultats */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+          
+          {/* Bloc d'information statutaire si la recherche porte sur un grade d'avancement au choix sans examen */}
+          {activeAuChoix && (
+            <div className="bg-amber-50/95 dark:bg-amber-950/40 border border-amber-300/80 dark:border-amber-700/60 p-4 rounded-2xl flex items-start gap-3.5 text-xs text-amber-950 dark:text-amber-200 shadow-2xs">
+              <Info className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1.5 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-extrabold text-xs sm:text-sm text-amber-900 dark:text-amber-100">
+                    Avancement statutaire « Au Choix » : {activeAuChoix.gradeAffiche}
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200">
+                    Sans examen pro
+                  </span>
+                </div>
+                <p className="text-xs text-amber-900/90 dark:text-amber-200/90 leading-relaxed">
+                  {activeAuChoix.explicationStatutaire}
+                </p>
+                <div className="bg-amber-100/60 dark:bg-amber-900/30 p-2 rounded-xl text-[11px] text-amber-800 dark:text-amber-300 space-y-0.5">
+                  <span className="font-bold">Conditions statutaires :</span> {activeAuChoix.conditionsResume}
+                </div>
+                <p className="text-[11px] font-bold text-amber-800 dark:text-amber-300 pt-0.5">
+                  👉 Ci-dessous sont listées les sessions officielles 2026-2027 pour progresser depuis votre cadre d'emplois (Promotion interne vers la catégorie B, concours internes et examens de la filière).
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span>{filteredSessions.length} session{filteredSessions.length > 1 ? "s" : ""} trouvée{filteredSessions.length > 1 ? "s" : ""}</span>
+            <span>
+              {filteredSessions.length} session{filteredSessions.length > 1 ? "s" : ""} trouvée{filteredSessions.length > 1 ? "s" : ""}
+            </span>
             <span className="text-[11px]">Source officielle : CIG Petite Couronne (Pantin)</span>
           </div>
 
           {filteredSessions.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
-              <AlertCircle className="w-6 h-6 text-slate-400 mx-auto" />
-              <p className="font-semibold text-slate-700 dark:text-slate-300">
-                Aucune session ne correspond à vos filtres actuels.
-              </p>
-              <p>
-                Vous pouvez élargir la recherche ou consulter directement le portail national des concours.
-              </p>
-              <a
-                href={LIENS_OFFICIELS_CIG.portailConcours}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-2 text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
-              >
-                <span>Accéder au moteur officiel cig929394.fr</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+            <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3.5">
+              <AlertCircle className="w-8 h-8 text-amber-500 mx-auto" />
+              <div className="space-y-1">
+                <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">
+                  Aucune session ne correspond à cette combinaison de filtres.
+                </p>
+                <p className="max-w-md mx-auto text-slate-600 dark:text-slate-400">
+                  {searchQuery 
+                    ? `Le filtre texte "${searchQuery}" restreint la sélection. Essayez d'élargir ou d'effacer le texte pour voir toutes les opportunités.`
+                    : "Modifiez ou réinitialisez les critères de sélection pour consulter le calendrier complet."}
+                </p>
+              </div>
+
+              {/* Boutons d'action rapide pour débloquer la vue */}
+              <div className="flex items-center justify-center gap-2 flex-wrap pt-2">
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span>Effacer le texte de recherche</span>
+                  </button>
+                )}
+
+                {selectedCat !== "all" && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCat("all")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 transition-colors cursor-pointer"
+                  >
+                    <span>Afficher toutes les catégories</span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleResetAllFilters}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-2xs cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Réinitialiser tous les filtres</span>
+                </button>
+              </div>
+
+              <div className="pt-2">
+                <a
+                  href={LIENS_OFFICIELS_CIG.portailConcours}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
+                >
+                  <span>Accéder au moteur officiel cig929394.fr</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">
@@ -285,7 +430,7 @@ export const ConcoursExamensSearchModal: React.FC<ConcoursExamensSearchModalProp
                       </span>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300">
                         {session.typeEpreuve === "examen_professionnel"
-                          ? "Examen Professionnel"
+                          ? session.voie === "promotion_interne" ? "Examen Promotion Interne" : "Examen Professionnel"
                           : session.typeEpreuve === "concours_interne"
                           ? "Concours Interne"
                           : "Concours Externe"}
